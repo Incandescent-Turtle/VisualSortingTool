@@ -33,7 +33,8 @@ public abstract class Algorithm
 	 */
 	public abstract void run();
 		
-	public String getAlgorithmName()
+	@Override
+	public String toString()
 	{
 		return name;
 	}

@@ -30,7 +30,7 @@ public class BubbleSort extends Algorithm
 					highlights[j+1] = Color.RED;
 					try
 					{
-						Thread.sleep(2);
+						Thread.sleep(sorter.getDelay());
 					} catch (InterruptedException e)
 					{
 						e.printStackTrace();
@@ -49,11 +49,5 @@ public class BubbleSort extends Algorithm
 		panel.repaint();
 		System.out.println("done bubble sort");
 		sorter.setAlgorithm(null);
-	}
-
-	@Override
-	public String getAlgorithmName()
-	{
-		return "BubbleSort";
 	}
 }

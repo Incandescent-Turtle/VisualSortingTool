@@ -17,6 +17,14 @@ public class Sorter
 {	
 	public static final int MARGIN = 30;
 
+	
+	//current algorithm being used (changed via buttons)
+	private Algorithm algorithm;
+	private Color defaultColor;
+	private JPanel panel;
+	
+	//the delay between anmimations
+	private int delay=10;
 	//main array that holds all the numbers to be sorted
 	public int[] array;
 	//array that holds which color the corresponding index in array should be
@@ -24,13 +32,9 @@ public class Sorter
 	//array size aka length
 	private int size = 200;
 	
-	//current algorithm being used (changed via buttons)
-	private Algorithm algorithm;
-	
-	private JPanel panel;
-	
 	public Sorter(SortingVisualizer visualizer)
 	{
+		defaultColor = new Color(144, 193, 215);
 		panel = visualizer;
 	}
 	
@@ -70,23 +74,23 @@ public class Sorter
 			size = (panel.getWidth() - Sorter.MARGIN*2)/4;
 			array = new int[size];
 			highlights = new Color[size];
-			tryShuffleArray();
 			panel.repaint();
 		}
 	}
 	
 	/**
-	 * If no active algorithm shuffles the array AND resets colors in the highlights array
+	 * If there is no active algorithm, shuffles the array AND resets colors in the highlights array
 	 */
 	public void tryShuffleArray()
 	{
 		if(algorithm  == null)
 		{
+			tryResizeArray();
 			for(int i = 0; i < size; i++)
 			{
 				Random rand = new Random();
 				array[i] = rand.nextInt(600) + 15;
-				highlights[i] = Color.WHITE;
+				highlights[i] = defaultColor;
 			}
 			panel.repaint();
 		}
@@ -102,14 +106,14 @@ public class Sorter
 		
 		//int[] arrayCopy = array.clone();
 		//Color[] highlightsCopy = highlights.clone();
-		
+		if(size > 0 && highlights != null)
 		for(int i = 0; i < size; i++)
 		{
 			//highlights in specified color (default is white)
 			g.setColor(highlights[i]);
-			g.fillRect(MARGIN + i*4, 0, 2, array[i]);
+			g.fillRect(MARGIN + i*4, panel.getHeight()-array[i], 2, array[i]);
 			//resets the highlights array
-			highlights[i] = Color.WHITE; 
+			highlights[i] = defaultColor; 
 		}
 	} 
 		
@@ -125,6 +129,20 @@ public class Sorter
 	public Algorithm getAlgorithm()
 	{
 		return algorithm;
+	}
+	
+	/**
+	 * <font color="red"> Only to be used when the spinner value in <b>SortingAlgorithm</b> changes</font color="red">
+	 * @param delay delay in ms for the animations
+	 */
+	public void setDelay(int delay)
+	{
+		this.delay = delay;
+	}
+	
+	public int getDelay()
+	{
+		return delay;
 	}
 	
 	public int getArraySize()
