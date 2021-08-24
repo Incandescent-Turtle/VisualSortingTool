@@ -1,20 +1,14 @@
 package main.algorithms;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.Timer;
-
-import main.Sorter;
+import main.SortingVisualizer;
 
 public class BubbleSort extends Algorithm
-{
-	Timer timer;
-	
-	public BubbleSort(Sorter sorter)
+{	
+	public BubbleSort(SortingVisualizer visualizer)
 	{
-		super("Bubble Sort", sorter);
+		super("Bubble Sort", visualizer);
 	}
 	
 	@Override
@@ -30,9 +24,7 @@ public class BubbleSort extends Algorithm
 			{
 				if(array[j] > array[j+1])
 				{
-					int temp = array[j];
-					array[j] = array[j+1];
-					array[j+1] = temp;
+					sorter.swap(j, j+1);
 					Color[] highlights = sorter.getHighlights();
 					highlights[j] = Color.RED;
 					highlights[j+1] = Color.RED;
@@ -41,10 +33,9 @@ public class BubbleSort extends Algorithm
 						Thread.sleep(2);
 					} catch (InterruptedException e)
 					{
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					sorter.repaint();
+					panel.repaint();
 				}
 			}
 		}
@@ -55,13 +46,13 @@ public class BubbleSort extends Algorithm
 				System.out.println("didnt sort properly");
 			}
 		}
-		sorter.repaint();
+		panel.repaint();
 		System.out.println("done bubble sort");
 		sorter.setAlgorithm(null);
 	}
 
 	@Override
-	public String getName()
+	public String getAlgorithmName()
 	{
 		return "BubbleSort";
 	}

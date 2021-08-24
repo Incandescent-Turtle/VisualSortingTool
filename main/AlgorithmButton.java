@@ -13,7 +13,7 @@ public class AlgorithmButton extends JButton
 		
 	public AlgorithmButton(Sorter sorter, Algorithm algorithm)
 	{
-		setText(algorithm.getName());
+		setText(algorithm.getAlgorithmName());
 		addActionListener(new ActionListener() {
 
 		    @Override
@@ -22,12 +22,21 @@ public class AlgorithmButton extends JButton
 		    	//if there isn't an algorithm active 
 		    	if(sorter.getAlgorithm() == null)
 		    	{
-					System.out.println(algorithm.getName() + " has been pushed");
+					System.out.println(algorithm.getAlgorithmName() + " has been pushed");
 		    		sorter.setAlgorithm(algorithm);
-		    		algorithm.run();
+		    		//runs logic on another thread so swing can update 
+				    new Thread(new Runnable()
+					{
+						
+						@Override
+						public void run()
+						{
+						    algorithm.run();
+
+						}
+					}).start();
 		    	}
 		    }
 		});
-		sorter.add(this);
 	}
 }

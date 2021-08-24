@@ -2,33 +2,24 @@ package main;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Random;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import main.algorithms.Algorithm;
-import main.algorithms.BubbleSort;
 
 /**
  * @author rorsm
- *	JPanel class that handles the main array used, the rendering, and the buttons \n
+ *	handles the main array used \n
+ *	
  */
-public class Sorter extends JPanel 
-{
-	private static final long serialVersionUID = 1L;
-	
+public class Sorter
+{	
 	public static final int MARGIN = 30;
-
-	private JFrame frame;
 
 	//main array that holds all the numbers to be sorted
 	public int[] array;
-	//array that holds which color the corresponding index in <b>array</b> should be
+	//array that holds which color the corresponding index in array should be
 	private Color[] highlights;
 	//array size aka length
 	private int size = 200;
@@ -36,70 +27,92 @@ public class Sorter extends JPanel
 	//current algorithm being used (changed via buttons)
 	private Algorithm algorithm;
 	
-	public Sorter(JFrame frame)
+	private JPanel panel;
+	
+	public Sorter(SortingVisualizer visualizer)
 	{
-		this.frame = frame;
-		//JPanel was being slow and for some reason <b>getWidth()</b> was returning 0 on startup
-		new AlgorithmButton(this, new BubbleSort(this));
-		JButton shuffle = new JButton();
-		shuffle.setText("Shuffle");
-		shuffle.addActionListener(new ActionListener()
-		{
-			
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				shuffleArray();
-				repaint();
-			}
-		});
-		add(shuffle);
-		resizeArray();
-		repaint(); 
+		panel = visualizer;
 	}
 	
 	/**
-	 * To have no logic, renders the bars with their colors and clears <b>highlights</b>
+	 * Swaps these two indices with each other in <b>array</b> with <i>no animation</i>
+	 * @param first first index to be swapped
+	 * @param second second index to be swapped
 	 */
-	@Override
-	protected void paintComponent(Graphics graphics)
+	public void swap(int first, int second)
 	{
-		super.paintComponent(graphics);
-		System.out.println("repainting");
-        Graphics2D g = (Graphics2D) graphics.create();
-		System.out.println("painting");
-		g.setColor(Color.DARK_GRAY);
-		g.fillRect(0, 0, getWidth(), getHeight());
-		
-		
-		for(int i = 0; i < size; i++)
-		{
-			g.setColor(highlights[i]);
-			g.fillRect(MARGIN + i*4, 0, 2, array[i]);
-			highlights[i] = Color.WHITE; 
-		}
-		g.dispose();
-		//Arrays.stream(array).forEach(i -> System.out.print(i + " "));		
-	} 
+		int temp = array[first];
+		array[first] = array[second];
+		array[second] = temp;
+	}
 	
 	/**
-	 * To be called when the window has changed size and isn't in the process of a shuffle
+	 * updates the <b>highlights</b> array at the specified index with the specified color
+	 * @param index index of the number in <b>array</b> that is to be highlighted
+	 */
+	public void highlight(int index, Color color)
+	{
+		highlights[index] = color;
+	}
+	
+	/**
+	 * To be called when the window has changed size. Wont run if an algorithm is active
 	 * <ul>
 	 * 	<li>changes the <b>size</b> variable</li>
 	 *	<li>resizes <b>array</b> and <b>highlights</b> accordingly</li>
 	 * 	<li>shuffles <b>array</b></li>
 	 * </ul>  
 	 */
-	public void resizeArray()
+	public void tryResizeArray()
 	{
-		System.out.println(getWidth());
-		setBounds(frame.getBounds());
-		size = (getWidth() - Sorter.MARGIN*2)/4;
-		array = new int[size];
-		highlights = new Color[size];
-		shuffleArray();
+		if(algorithm == null)
+		{
+			size = (panel.getWidth() - Sorter.MARGIN*2)/4;
+			array = new int[size];
+			highlights = new Color[size];
+			tryShuffleArray();
+			panel.repaint();
+		}
 	}
 	
+	/**
+	 * If no active algorithm shuffles the array AND resets colors in the highlights array
+	 */
+	public void tryShuffleArray()
+	{
+		if(algorithm  == null)
+		{
+			for(int i = 0; i < size; i++)
+			{
+				Random rand = new Random();
+				array[i] = rand.nextInt(600) + 15;
+				highlights[i] = Color.WHITE;
+			}
+			panel.repaint();
+		}
+	}
+	
+	/**
+	 * To have no logic, renders the bars with their colors and clears <b>highlights</b>
+	 */
+	protected void drawArray(Graphics g)
+	{
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
+		
+		//int[] arrayCopy = array.clone();
+		//Color[] highlightsCopy = highlights.clone();
+		
+		for(int i = 0; i < size; i++)
+		{
+			//highlights in specified color (default is white)
+			g.setColor(highlights[i]);
+			g.fillRect(MARGIN + i*4, 0, 2, array[i]);
+			//resets the highlights array
+			highlights[i] = Color.WHITE; 
+		}
+	} 
+		
 	/**
 	 * <font color="red">Only to be used by <b>AlgorithmButton</b>s upon click</font color="green">
 	 * @param algorithm the algorithm that the button represents
@@ -127,19 +140,5 @@ public class Sorter extends JPanel
 	public Color[] getHighlights()
 	{
 		return highlights;
-	}
-	
-	/**
-	 * Shuffles the array AND resets colors in the highlights array
-	 * 
-	 */
-	private void shuffleArray()
-	{
-		for(int i = 0; i < size; i++)
-		{
-			Random rand = new Random();
-			array[i] = rand.nextInt(600) + 15;
-			highlights[i] = Color.WHITE;
-		}
 	}
 }
