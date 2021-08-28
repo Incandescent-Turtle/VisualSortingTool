@@ -32,6 +32,8 @@ public class Sorter
 	//array size aka length
 	private int size = 200;
 	
+	private int barThickness = 15;
+	
 	public Sorter(SortingVisualizer visualizer)
 	{
 		defaultColor = new Color(144, 193, 215);
@@ -71,7 +73,7 @@ public class Sorter
 	{
 		if(algorithm == null)
 		{
-			size = (panel.getWidth() - Sorter.MARGIN*2)/4;
+			size = (panel.getWidth() - Sorter.MARGIN*2)/(barThickness+2);
 			array = new int[size];
 			highlights = new Color[size];
 			panel.repaint();
@@ -104,14 +106,13 @@ public class Sorter
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
 		
-		//int[] arrayCopy = array.clone();
-		//Color[] highlightsCopy = highlights.clone();
 		if(size > 0 && highlights != null)
 		for(int i = 0; i < size; i++)
 		{
+			if(highlights[i] == Color.RED) g.setColor(Color.RED);
 			//highlights in specified color (default is white)
 			g.setColor(highlights[i]);
-			g.fillRect(MARGIN + i*4, panel.getHeight()-array[i], 2, array[i]);
+			g.fillRect(MARGIN + i*(barThickness+2), panel.getHeight()-array[i], barThickness, array[i]);
 			//resets the highlights array
 			highlights[i] = defaultColor; 
 		}

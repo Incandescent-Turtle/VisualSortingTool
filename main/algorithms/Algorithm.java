@@ -7,9 +7,9 @@ import main.SortingVisualizer;
 
 /**
  * @author rorsm
- *	Abstract class to build algorithm classes with \n
+ *	Abstract class to build algorithm classes with
  *	
- *	ran on a seperate thread by its button \n
+ *	ran on a seperate thread by its button
  *	 
  *	
  *	the idea is to override run() in the subclasses
