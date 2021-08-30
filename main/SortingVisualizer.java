@@ -24,6 +24,8 @@ public class SortingVisualizer extends JPanel
 	private Sorter sorter;
 	
 	private FullscreenHandler fullscreenHandler;
+	
+	private MainUI mainUI;
 
 	public SortingVisualizer()
 	{
@@ -35,7 +37,7 @@ public class SortingVisualizer extends JPanel
 		setUpFrame();
 		fullscreenHandler = new FullscreenHandler(this);
 		//sets up top bar UI
-		new MainUI(this);
+		mainUI = new MainUI(this);
 		//whenever a resize occurs it attempts to update the array size
 		addComponentListener(new ComponentAdapter() {
 				
@@ -57,7 +59,7 @@ public class SortingVisualizer extends JPanel
 	{
 		//overrides to improve fullscreen function
 		frame = new JFrame("Sorting Methods Visudal");
-		Dimension dim = new Dimension(800, 800);
+		Dimension dim = new Dimension(400, 400);
 		frame.setPreferredSize(dim);
 		frame.setMaximumSize(dim);
 		frame.setMinimumSize(dim);
@@ -65,6 +67,7 @@ public class SortingVisualizer extends JPanel
 		frame.setResizable(true);
 		frame.setLocationRelativeTo(null);
 		frame.add(this);
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	}
 	
 	@Override
@@ -87,6 +90,11 @@ public class SortingVisualizer extends JPanel
 	public FullscreenHandler getFullscreenHandler()
 	{
 		return fullscreenHandler;
+	}
+	
+	public MainUI getMainUI()
+	{
+		return mainUI;
 	}
 	
 	public static void main(String[] args)

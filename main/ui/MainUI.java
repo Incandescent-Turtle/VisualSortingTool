@@ -76,4 +76,9 @@ public class MainUI
 			}
 		});		
 	}
+	
+	public JPanel getTopBar()
+	{
+		return topBar;
+	}
 }

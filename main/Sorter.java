@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 
-import javax.swing.JPanel;
-
 import main.algorithms.Algorithm;
 
 /**
@@ -15,12 +13,13 @@ import main.algorithms.Algorithm;
  */
 public class Sorter
 {	
-	public static final int MARGIN = 30;
+	//this is the minumim amount of margin permitted
+	public static final int MIN_MARGIN = 30;
 	
 	//current algorithm being used (changed via buttons)
 	private Algorithm algorithm;
 	private Color defaultColor;
-	private JPanel panel;
+	private SortingVisualizer visualizer;
 	
 	//the delay between anmimations
 	private int delay=10;
@@ -32,11 +31,12 @@ public class Sorter
 	private int size = 200;
 	
 	private int barThickness = 15;
+	private int barGap = 10;
 	
 	public Sorter(SortingVisualizer visualizer)
 	{
 		defaultColor = new Color(144, 193, 215);
-		panel = visualizer;
+		this.visualizer = visualizer;
 	}
 	
 	/**
@@ -72,10 +72,10 @@ public class Sorter
 	{
 		if(algorithm == null)
 		{
-			size = (panel.getWidth() - Sorter.MARGIN*2)/(barThickness+2);
+			size = (visualizer.getWidth() - Sorter.MIN_MARGIN*2 + barGap)/(barThickness+barGap);
 			array = new int[size];
 			highlights = new Color[size];
-			panel.repaint();
+			visualizer.repaint();
 		}
 	}
 	
@@ -87,13 +87,14 @@ public class Sorter
 		if(algorithm  == null)
 		{
 			tryResizeArray();
+			int maxHeight = visualizer.getHeight() - visualizer.getMainUI().getTopBar().getHeight() - 20;
 			for(int i = 0; i < size; i++)
 			{
 				Random rand = new Random();
-				array[i] = rand.nextInt(600) + 15;
+				array[i] = rand.nextInt(maxHeight) + 15;
 				highlights[i] = defaultColor;
 			}
-			panel.repaint();
+			visualizer.repaint();
 		}
 	}
 	
@@ -103,15 +104,20 @@ public class Sorter
 	protected void drawArray(Graphics g)
 	{
 		g.setColor(Color.DARK_GRAY);
-		g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
+		g.fillRect(0, 0, visualizer.getWidth(), visualizer.getHeight());
+		
+		//length of all bars in pixels 
+		int length = size*(barThickness+barGap) - barGap;
+		//margins based on the total length of all the bars and gaps
+		int realMargin = (visualizer.getWidth() - length)/2;
 		
 		if(size > 0 && highlights != null)
 		for(int i = 0; i < size; i++)
-		{System.out.println("drawing");
+		{
 			if(highlights[i] == Color.RED) g.setColor(Color.RED);
 			//highlights in specified color (default is white)
 			g.setColor(highlights[i]);
-			g.fillRect(MARGIN + i*(barThickness+2), panel.getHeight()-array[i], barThickness, array[i]);
+			g.fillRect(realMargin + i*(barThickness+barGap), visualizer.getHeight()-array[i], barThickness, array[i]);
 			//resets the highlights array
 			highlights[i] = defaultColor; 
 		}
