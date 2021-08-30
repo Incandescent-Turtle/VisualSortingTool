@@ -1,0 +1,20 @@
+shove ui into a new class
+UI for custimization (RGBs of bars, size of bars, etc)
+sound effects
+
+For full screen just return to former state
+Screenshot button
+
+
+SAHIR-INSPIRED:
+More generic, sort classes, comparator, custom paint method
+JSON support ?
+Inputs like width etc for rows
+
+
+Customization menu:
+Reads/stores from file
+Image settings
+File location
+
+ScortingImage to have a scaled instance of itself (so you can enlarge it)

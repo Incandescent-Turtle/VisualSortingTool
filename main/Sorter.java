@@ -16,7 +16,6 @@ import main.algorithms.Algorithm;
 public class Sorter
 {	
 	public static final int MARGIN = 30;
-
 	
 	//current algorithm being used (changed via buttons)
 	private Algorithm algorithm;
