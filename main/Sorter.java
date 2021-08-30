@@ -108,7 +108,7 @@ public class Sorter
 		
 		if(size > 0 && highlights != null)
 		for(int i = 0; i < size; i++)
-		{
+		{System.out.println("drawing");
 			if(highlights[i] == Color.RED) g.setColor(Color.RED);
 			//highlights in specified color (default is white)
 			g.setColor(highlights[i]);
