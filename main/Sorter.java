@@ -19,7 +19,7 @@ public class Sorter
 	//current algorithm being used (changed via buttons)
 	private Algorithm algorithm;
 	private Color defaultColor;
-	private SortingVisualizer visualizer;
+	private VisualSortingTool sortingTool;
 	
 	//the delay between anmimations
 	private int delay=10;
@@ -33,10 +33,10 @@ public class Sorter
 	private int barThickness = 15;
 	private int barGap = 10;
 	
-	public Sorter(SortingVisualizer visualizer)
+	public Sorter(VisualSortingTool sortingTool)
 	{
 		defaultColor = new Color(144, 193, 215);
-		this.visualizer = visualizer;
+		this.sortingTool = sortingTool;
 	}
 	
 	/**
@@ -72,10 +72,10 @@ public class Sorter
 	{
 		if(algorithm == null)
 		{
-			size = (visualizer.getWidth() - Sorter.MIN_MARGIN*2 + barGap)/(barThickness+barGap);
+			size = (sortingTool.getWidth() - Sorter.MIN_MARGIN*2 + barGap)/(barThickness+barGap);
 			array = new int[size];
 			highlights = new Color[size];
-			visualizer.repaint();
+			sortingTool.repaint();
 		}
 	}
 	
@@ -87,14 +87,14 @@ public class Sorter
 		if(algorithm  == null)
 		{
 			tryResizeArray();
-			int maxHeight = visualizer.getHeight() - visualizer.getMainUI().getTopBar().getHeight() - 20;
+			int maxHeight = sortingTool.getHeight() - sortingTool.getMainUI().getTopBar().getHeight() - 20;
 			for(int i = 0; i < size; i++)
 			{
 				Random rand = new Random();
 				array[i] = rand.nextInt(maxHeight) + 15;
 				highlights[i] = defaultColor;
 			}
-			visualizer.repaint();
+			sortingTool.repaint();
 		}
 	}
 	
@@ -104,12 +104,12 @@ public class Sorter
 	protected void drawArray(Graphics g)
 	{
 		g.setColor(Color.DARK_GRAY);
-		g.fillRect(0, 0, visualizer.getWidth(), visualizer.getHeight());
+		g.fillRect(0, 0, sortingTool.getWidth(), sortingTool.getHeight());
 		
 		//length of all bars in pixels 
 		int length = size*(barThickness+barGap) - barGap;
 		//margins based on the total length of all the bars and gaps
-		int realMargin = (visualizer.getWidth() - length)/2;
+		int realMargin = (sortingTool.getWidth() - length)/2;
 		
 		if(size > 0 && highlights != null)
 		for(int i = 0; i < size; i++)
@@ -117,7 +117,7 @@ public class Sorter
 			if(highlights[i] == Color.RED) g.setColor(Color.RED);
 			//highlights in specified color (default is white)
 			g.setColor(highlights[i]);
-			g.fillRect(realMargin + i*(barThickness+barGap), visualizer.getHeight()-array[i], barThickness, array[i]);
+			g.fillRect(realMargin + i*(barThickness+barGap), sortingTool.getHeight()-array[i], barThickness, array[i]);
 			//resets the highlights array
 			highlights[i] = defaultColor; 
 		}

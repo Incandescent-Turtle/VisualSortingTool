@@ -7,7 +7,7 @@ import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import main.SortingVisualizer;
+import main.VisualSortingTool;
 
 @SuppressWarnings("serial")
 /**
@@ -15,11 +15,11 @@ import main.SortingVisualizer;
  */
 public class Keybindings
 {
-	private SortingVisualizer panel;
+	private VisualSortingTool sortingTool;
 	
-	public Keybindings(SortingVisualizer panel)
+	public Keybindings(VisualSortingTool sortingTool)
 	{
-		this.panel = panel;
+		this.sortingTool = sortingTool;
 		setUpF11ForFullscreen();
 		setUpEscForClose();
 	}
@@ -47,8 +47,8 @@ public class Keybindings
 			
 			public void actionPerformed(ActionEvent e) 
 		    {
-				panel.getFullscreenHandler().toggleFullscreen();
-				panel.repaint();
+				sortingTool.getFullscreenHandler().toggleFullscreen();
+				sortingTool.repaint();
 		    }
 		};
 		setUpMaps("F11", "fullscreen", fullscreen);
@@ -56,8 +56,8 @@ public class Keybindings
 	
 	private void setUpMaps(String key, String actionString, Action action)
 	{
-		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key), actionString);
-		panel.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(key), actionString);
-		panel.getActionMap().put(actionString,action);
+		sortingTool.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key), actionString);
+		sortingTool.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(key), actionString);
+		sortingTool.getActionMap().put(actionString,action);
 	}
 }

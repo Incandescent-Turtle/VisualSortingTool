@@ -7,7 +7,7 @@ import java.awt.event.ComponentEvent;
 
 import javax.swing.JFrame;
 
-import main.SortingVisualizer;
+import main.VisualSortingTool;
 
 /**
  * Implements the "normal" fullscreen feature in most applications
@@ -24,7 +24,7 @@ public class FullscreenHandler
 	//window state before fullscreening
 	private int windowState = JFrame.NORMAL;
 	
-	public FullscreenHandler(SortingVisualizer panel)
+	public FullscreenHandler(VisualSortingTool panel)
 	{
 		this.frame = panel.getFrame();
 		nonFullScreenBounds = frame.getBounds();

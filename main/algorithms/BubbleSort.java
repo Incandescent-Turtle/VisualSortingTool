@@ -2,13 +2,13 @@ package main.algorithms;
 
 import java.awt.Color;
 
-import main.SortingVisualizer;
+import main.VisualSortingTool;
 
 public class BubbleSort extends Algorithm
 {	
-	public BubbleSort(SortingVisualizer visualizer)
+	public BubbleSort(VisualSortingTool sortingTool)
 	{
-		super("Bubble Sort", visualizer);
+		super("Bubble Sort", sortingTool);
 	}
 	
 	@Override
@@ -26,7 +26,7 @@ public class BubbleSort extends Algorithm
 				highlights[j+1] = Color.RED;
 				if(array[j] > array[j+1]) sorter.swap(j, j+1);
 				delay(sorter);
-				visualizer.repaint();
+				sortingTool.repaint();
 			}
 		}
 		finishRun();

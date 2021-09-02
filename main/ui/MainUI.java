@@ -11,7 +11,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import main.Sorter;
-import main.SortingVisualizer;
+import main.VisualSortingTool;
 import main.algorithms.Algorithm;
 import main.algorithms.BubbleSort;
 
@@ -27,10 +27,10 @@ public class MainUI
     private JButton runAlgorithmButton = new JButton("Run Selected");
     private JSpinner delaySpinner = new JSpinner(new SpinnerNumberModel(10, 1, 10000, 1));
 
-	public MainUI(SortingVisualizer visualizer)
+	public MainUI(VisualSortingTool sortingTool)
 	{
-		Sorter sorter = visualizer.getSorter();
-		visualizer.add(topBar, BorderLayout.PAGE_START); //top of the screen
+		Sorter sorter = sortingTool.getSorter();
+		sortingTool.add(topBar, BorderLayout.PAGE_START); //top of the screen
 		
 		//Shuffle button
 		shuffleButton.addActionListener(e -> sorter.tryShuffleArray());
@@ -40,31 +40,31 @@ public class MainUI
         /*
          * Algorithms
          */
-        algorithmList.addItem(new BubbleSort(visualizer));
+        algorithmList.addItem(new BubbleSort(sortingTool));
         
-        setUpRunButton(visualizer);
+        setUpRunButton(sortingTool);
         
 		topBar.add(shuffleButton);
         topBar.add(algorithmList);
         topBar.add(runAlgorithmButton);
         topBar.add(delaySpinner);
-        visualizer.validate();
+        sortingTool.validate();
 	}
 
 	/*adds action listener to the button the runs the current algorithn
 	 * I just dont like anonomyous classes
 	 */
-	private void setUpRunButton(SortingVisualizer visualizer)
+	private void setUpRunButton(VisualSortingTool sortingTool)
 	{
 		runAlgorithmButton.addActionListener(new ActionListener() {
     	
-			private Sorter sorter = visualizer.getSorter();
+			private Sorter sorter = sortingTool.getSorter();
 			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 		    	//if there isn't an algorithm active and it isnt sorted
-		    	if(!Algorithm.isSorted(visualizer, false) && sorter.getAlgorithm() == null)
+		    	if(!Algorithm.isSorted(sortingTool, false) && sorter.getAlgorithm() == null)
 		    	{
 					System.out.println(algorithmList.getSelectedItem().toString() + " has been pushed");
 		    		sorter.setAlgorithm((Algorithm)algorithmList.getSelectedItem());

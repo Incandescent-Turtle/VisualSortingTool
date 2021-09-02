@@ -3,7 +3,7 @@ package main.algorithms;
 import java.awt.Color;
 
 import main.Sorter;
-import main.SortingVisualizer;
+import main.VisualSortingTool;
 
 /**
  * @author rorsm
@@ -18,13 +18,13 @@ public abstract class Algorithm
 {
 	private String name;
 	protected Sorter sorter;
-	protected SortingVisualizer visualizer;
+	protected VisualSortingTool sortingTool;
 	
-	public Algorithm(String name, SortingVisualizer visualizer)
+	public Algorithm(String name, VisualSortingTool sortingTool)
 	{
 		this.name = name;
-		sorter = visualizer.getSorter();
-		this.visualizer = visualizer;
+		sorter = sortingTool.getSorter();
+		this.sortingTool = sortingTool;
 	}
 	
 	/**
@@ -40,7 +40,7 @@ public abstract class Algorithm
 	{
 		System.out.println("Done " + name);
 		sorter.setAlgorithm(null);
-		isSorted(visualizer, true);
+		isSorted(sortingTool, true);
 	}
 	
 	/**
@@ -65,9 +65,9 @@ public abstract class Algorithm
 	 * Gives a little animation
 	 * @param shouldPaint whether this should be run with painting/delay methods or not (visualized or not)
 	 */
-	public static boolean isSorted(SortingVisualizer visualizer, boolean shouldPaint)
+	public static boolean isSorted(VisualSortingTool sortingTool, boolean shouldPaint)
 	{
-		Sorter sorter = visualizer.getSorter();
+		Sorter sorter = sortingTool.getSorter();
 		int[] array = sorter.getArray();
 		Color[] highlights = sorter.getHighlights();
 		for(int i = 0; i<array.length; i++)
@@ -79,7 +79,7 @@ public abstract class Algorithm
 				{
 					highlights[j] = Color.GREEN;
 				}
-				visualizer.repaint();
+				sortingTool.repaint();
 				return true;
 			}
 			
@@ -92,7 +92,7 @@ public abstract class Algorithm
 					highlights[j] = Color.GREEN;
 				}
 				delay(10);
-				visualizer.repaint();
+				sortingTool.repaint();
 			}
 		}
 		return true;
