@@ -1,13 +1,13 @@
 package main.algorithms;
 
-import main.SortingVisualizer;
+import main.VisualSortingTool;
 
 public class QuickSort extends Algorithm
 {
 
-	public QuickSort(SortingVisualizer visualizer)
+	public QuickSort(VisualSortingTool sortingTool)
 	{
-		super("Quick Sort", visualizer);
+		super("Quick Sort", sortingTool);
 	}
 
 	@Override

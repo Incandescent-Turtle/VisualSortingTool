@@ -7,11 +7,10 @@ import java.awt.event.ComponentEvent;
 
 import javax.swing.JFrame;
 
-import main.SortingVisualizer;
+import main.VisualSortingTool;
 
 /**
  * Implements the "normal" fullscreen feature in most applications
- * Adds two listeners to the frame
  */
 public class FullscreenHandler
 {
@@ -24,13 +23,16 @@ public class FullscreenHandler
 	//window state before fullscreening
 	private int windowState = JFrame.NORMAL;
 	
-	public FullscreenHandler(SortingVisualizer panel)
+	public FullscreenHandler(VisualSortingTool panel)
 	{
 		this.frame = panel.getFrame();
 		nonFullScreenBounds = frame.getBounds();
 		addListeners();
 	}
 	
+	/**
+	 * adds the listener for resize/moving of the window 
+	 */
 	private void addListeners()
 	{
 		frame.addComponentListener(new ComponentAdapter() {
@@ -60,12 +62,9 @@ public class FullscreenHandler
 	{
 		frame.dispose();
 		frame.setVisible(false);
-		 System.out.println("ss");
-		 System.out.println(frame.isUndecorated());
 		if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH && frame.isUndecorated())
 		{
 			// reverting
-
 			frame.setExtendedState(windowState);
 			frame.setBounds(nonFullScreenBounds);
 			//true when the screen has been dragged to maximize

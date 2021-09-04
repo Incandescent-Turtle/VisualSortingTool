@@ -1,0 +1,10 @@
+Program Outline:
+
+VisualSortingTool is the main class and provides access to everything
+
+VisualComponents (VCs) hold an int value, these are what get sorted as numbers
+
+Sorters hold arrays of VisualComponents, and use Visualizers to draw the VCs to the screen
+add these to the program via the VisualSortingTool constructor
+
+Algorithms use the current Sorter's VC array and sort it, animating the process

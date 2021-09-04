@@ -2,8 +2,9 @@ package main.algorithms;
 
 import java.awt.Color;
 
-import main.Sorter;
-import main.SortingVisualizer;
+import main.VisualSortingTool;
+import main.sorters.Sorter;
+import main.vcs.VisualComponent;
 
 /**
  * @author rorsm
@@ -17,14 +18,12 @@ import main.SortingVisualizer;
 public abstract class Algorithm 
 {
 	private String name;
-	protected Sorter sorter;
-	protected SortingVisualizer visualizer;
+	protected VisualSortingTool sortingTool;
 	
-	public Algorithm(String name, SortingVisualizer visualizer)
+	public Algorithm(String name, VisualSortingTool sortingTool)
 	{
 		this.name = name;
-		sorter = visualizer.getSorter();
-		this.visualizer = visualizer;
+		this.sortingTool = sortingTool;
 	}
 	
 	/**
@@ -39,8 +38,9 @@ public abstract class Algorithm
 	protected final void finishRun()
 	{
 		System.out.println("Done " + name);
-		sorter.setAlgorithm(null);
-		isSorted(visualizer, true);
+		sortingTool.getSorter().setAlgorithm(null);
+		isSorted(sortingTool, true);
+		sortingTool.getMainUI().enableSorterPicker();
 	}
 	
 	/**
@@ -48,16 +48,7 @@ public abstract class Algorithm
 	 */
 	protected final static void delay(Sorter sorter)
 	{
-		delay(sorter.getDelay());
-	}
-	
-	private final static void delay(int delay)
-	{
-		try {
-			Thread.sleep(delay);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		VisualSortingTool.delay(sorter.getDelay());
 	}
 	
 	/**
@@ -65,11 +56,11 @@ public abstract class Algorithm
 	 * Gives a little animation
 	 * @param shouldPaint whether this should be run with painting/delay methods or not (visualized or not)
 	 */
-	public static boolean isSorted(SortingVisualizer visualizer, boolean shouldPaint)
+	public static boolean isSorted(VisualSortingTool sortingTool, boolean shouldPaint)
 	{
-		Sorter sorter = visualizer.getSorter();
-		int[] array = sorter.getArray();
-		Color[] highlights = sorter.getHighlights();
+		Sorter sorter = sortingTool.getSorter();
+		VisualComponent[] array = sorter.getArray();
+		Color[] highlights = sorter.getVisualizer().getHighlights();
 		for(int i = 0; i<array.length; i++)
 		{
 			//if last element
@@ -79,20 +70,20 @@ public abstract class Algorithm
 				{
 					highlights[j] = Color.GREEN;
 				}
-				visualizer.repaint();
+				sortingTool.repaint();
 				return true;
 			}
 			
 			//returns false if incorrect
-			if(i != array.length-1 && array[i]>array[i+1]) return false;
+			if(i != array.length-1 && array[i].getValue()>array[i+1].getValue()) return false;
 			if(shouldPaint)
 			{
 				for(int j = 0; j <= i+1; j++)
 				{
 					highlights[j] = Color.GREEN;
 				}
-				delay(10);
-				visualizer.repaint();
+				VisualSortingTool.delay(10);
+				sortingTool.repaint();
 			}
 		}
 		return true;
