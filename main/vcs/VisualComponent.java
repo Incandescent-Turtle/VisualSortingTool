@@ -1,17 +1,21 @@
 package main.vcs;
 
-public abstract class VisualComponent
+/**
+ * these are what the sorters hold in their arrays, the things being sorted
+ * VC for short
+ */
+public class VisualComponent
 {
-	private int value;
+	//the value that is compared to other VCs
+	private final int value;
 	
-	public int getValue()
-	{
-		return value;
-	}
-	
-	public VisualComponent setValue(int value)
+	public VisualComponent(int value)
 	{
 		this.value = value;
-		return this;
+	}
+	
+	public final int getValue()
+	{
+		return value;
 	}
 }

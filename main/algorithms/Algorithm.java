@@ -2,8 +2,9 @@ package main.algorithms;
 
 import java.awt.Color;
 
-import main.Sorter;
 import main.VisualSortingTool;
+import main.sorters.Sorter;
+import main.vcs.VisualComponent;
 
 /**
  * @author rorsm
@@ -17,13 +18,11 @@ import main.VisualSortingTool;
 public abstract class Algorithm 
 {
 	private String name;
-	protected Sorter sorter;
 	protected VisualSortingTool sortingTool;
 	
 	public Algorithm(String name, VisualSortingTool sortingTool)
 	{
 		this.name = name;
-		sorter = sortingTool.getSorter();
 		this.sortingTool = sortingTool;
 	}
 	
@@ -39,8 +38,9 @@ public abstract class Algorithm
 	protected final void finishRun()
 	{
 		System.out.println("Done " + name);
-		sorter.setAlgorithm(null);
+		sortingTool.getSorter().setAlgorithm(null);
 		isSorted(sortingTool, true);
+		sortingTool.getMainUI().enableSorterPicker();
 	}
 	
 	/**
@@ -48,16 +48,7 @@ public abstract class Algorithm
 	 */
 	protected final static void delay(Sorter sorter)
 	{
-		delay(sorter.getDelay());
-	}
-	
-	private final static void delay(int delay)
-	{
-		try {
-			Thread.sleep(delay);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		VisualSortingTool.delay(sorter.getDelay());
 	}
 	
 	/**
@@ -68,8 +59,8 @@ public abstract class Algorithm
 	public static boolean isSorted(VisualSortingTool sortingTool, boolean shouldPaint)
 	{
 		Sorter sorter = sortingTool.getSorter();
-		int[] array = sorter.getArray();
-		Color[] highlights = sorter.getHighlights();
+		VisualComponent[] array = sorter.getArray();
+		Color[] highlights = sorter.getVisualizer().getHighlights();
 		for(int i = 0; i<array.length; i++)
 		{
 			//if last element
@@ -84,14 +75,14 @@ public abstract class Algorithm
 			}
 			
 			//returns false if incorrect
-			if(i != array.length-1 && array[i]>array[i+1]) return false;
+			if(i != array.length-1 && array[i].getValue()>array[i+1].getValue()) return false;
 			if(shouldPaint)
 			{
 				for(int j = 0; j <= i+1; j++)
 				{
 					highlights[j] = Color.GREEN;
 				}
-				delay(10);
+				VisualSortingTool.delay(10);
 				sortingTool.repaint();
 			}
 		}

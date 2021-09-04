@@ -1,44 +1,46 @@
 package main.sorters;
 
-import java.awt.Color;
-
-import main.Sorter;
 import main.VisualSortingTool;
 import main.vcs.VisualComponent;
 import main.visualizers.VisualizerBarHeight;
 
-public class SorterBarHeight extends main.sorters.Sorter
+public class SorterBarHeight extends Sorter
 {
-	public static final int MIN_MARGIN = 30;
-	private int barThickness = 15;
-	private int barGap = 10;
-
 	public SorterBarHeight(VisualSortingTool sortingTool)
 	{
-		super(sortingTool, new VisualizerBarHeight());
+		super(sortingTool, new VisualizerBarHeight(sortingTool), "Bar Heights");
 	}
 
-	
 	/**
 	 * <ul>
 	 * 	<li>changes the <b>size</b> variable based on window size</li>
 	 *	<li>resizes <b>array</b> and <b>highlights</b> accordingly</li>
-	 *	<li>repaints window</li>
-	 * </ul>  
+	 *	 * </ul>  
 	 */
 	@Override
 	protected void resizeArray()
 	{
-		size = (sortingTool.getWidth() - Sorter.MIN_MARGIN*2 + barGap)/(barThickness+barGap);
+		int barWidth = visualizer.getComponentWidth();
+		int barGap = visualizer.getComponentGap();
+		size = (sortingTool.getWidth() - visualizer.getMinMargin()*2 + barGap)/(barWidth+barGap);
+		if(size <=0 ) size = 10;
 		array = new VisualComponent[size];
-		highlights = new Color[size];
-		sortingTool.repaint();
+		visualizer.resizeHighlights(size);
 	}
-
-
+	
+	/*
+	 * based on the array size and height of window creates values that create a linear slope
+	 */
 	@Override
-	protected void shuffleArray()
+	protected void reloadArray()
 	{
-		
+		int maxHeight = sortingTool.getHeight() - sortingTool.getMainUI().getTopBarHeight() - 20;
+		int minHeight = 15;
+		//difference between two adjacent bars
+		int step = (maxHeight - minHeight)/size;
+		for(int i = 0; i < size; i++)
+		{
+			array[i] = new VisualComponent(minHeight + i*(step));
+		}
 	}
 }
