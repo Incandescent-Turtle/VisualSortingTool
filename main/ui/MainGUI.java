@@ -19,7 +19,7 @@ import main.sorters.Sorter;
  * On creation adds a top bar to the application with some options
  *
  */
-public class MainUI
+public class MainGUI
 {
 	//the top UI bar holding the main UI components
 	private JPanel topBar = new JPanel();
@@ -43,7 +43,7 @@ public class MainUI
     
     private VisualSortingTool sortingTool;
     
-	public MainUI(VisualSortingTool sortingTool)
+	public MainGUI(VisualSortingTool sortingTool)
 	{
 		this.sortingTool = sortingTool;
 	}
@@ -71,6 +71,7 @@ public class MainUI
         	sortingTool.getSorter().tryResizeArray();
         	sortingTool.getSorter().tryReloadArray();
         	sortingTool.getSorter().tryShuffleArray();
+        	sortingTool.repaint();
         });
                         
         setUpRunButton(sortingTool);

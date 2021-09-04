@@ -34,7 +34,7 @@ public class SorterBarHeight extends Sorter
 	@Override
 	protected void reloadArray()
 	{
-		int maxHeight = sortingTool.getHeight() - sortingTool.getMainUI().getTopBarHeight() - 20;
+		int maxHeight = sortingTool.getHeight() - sortingTool.getMainGUI().getTopBarHeight() - 20;
 		int minHeight = 15;
 		//difference between two adjacent bars
 		int step = (maxHeight - minHeight)/size;

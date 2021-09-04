@@ -40,7 +40,7 @@ public abstract class Algorithm
 		System.out.println("Done " + name);
 		sortingTool.getSorter().setAlgorithm(null);
 		isSorted(sortingTool, true);
-		sortingTool.getMainUI().enableSorterPicker();
+		sortingTool.getMainGUI().enableSorterPicker();
 	}
 	
 	/**

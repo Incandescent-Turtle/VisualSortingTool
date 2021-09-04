@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Arrays;
@@ -17,9 +19,10 @@ import main.algorithms.BubbleSort;
 import main.sorters.Sorter;
 import main.sorters.SorterBarHeight;
 import main.sorters.SorterColorGradient;
+import main.sorters.SorterNumber;
 import main.ui.FullscreenHandler;
 import main.ui.Keybindings;
-import main.ui.MainUI;
+import main.ui.MainGUI;
 
 @SuppressWarnings("serial")
 /**
@@ -32,7 +35,7 @@ public class VisualSortingTool extends JPanel
 	
 	private FullscreenHandler fullscreenHandler;
 	
-	private MainUI mainUI;
+	private MainGUI mainGUI;
 
 	//all the sorters in the program
 	private Sorter[] sorters;
@@ -45,8 +48,9 @@ public class VisualSortingTool extends JPanel
 		super(new BorderLayout());
 		
 		sorters = new Sorter[] {
-				sorter= new SorterBarHeight(this), 
+				sorter=new SorterBarHeight(this), 
 						new SorterColorGradient(this),
+						 new SorterNumber(this)
 		};
 		
 		algorithms = new Algorithm[] {
@@ -57,12 +61,12 @@ public class VisualSortingTool extends JPanel
 		setUpFrame();
 		fullscreenHandler = new FullscreenHandler(this);
 		//initializes
-		mainUI = new MainUI(this);
+		mainGUI = new MainGUI(this);
 		//adds sorters and algorithms
-		Arrays.asList(sorters).forEach(s -> mainUI.addSorter(s));
-		Arrays.asList(algorithms).forEach(a -> mainUI.addAlgorithm(a));
+		Arrays.asList(sorters).forEach(s -> mainGUI.addSorter(s));
+		Arrays.asList(algorithms).forEach(a -> mainGUI.addAlgorithm(a));
 		//sets up the class, adds listeners etc
-		mainUI.setUp();
+		mainGUI.setUp();
 		//whenever a resize occurs it attempts to update the array size
 		addComponentListener(new ComponentAdapter() {
 				
@@ -98,9 +102,14 @@ public class VisualSortingTool extends JPanel
 	}
 	
 	@Override
-	protected void paintComponent(Graphics g)
+	protected void paintComponent(Graphics graphics)
 	{
-		super.paintComponent(g);
+		super.paintComponent(graphics);
+		
+		Graphics2D g = (Graphics2D) graphics;
+	    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+	    
 		//makes a background
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(0, 0, getWidth(), getHeight());
@@ -127,9 +136,9 @@ public class VisualSortingTool extends JPanel
 		return fullscreenHandler;
 	}
 	
-	public MainUI getMainUI()
+	public MainGUI getMainGUI()
 	{
-		return mainUI;
+		return mainGUI;
 	}
 	
 	public static void delay(int ms)

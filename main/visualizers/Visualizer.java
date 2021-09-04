@@ -41,7 +41,8 @@ public abstract class Visualizer
 	public final void drawArray(Graphics g)
 	{
 		Sorter sorter = sortingTool.getSorter();
-		drawArray(g, sorter, sorter.getArray(), sorter.getArraySize());
+		if(sorter.getArraySize() > 0 && highlights != null)
+			drawArray(g, sorter, sorter.getArray(), sorter.getArraySize());
 	}
 	
 	protected abstract void drawArray(Graphics g, Sorter sorter, VisualComponent[] array, int size);

@@ -26,7 +26,6 @@ public class VisualizerBarHeight extends Visualizer
 	@Override
 	public void drawArray(Graphics g, Sorter sorter, VisualComponent[] array, int size)
 	{			
-		if(size > 0 && highlights != null)
 		for(int i = 0; i < size; i++)
 		{
 			if(highlights[i] == Color.RED) g.setColor(Color.RED);

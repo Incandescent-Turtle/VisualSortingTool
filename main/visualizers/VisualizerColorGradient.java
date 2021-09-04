@@ -23,7 +23,6 @@ public class VisualizerColorGradient extends Visualizer
 	@Override
 	public void drawArray(Graphics g, Sorter sorter, VisualComponent[] array, int size)
 	{
-		if(size > 0 && highlights != null)
 		for(int i = 0; i < size; i++)
 		{
 			//honestly idk what this is, i just dont know how to make a gradient, but somehow i made this
@@ -42,7 +41,7 @@ public class VisualizerColorGradient extends Visualizer
 				if(blue < 0 || blue > 255) blue = 255;
 			}
 			g.setColor(highlights[i] == Color.RED ? Color.RED : new Color(red, green, blue));
-			int maxHeight = sortingTool.getHeight() - sortingTool.getMainUI().getTopBarHeight() - 20;
+			int maxHeight = sortingTool.getHeight() - sortingTool.getMainGUI().getTopBarHeight() - 20;
 			g.fillRect(getRealMargins(size) + i*(componentWidth + componentGap), sortingTool.getHeight()-maxHeight, componentWidth, maxHeight);
 			highlights[i] = defaultColor; 
 		}

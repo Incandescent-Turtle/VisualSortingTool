@@ -73,7 +73,11 @@ public abstract class Sorter
 	/**
 	 * used to resize the array if applicable. never to be called directly outside of tryResizeArray()
 	 */
-	protected abstract void resizeArray();
+	protected void resizeArray()
+	{
+		array = new VisualComponent[size];
+		visualizer.resizeHighlights(size);
+	}
 	
 	/**
 	 * if no active algorithm, will either generate new values via generateValues() or reload via reloadArray()
