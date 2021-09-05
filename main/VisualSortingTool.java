@@ -48,6 +48,7 @@ public class VisualSortingTool extends JPanel
 		//to allow for UI to be in top bar
 		super(new BorderLayout());
 		
+		
 		sorters = new Sorter[] {
 				sorter=new BarHeightSorter(this), 
 						new ColorGradientSorter(this),
