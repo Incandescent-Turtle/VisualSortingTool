@@ -6,7 +6,7 @@ import java.util.Random;
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
 import main.vcs.VisualComponent;
-import main.visualizers.Visualizer;
+import main.visualizers.bases.Visualizer;
 
 public abstract class Sorter
 {

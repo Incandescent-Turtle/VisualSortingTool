@@ -6,10 +6,11 @@ import java.awt.Graphics;
 import main.VisualSortingTool;
 import main.sorters.Sorter;
 import main.vcs.VisualComponent;
+import main.visualizers.bases.Visualizer;
 
-public class VisualizerBarHeight extends Visualizer
+public class BarHeightVisualizer extends Visualizer
 {	
-	public VisualizerBarHeight(VisualSortingTool sortingTool)
+	public BarHeightVisualizer(VisualSortingTool sortingTool)
 	{
 		super(sortingTool);
 		//a nice blue
@@ -31,7 +32,7 @@ public class VisualizerBarHeight extends Visualizer
 			if(highlights[i] == Color.RED) g.setColor(Color.RED);
 			//highlights in specified color (default is white)
 			g.setColor(highlights[i]);
-			g.fillRect(getRealMargins(size) + i*(componentWidth+componentGap), sortingTool.getHeight()-array[i].getValue(), componentWidth, array[i].getValue());
+			g.fillRect(getRealHMargins(size) + i*(componentWidth+componentGap), sortingTool.getHeight()-array[i].getValue(), componentWidth, array[i].getValue());
 			//resets the highlights array
 			highlights[i] = defaultColor; 
 		}

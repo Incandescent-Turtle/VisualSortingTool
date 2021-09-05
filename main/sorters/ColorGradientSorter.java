@@ -4,13 +4,13 @@ import java.util.Random;
 
 import main.VisualSortingTool;
 import main.vcs.VisualComponent;
-import main.visualizers.VisualizerColorGradient;
+import main.visualizers.ColorGradientVisualizer;
 
-public class SorterColorGradient extends Sorter
+public class ColorGradientSorter extends Sorter
 {
-	public SorterColorGradient(VisualSortingTool sortingTool)
+	public ColorGradientSorter(VisualSortingTool sortingTool)
 	{
-		super(sortingTool, new VisualizerColorGradient(sortingTool), "Color Gradient");
+		super(sortingTool, new ColorGradientVisualizer(sortingTool), "Color Gradient");
 	}
 
 	/**

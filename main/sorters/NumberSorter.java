@@ -2,13 +2,13 @@ package main.sorters;
 
 import main.VisualSortingTool;
 import main.vcs.VisualComponent;
-import main.visualizers.VisualizerNumber;
+import main.visualizers.NumberFixedVisualizer;
 
-public class SorterNumber extends Sorter
+public class NumberSorter extends Sorter
 {
-	public SorterNumber(VisualSortingTool sortingTool)
+	public NumberSorter(VisualSortingTool sortingTool)
 	{
-		super(sortingTool, new VisualizerNumber(sortingTool), "Numbers");
+		super(sortingTool, new NumberFixedVisualizer(sortingTool), "Numbers");
 		size = 100;
 	}
 	

@@ -1,4 +1,4 @@
-package main.visualizers;
+package main.visualizers.bases;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -65,7 +65,7 @@ public abstract class Visualizer
 	 */
 	public final int getTotalWidth(int size)
 	{
-		return size*(componentWidth+componentGap) - componentGap;
+		return size*(getComponentWidth()+componentGap) - componentGap;
 	}
 	
 	/**
@@ -75,13 +75,12 @@ public abstract class Visualizer
 	 * @param size # of VCs 
 	 * @return the size of a single margin
 	 */
-	public final int getRealMargins(int size)
+	public final int getRealHMargins(int size)
 	{
 		return (sortingTool.getWidth() - getTotalWidth(size))/2;
-
 	}
 	
-	public final int getComponentWidth()
+	public int getComponentWidth()
 	{
 		return componentWidth;
 	}
@@ -91,7 +90,7 @@ public abstract class Visualizer
 		return componentGap;
 	}
 	
-	public final int getComponentHeight()
+	public int getComponentHeight()
 	{
 		return componentHeight;
 	}

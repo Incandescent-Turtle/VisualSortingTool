@@ -1,11 +1,15 @@
 package main.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -21,8 +25,9 @@ import main.sorters.Sorter;
  */
 public class MainGUI
 {
+    private FlowLayout layout = new FlowLayout(FlowLayout.CENTER, 5, 5);
 	//the top UI bar holding the main UI components
-	private JPanel topBar = new JPanel();
+	private JPanel topBar = new JPanel(layout);
 	
 	//the button that shuffles the sorters array
 	private JButton shuffleButton = new JButton("Shuffle");
@@ -41,6 +46,9 @@ public class MainGUI
 	//drop down list of sorters to pick visualization methods
     private JComboBox<Sorter> sorterList = new JComboBox<Sorter>();
     
+    private ArrayList<JLabel> labels = new ArrayList<>();
+    private ArrayList<JComponent> components = new ArrayList<>();
+
     private VisualSortingTool sortingTool;
     
 	public MainGUI(VisualSortingTool sortingTool)
@@ -77,14 +85,14 @@ public class MainGUI
         setUpRunButton(sortingTool);
         
         //in a specific order
-		topBar.add(shuffleButton);
-		topBar.add(algorithmLabel);
-        topBar.add(algorithmList);
-        topBar.add(runAlgorithmButton);
-        topBar.add(delayLabel);
-        topBar.add(delaySpinner);
-        topBar.add(sorterLabel);
-        topBar.add(sorterList);
+        addToGUI(shuffleButton);
+        addToGUI(algorithmLabel);
+        addToGUI(algorithmList);
+        addToGUI(runAlgorithmButton);
+        addToGUI(delayLabel);
+        addToGUI(delaySpinner);
+        addToGUI(sorterLabel);
+        addToGUI(sorterList);
         sortingTool.validate();
 	}
 
@@ -114,9 +122,50 @@ public class MainGUI
 		});		
 	}
 	
+	private void addToGUI(JComponent component)
+	{
+		topBar.add(component);
+		if(component instanceof JLabel) labels.add((JLabel) component);
+		else components.add(component);
+	}
+	
 	public void enableSorterPicker()
 	{
 		sorterList.setEnabled(true);
+	}
+	
+	public void resizeGUI()
+	{
+		boolean isSmall = topBar.getWidth() < getGUIWidth(true);
+		hideLabels(isSmall);
+		layout.setAlignment(isSmall ? FlowLayout.LEFT : FlowLayout.CENTER);
+	}
+	
+	private void hideLabels(boolean hide)
+	{
+		for(JLabel label : labels)
+		{
+			label.setVisible(!hide);
+		}
+	}
+	
+	public int getGUIWidth(boolean withLabels)
+	{
+		int width = 20;
+		for(JComponent component : components)
+		{
+			width += component.getWidth() + layout.getHgap();
+		}
+		width += layout.getHgap();
+		
+		if(withLabels)
+		{
+			for(JLabel label : labels)
+			{
+				width += label.getWidth() + layout.getHgap();
+			}
+		}
+		return width;
 	}
 	
 	public int getTopBarHeight()
