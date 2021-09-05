@@ -15,9 +15,14 @@ public abstract class FixedSizeVisualizer extends Visualizer
 		super(sortingTool);
 		minMargin = 5;
 		componentGap = 10;
-		componentSize =10;
+		componentSize = 10;
 	}
 
+	/**
+	 * calls resize(), then calls drawComponent() for every VC with the x and y of its upper 
+	 * left hand position
+	 * dont override this 
+	 */
 	@Override
 	protected void drawArray(Graphics g, Sorter sorter, VisualComponent[] array, int arraySize)
 	{				
@@ -47,6 +52,9 @@ public abstract class FixedSizeVisualizer extends Visualizer
 		return (sortingTool.getHeight() - sortingTool.getMainGUI().getTopBarHeight() - (numOfRows*(componentSize+componentGap)-componentGap))/2;
 	}
 	
+	/**
+	 * sets componentSize and componentGap to be as big as possible to fill up all the window space
+	 */
 	public final void resize()
 	{
 		int arraySize = sortingTool.getSorter().getArraySize();
