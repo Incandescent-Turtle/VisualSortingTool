@@ -6,11 +6,12 @@ import java.awt.Graphics;
 import main.VisualSortingTool;
 import main.sorters.Sorter;
 import main.vcs.VisualComponent;
+import main.visualizers.bases.Visualizer;
 
-public class VisualizerColorGradient extends Visualizer
+public class ColorGradientVisualizer extends Visualizer
 {
 
-	public VisualizerColorGradient(VisualSortingTool sortingTool)
+	public ColorGradientVisualizer(VisualSortingTool sortingTool)
 	{
 		super(sortingTool);
 		minMargin = 2;
@@ -42,7 +43,7 @@ public class VisualizerColorGradient extends Visualizer
 			}
 			g.setColor(highlights[i] == Color.RED ? Color.RED : new Color(red, green, blue));
 			int maxHeight = sortingTool.getHeight() - sortingTool.getMainGUI().getTopBarHeight() - 20;
-			g.fillRect(getRealMargins(size) + i*(componentWidth + componentGap), sortingTool.getHeight()-maxHeight, componentWidth, maxHeight);
+			g.fillRect(getRealHMargins(size) + i*(componentWidth + componentGap), sortingTool.getHeight()-maxHeight, componentWidth, maxHeight);
 			highlights[i] = defaultColor; 
 		}
 	}

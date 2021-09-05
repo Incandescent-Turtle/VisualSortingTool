@@ -16,10 +16,11 @@ import javax.swing.UIManager;
 
 import main.algorithms.Algorithm;
 import main.algorithms.BubbleSort;
+import main.sorters.BarHeightSorter;
+import main.sorters.ColorGradientSorter;
+import main.sorters.NumberSorter;
 import main.sorters.Sorter;
-import main.sorters.SorterBarHeight;
-import main.sorters.SorterColorGradient;
-import main.sorters.SorterNumber;
+import main.ui.CustimizationGUI;
 import main.ui.FullscreenHandler;
 import main.ui.Keybindings;
 import main.ui.MainGUI;
@@ -48,9 +49,9 @@ public class VisualSortingTool extends JPanel
 		super(new BorderLayout());
 		
 		sorters = new Sorter[] {
-				sorter=new SorterBarHeight(this), 
-						new SorterColorGradient(this),
-						 new SorterNumber(this)
+				sorter=new BarHeightSorter(this), 
+						new ColorGradientSorter(this),
+						 new NumberSorter(this)
 		};
 		
 		algorithms = new Algorithm[] {
@@ -58,10 +59,10 @@ public class VisualSortingTool extends JPanel
 		};
 		
 		new Keybindings(this);
+		mainGUI = new MainGUI(this);
 		setUpFrame();
 		fullscreenHandler = new FullscreenHandler(this);
 		//initializes
-		mainGUI = new MainGUI(this);
 		//adds sorters and algorithms
 		Arrays.asList(sorters).forEach(s -> mainGUI.addSorter(s));
 		Arrays.asList(algorithms).forEach(a -> mainGUI.addAlgorithm(a));
@@ -74,6 +75,7 @@ public class VisualSortingTool extends JPanel
 	        public void componentResized(ComponentEvent e) 
 			{
 				//only resizes when algorithm isnt running
+				mainGUI.resizeGUI();
 				sorter.tryResizeArray();
 				sorter.tryReloadArray();
 				sorter.tryShuffleArray();
@@ -82,7 +84,13 @@ public class VisualSortingTool extends JPanel
 		});	
 		validate();
 		frame.setVisible(true);
+        frame.setMinimumSize(new Dimension(mainGUI.getGUIWidth(false), 400));
+		frame.setLocationRelativeTo(null);
+		//starts maximized
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.requestFocus();
+		new CustimizationGUI(this);
+		frame.validate();
 	}
 
 	private void setUpFrame()
@@ -92,13 +100,10 @@ public class VisualSortingTool extends JPanel
 		Dimension dim = new Dimension(400, 400);
 		frame.setPreferredSize(dim);
 		frame.setMaximumSize(dim);
-		frame.setMinimumSize(dim);
+		//frame.setMinimumSize(dim);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(true);
-		frame.setLocationRelativeTo(null);
 		frame.add(this);
-		//starts maximized
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	}
 	
 	@Override

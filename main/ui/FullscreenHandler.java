@@ -62,6 +62,7 @@ public class FullscreenHandler
 	{
 		frame.dispose();
 		frame.setVisible(false);
+		//when fullscreen
 		if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH && frame.isUndecorated())
 		{
 			// reverting

@@ -2,13 +2,13 @@ package main.sorters;
 
 import main.VisualSortingTool;
 import main.vcs.VisualComponent;
-import main.visualizers.VisualizerBarHeight;
+import main.visualizers.BarHeightVisualizer;
 
-public class SorterBarHeight extends Sorter
+public class BarHeightSorter extends Sorter
 {
-	public SorterBarHeight(VisualSortingTool sortingTool)
+	public BarHeightSorter(VisualSortingTool sortingTool)
 	{
-		super(sortingTool, new VisualizerBarHeight(sortingTool), "Bar Heights");
+		super(sortingTool, new BarHeightVisualizer(sortingTool), "Bar Heights");
 	}
 
 	/**
