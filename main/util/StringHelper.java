@@ -1,4 +1,4 @@
-package main.helpers;
+package main.util;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

@@ -77,7 +77,7 @@ public abstract class Visualizer
 	 */
 	public final int getRealHMargins(int size)
 	{
-		return (sortingTool.getWidth() - getTotalWidth(size))/2;
+		return (sortingTool.getVisualizerWidth() - getTotalWidth(size))/2;
 	}
 	
 	public int getComponentWidth()

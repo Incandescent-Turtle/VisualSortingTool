@@ -65,6 +65,8 @@ public class MainGUI
 		
 		//Shuffle button
 		shuffleButton.addActionListener(e -> {
+			sortingTool.getSorter().tryResizeArray();
+			sortingTool.getSorter().tryReloadArray();
 			sortingTool.getSorter().tryShuffleArray();
 			sortingTool.repaint();
 		});
@@ -166,11 +168,6 @@ public class MainGUI
 			}
 		}
 		return width;
-	}
-	
-	public int getTopBarHeight()
-	{
-		return topBar.getHeight();
 	}
 	
 	public void addAlgorithm(Algorithm algorithm)

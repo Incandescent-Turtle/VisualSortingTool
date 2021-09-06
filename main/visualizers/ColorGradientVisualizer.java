@@ -42,8 +42,8 @@ public class ColorGradientVisualizer extends Visualizer
 				if(blue < 0 || blue > 255) blue = 255;
 			}
 			g.setColor(highlights[i] == Color.RED ? Color.RED : new Color(red, green, blue));
-			int maxHeight = sortingTool.getHeight() - sortingTool.getMainGUI().getTopBarHeight() - 20;
-			g.fillRect(getRealHMargins(size) + i*(componentWidth + componentGap), sortingTool.getHeight()-maxHeight, componentWidth, maxHeight);
+			int maxHeight = sortingTool.getVisualizerHeight() - 20;
+			g.fillRect(getRealHMargins(size) + i*(componentWidth + componentGap), sortingTool.getVisualizerHeight()-maxHeight, componentWidth, maxHeight);
 			highlights[i] = defaultColor; 
 		}
 	}

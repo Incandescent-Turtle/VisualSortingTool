@@ -3,9 +3,6 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Arrays;
@@ -20,7 +17,7 @@ import main.sorters.BarHeightSorter;
 import main.sorters.ColorGradientSorter;
 import main.sorters.NumberSorter;
 import main.sorters.Sorter;
-import main.ui.CustimizationGUI;
+import main.ui.CustimizationPanel;
 import main.ui.FullscreenHandler;
 import main.ui.Keybindings;
 import main.ui.MainGUI;
@@ -32,6 +29,7 @@ import main.ui.MainGUI;
 public class VisualSortingTool extends JPanel
 {	
 	private JFrame frame;
+	private VisualizationPanel visualizationPanel;
 	private Sorter sorter;
 	
 	private FullscreenHandler fullscreenHandler;
@@ -47,7 +45,10 @@ public class VisualSortingTool extends JPanel
 	{
 		//to allow for UI to be in top bar
 		super(new BorderLayout());
-		
+		visualizationPanel = new VisualizationPanel(this);
+		visualizationPanel.setBackground(Color.GRAY);
+		new CustimizationPanel(this);
+		add(visualizationPanel, BorderLayout.CENTER);
 		sorters = new Sorter[] {
 				sorter=new BarHeightSorter(this), 
 						new ColorGradientSorter(this),
@@ -89,7 +90,6 @@ public class VisualSortingTool extends JPanel
 		//starts maximized
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.requestFocus();
-		new CustimizationGUI(this);
 		frame.validate();
 	}
 
@@ -106,19 +106,9 @@ public class VisualSortingTool extends JPanel
 		frame.add(this);
 	}
 	
-	@Override
-	protected void paintComponent(Graphics graphics)
+	public void repaintVisualizationPanel()
 	{
-		super.paintComponent(graphics);
-		
-		Graphics2D g = (Graphics2D) graphics;
-	    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-	    
-		//makes a background
-		g.setColor(Color.DARK_GRAY);
-		g.fillRect(0, 0, getWidth(), getHeight());
-		if(getWidth() > 0)sorter.getVisualizer().drawArray(g);
+		visualizationPanel.repaint();
 	}
 
 	public Sorter getSorter()
@@ -134,6 +124,21 @@ public class VisualSortingTool extends JPanel
 	public JFrame getFrame()
 	{
 		return frame;
+	}
+	
+	public JPanel getVisualizationPanel()
+	{
+		return visualizationPanel;
+	}
+	
+	public int getVisualizerHeight()
+	{
+		return visualizationPanel.getHeight();
+	}
+	
+	public int getVisualizerWidth()
+	{
+		return visualizationPanel.getWidth();
 	}
 	
 	public FullscreenHandler getFullscreenHandler()

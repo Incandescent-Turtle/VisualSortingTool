@@ -15,7 +15,6 @@ public class BarHeightVisualizer extends Visualizer
 		super(sortingTool);
 		//a nice blue
 		setDefaultColor(new Color(144, 193, 215));
-		
 		minMargin = 2;
 		componentWidth = 15;
 		componentGap = 2;
@@ -32,7 +31,7 @@ public class BarHeightVisualizer extends Visualizer
 			if(highlights[i] == Color.RED) g.setColor(Color.RED);
 			//highlights in specified color (default is white)
 			g.setColor(highlights[i]);
-			g.fillRect(getRealHMargins(size) + i*(componentWidth+componentGap), sortingTool.getHeight()-array[i].getValue(), componentWidth, array[i].getValue());
+			g.fillRect(getRealHMargins(size) + i*(componentWidth+componentGap), sortingTool.getVisualizerHeight()-array[i].getValue(), componentWidth, array[i].getValue());
 			//resets the highlights array
 			highlights[i] = defaultColor; 
 		}
