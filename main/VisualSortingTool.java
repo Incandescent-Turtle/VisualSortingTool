@@ -17,10 +17,10 @@ import main.sorters.BarHeightSorter;
 import main.sorters.ColorGradientSorter;
 import main.sorters.NumberSorter;
 import main.sorters.Sorter;
-import main.ui.CustimizationPanel;
 import main.ui.FullscreenHandler;
 import main.ui.Keybindings;
 import main.ui.MainGUI;
+import main.ui.custimization.CustimizationPanel;
 
 @SuppressWarnings("serial")
 /**
@@ -83,14 +83,13 @@ public class VisualSortingTool extends JPanel
 				repaint();
 			}
 		});	
-		validate();
-		frame.setVisible(true);
         frame.setMinimumSize(new Dimension(mainGUI.getGUIWidth(false), 400));
 		frame.setLocationRelativeTo(null);
 		//starts maximized
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.requestFocus();
 		frame.validate();
+		frame.setVisible(true);
 	}
 
 	private void setUpFrame()

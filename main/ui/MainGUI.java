@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -26,6 +27,7 @@ import main.sorters.Sorter;
 public class MainGUI
 {
     private FlowLayout layout = new FlowLayout(FlowLayout.CENTER, 5, 5);
+
 	//the top UI bar holding the main UI components
 	private JPanel topBar = new JPanel(layout);
 	
@@ -54,6 +56,8 @@ public class MainGUI
 	public MainGUI(VisualSortingTool sortingTool)
 	{
 		this.sortingTool = sortingTool;
+		BoxLayout bl = new BoxLayout(topBar, BoxLayout.X_AXIS);
+		
 	}
 	
 	/**
