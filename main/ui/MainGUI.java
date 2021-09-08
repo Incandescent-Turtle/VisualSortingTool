@@ -1,7 +1,6 @@
 package main.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -56,8 +55,6 @@ public class MainGUI
 	public MainGUI(VisualSortingTool sortingTool)
 	{
 		this.sortingTool = sortingTool;
-		BoxLayout bl = new BoxLayout(topBar, BoxLayout.X_AXIS);
-		
 	}
 	
 	/**
@@ -81,10 +78,13 @@ public class MainGUI
         //sorter combobox. when switches it resizes/reloads/shuffles the sorter as well as carrying over the delay
         sorterList.addItemListener(e -> {
         	sortingTool.setSorter((Sorter) e.getItem());
-        	sortingTool.getSorter().setDelay((int) delaySpinner.getValue());
-        	sortingTool.getSorter().tryResizeArray();
-        	sortingTool.getSorter().tryReloadArray();
-        	sortingTool.getSorter().tryShuffleArray();
+        	Sorter sorter = sortingTool.getSorter();
+        	if(sortingTool.getCustimizationPanel() == null) System.out.println("true");
+        	sortingTool.getCustimizationPanel().changePanel(sorter.toString());
+        	sorter.setDelay((int) delaySpinner.getValue());
+        	sorter.tryResizeArray();
+        	sorter.tryReloadArray();
+        	sorter.tryShuffleArray();
         	sortingTool.repaint();
         });
                         
@@ -119,6 +119,7 @@ public class MainGUI
 					System.out.println(algorithmList.getSelectedItem().toString() + " has been pushed");
 					sorter.setAlgorithm((Algorithm)algorithmList.getSelectedItem());
 		    		sorterList.setEnabled(false);
+		    		algorithmList.setEnabled(false);
 		    		//runs the current algorithm
 				    Thread thread = new Thread(() -> ((Algorithm)algorithmList.getSelectedItem()).run());
 		    		//runs logic on another thread so swing can update 
@@ -135,9 +136,10 @@ public class MainGUI
 		else components.add(component);
 	}
 	
-	public void enableSorterPicker()
+	public void enableComboBoxes()
 	{
 		sorterList.setEnabled(true);
+		algorithmList.setEnabled(true);
 	}
 	
 	public void resizeGUI()

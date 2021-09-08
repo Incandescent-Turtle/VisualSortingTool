@@ -13,7 +13,7 @@ import javax.swing.SpinnerNumberModel;
 import main.VisualSortingTool;
 
 @SuppressWarnings("serial")
-public class SorterPanel extends JPanel
+public class GroupLayoutSorterPanel extends JPanel
 {
 	private final GroupLayout.ParallelGroup left;
 	private final GroupLayout.ParallelGroup right;
@@ -21,7 +21,7 @@ public class SorterPanel extends JPanel
 	private final GroupLayout gl;
 	private final VisualSortingTool sortingTool;
 
-	public SorterPanel(VisualSortingTool sortingTool, CustimizationPanel custimizer)
+	public GroupLayoutSorterPanel(VisualSortingTool sortingTool, CustimizationPanel custimizer)
 	{
 		this.sortingTool = sortingTool;
 		setLayout(gl = new GroupLayout(this));

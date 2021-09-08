@@ -1,6 +1,7 @@
 package main.ui.custimization;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,7 +9,6 @@ import java.awt.event.ActionListener;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -18,55 +18,26 @@ import main.util.ColorRetrieveAction;
 import main.visualizers.bases.Visualizer;
 
 @SuppressWarnings("serial")
-public class CustimizationPanel extends JTabbedPane
+public class CustimizationPanel extends JPanel
 {
 	private final VisualSortingTool sortingTool;
-	public final JButton defaultColorPickingButton;
-	private  GroupLayout.ParallelGroup left;
-	private  GroupLayout.ParallelGroup right;
-	private  GroupLayout.SequentialGroup rows;
-
+	private CardLayout cl = new CardLayout();
+	
 	public CustimizationPanel(VisualSortingTool sortingTool) 
 	{
+		setLayout(cl);
 		this.sortingTool = sortingTool;
-		sortingTool.add(this, BorderLayout.LINE_END);
-		defaultColorPickingButton = createDefaultColorPickingButton();
-
-		add("Bar Height", new SorterPanel(sortingTool, this));
-
+		add(new GridBagLayoutSortingPanel(sortingTool, this), "Bar Heights");
+		add(new GroupLayoutSorterPanel(sortingTool, this), "Color Gradient");
+		//add("Bar Height", new GroupLayoutSorterPanel(sortingTool, this));
 		revalidate();
-		JPanel p2 = new JPanel();
-		add("Color Gradient", new SorterPanel(sortingTool, this));
-		JPanel p3 = new JPanel();
-		add("Numbers", p3);
+		sortingTool.add(this, BorderLayout.LINE_END);
 	}
 	
-	private void placeComponents(GroupLayout gl)
-	{	
-		gl.setHorizontalGroup(
-				gl.createSequentialGroup()
-				.addGroup(left)
-				.addGroup(right));
-		
-		gl.setVerticalGroup(rows);
-	}
-	
-	private void addRow(GroupLayout gl, JComponent leftComponent, JComponent rightComponent)
+	public void changePanel(String name)
 	{
-		GroupLayout.ParallelGroup row = gl.createParallelGroup();
-		if(leftComponent != null)
-		{
-			row.addComponent(leftComponent);
-			left.addComponent(leftComponent, GroupLayout.Alignment.CENTER);
-		}
-		if(rightComponent != null)
-		{
-			row.addComponent(rightComponent, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE);
-			right.addComponent(rightComponent, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE);
-		}
-		rows.addGroup(row);
+		cl.show(this, name);
 	}
-	
 	protected JButton createColorPickingButton(ColorAction okAction, ColorRetrieveAction retrieveAction)
 	{
 		JButton button = new JButton("Choose Color");

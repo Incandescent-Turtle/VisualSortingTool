@@ -30,6 +30,7 @@ public class VisualSortingTool extends JPanel
 {	
 	private JFrame frame;
 	private VisualizationPanel visualizationPanel;
+	private CustimizationPanel customizer;
 	private Sorter sorter;
 	
 	private FullscreenHandler fullscreenHandler;
@@ -47,7 +48,7 @@ public class VisualSortingTool extends JPanel
 		super(new BorderLayout());
 		visualizationPanel = new VisualizationPanel(this);
 		visualizationPanel.setBackground(Color.GRAY);
-		new CustimizationPanel(this);
+		customizer = new CustimizationPanel(this);
 		add(visualizationPanel, BorderLayout.CENTER);
 		sorters = new Sorter[] {
 				sorter=new BarHeightSorter(this), 
@@ -83,22 +84,27 @@ public class VisualSortingTool extends JPanel
 				repaint();
 			}
 		});	
-        frame.setMinimumSize(new Dimension(mainGUI.getGUIWidth(false), 400));
 		frame.setLocationRelativeTo(null);
 		//starts maximized
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.requestFocus();
 		frame.validate();
+		frame.setMinimumSize(new Dimension(mainGUI.getGUIWidth(false), 400));
 		frame.setVisible(true);
 	}
-
+	
 	private void setUpFrame()
 	{
 		//overrides to improve fullscreen function
-		frame = new JFrame("Sorting Methods Visudal");
+		frame = new JFrame("Sorting Methods Visudal") {
+			@Override
+			public Dimension getMinimumSize()
+			{
+				return new Dimension(mainGUI.getGUIWidth(false), 500);
+			}
+		};
 		Dimension dim = new Dimension(400, 400);
 		frame.setPreferredSize(dim);
-		frame.setMaximumSize(dim);
 		//frame.setMinimumSize(dim);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(true);
@@ -167,5 +173,10 @@ public class VisualSortingTool extends JPanel
 			e.printStackTrace();
 		}
 		new VisualSortingTool();
+	}
+	
+	public CustimizationPanel getCustimizationPanel()
+	{
+		return customizer;
 	}
 }

@@ -53,7 +53,7 @@ public abstract class FixedSizeVisualizer extends Visualizer
 	}
 	
 	/**
-	 * sets componentSize and componentGap to be as big as possible to fill up all the window space
+	 * sets componentSize  to be as big as possible to fill up all the window space
 	 */
 	public final void resize()
 	{
@@ -62,32 +62,19 @@ public abstract class FixedSizeVisualizer extends Visualizer
 		int numOfRows = 1;
 		int limit = 1;
 		componentSize = 1;
-		componentGap = 1;
 		//finds biggest possible size
 		//bottom of the last row < the bottom of the screen
 		while((baseY + numOfRows*(componentSize+componentGap)-componentGap) < (sortingTool.getVisualizerHeight() - componentGap))
 		{
 			componentSize++;
 			//gap is a fraction of size
-			componentGap = (int) Math.ceil(componentSize/10f);
+			//componentGap = (int) Math.ceil(componentSize/10f);
 			//at current size how many VCs can fit in a single row
 			limit = (sortingTool.getVisualizerWidth()-minMargin*2+componentGap)/((componentSize+componentGap));
 			//with current size how many rows are needed
 			numOfRows = arraySize/limit + 1;
 		}
 		componentSize-=1;
-		//finds biggest possible gap size
-		//bottom of the last row < the bottom of the screen
-		while((baseY + numOfRows*(componentSize+componentGap)-componentGap) < (sortingTool.getVisualizerHeight() - componentGap))
-		{
-			componentGap++;
-			//at current size how many VCs can fit in a single row
-			limit = (sortingTool.getVisualizerWidth()-minMargin*2+componentGap)/((componentSize+componentGap));
-			//with current size how many rows are needed
-			numOfRows = arraySize/limit + 1;
-		}
-		componentGap -= 1;
-		System.out.println(componentSize);
 	}
 	
 	protected abstract void drawComponent(Graphics g, Sorter sorter, VisualComponent[] array, int index, int arraySize, int x, int y);
