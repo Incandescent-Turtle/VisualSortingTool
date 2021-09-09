@@ -38,6 +38,5 @@ public class BubbleSort extends Algorithm
 			}
 		}
 		finishRun();
-		System.out.println("done check");
 	}
 }

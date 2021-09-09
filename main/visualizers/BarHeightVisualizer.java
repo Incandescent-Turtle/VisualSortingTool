@@ -3,8 +3,12 @@ package main.visualizers;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import javax.swing.SpinnerNumberModel;
+
 import main.VisualSortingTool;
 import main.sorters.Sorter;
+import main.ui.custimization.CustomizationGUI;
+import main.ui.custimization.CustomizationPanel;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.Visualizer;
 
@@ -18,6 +22,19 @@ public class BarHeightVisualizer extends Visualizer
 		minMargin = 2;
 		componentWidth = 15;
 		componentGap = 2;
+	}
+	
+	@Override
+	public void addCustomizationComponents(CustomizationPanel cp)
+	{
+		SpinnerNumberModel nm = new SpinnerNumberModel(componentWidth, 2, 100, 1);
+		cp.addRow("Bar Width:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> componentWidth = n));
+		nm = new SpinnerNumberModel(componentGap, 1, 20, 1);
+		cp.addRow("Gap:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> componentGap = n));
+		nm = new SpinnerNumberModel(componentGap, 0, 100, 1);
+		cp.addRow("Margin:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> minMargin = n));
+		cp.addRow(CustomizationGUI.createDefaultColorPickingButton(sortingTool), true);
+		cp.addRow(CustomizationGUI.createMakePinkButton(sortingTool), true);
 	}
 	
 	/**

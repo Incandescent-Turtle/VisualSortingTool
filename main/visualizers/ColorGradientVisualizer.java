@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 import main.VisualSortingTool;
 import main.sorters.Sorter;
+import main.ui.custimization.CustomizationPanel;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.Visualizer;
 
@@ -21,6 +22,13 @@ public class ColorGradientVisualizer extends Visualizer
 		componentGap = 2;
 	}
 
+	@Override
+	public void addCustomizationComponents(CustomizationPanel cp)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	
 	@Override
 	public void drawArray(Graphics g, Sorter sorter, VisualComponent[] array, int size)
 	{

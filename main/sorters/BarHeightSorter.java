@@ -1,6 +1,13 @@
 package main.sorters;
 
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import jdk.nashorn.internal.scripts.JS;
 import main.VisualSortingTool;
+import main.ui.custimization.CustomizationPanel;
 import main.vcs.VisualComponent;
 import main.visualizers.BarHeightVisualizer;
 
@@ -11,6 +18,11 @@ public class BarHeightSorter extends Sorter
 		super(sortingTool, new BarHeightVisualizer(sortingTool), "Bar Heights");
 	}
 
+	@Override
+	public void addCustomizationComponents(CustomizationPanel cp)
+	{
+	}
+	
 	/**
 	 * <ul>
 	 * 	<li>changes the <b>size</b> variable based on window size</li>

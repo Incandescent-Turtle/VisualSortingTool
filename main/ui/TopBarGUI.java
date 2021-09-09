@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -19,16 +18,10 @@ import main.VisualSortingTool;
 import main.algorithms.Algorithm;
 import main.sorters.Sorter;
 
-/**
- * On creation adds a top bar to the application with some options
- *
- */
-public class MainGUI
+@SuppressWarnings("serial")
+public class TopBarGUI extends JPanel
 {
-    private FlowLayout layout = new FlowLayout(FlowLayout.CENTER, 5, 5);
-
-	//the top UI bar holding the main UI components
-	private JPanel topBar = new JPanel(layout);
+	 private FlowLayout layout = new FlowLayout(FlowLayout.CENTER, 5, 5);
 	
 	//the button that shuffles the sorters array
 	private JButton shuffleButton = new JButton("Shuffle");
@@ -52,24 +45,22 @@ public class MainGUI
 
     private VisualSortingTool sortingTool;
     
-	public MainGUI(VisualSortingTool sortingTool)
+    public TopBarGUI(VisualSortingTool sortingTool)
 	{
 		this.sortingTool = sortingTool;
 	}
-	
+    
+
 	/**
 	 * To call after sorters have been added to thei combobox
 	 */
 	public void setUp()
 	{
-		sortingTool.add(topBar, BorderLayout.PAGE_START); //top of the screen
+		sortingTool.add(this, BorderLayout.PAGE_START); //top of the screen
 		
 		//Shuffle button
 		shuffleButton.addActionListener(e -> {
-			sortingTool.getSorter().tryResizeArray();
-			sortingTool.getSorter().tryReloadArray();
-			sortingTool.getSorter().tryShuffleArray();
-			sortingTool.repaint();
+			sortingTool.getSorter().recalculateAndRepaint();
 		});
 		
 		//Delay Spinner
@@ -79,13 +70,9 @@ public class MainGUI
         sorterList.addItemListener(e -> {
         	sortingTool.setSorter((Sorter) e.getItem());
         	Sorter sorter = sortingTool.getSorter();
-        	if(sortingTool.getCustimizationPanel() == null) System.out.println("true");
-        	sortingTool.getCustimizationPanel().changePanel(sorter.toString());
+        	sortingTool.getGUIHandler().getCustimizationPanel().changePanel(sorter);
         	sorter.setDelay((int) delaySpinner.getValue());
-        	sorter.tryResizeArray();
-        	sorter.tryReloadArray();
-        	sorter.tryShuffleArray();
-        	sortingTool.repaint();
+        	sorter.recalculateAndRepaint();
         });
                         
         setUpRunButton(sortingTool);
@@ -99,6 +86,7 @@ public class MainGUI
         addToGUI(delaySpinner);
         addToGUI(sorterLabel);
         addToGUI(sorterList);
+        sortingTool.getGUIHandler().addToggleable(shuffleButton, algorithmList, runAlgorithmButton, sorterList);
         sortingTool.validate();
 	}
 
@@ -118,8 +106,7 @@ public class MainGUI
 		    	{
 					System.out.println(algorithmList.getSelectedItem().toString() + " has been pushed");
 					sorter.setAlgorithm((Algorithm)algorithmList.getSelectedItem());
-		    		sorterList.setEnabled(false);
-		    		algorithmList.setEnabled(false);
+		    		sortingTool.getGUIHandler().setEnabled(false);
 		    		//runs the current algorithm
 				    Thread thread = new Thread(() -> ((Algorithm)algorithmList.getSelectedItem()).run());
 		    		//runs logic on another thread so swing can update 
@@ -131,7 +118,7 @@ public class MainGUI
 	
 	private void addToGUI(JComponent component)
 	{
-		topBar.add(component);
+		add(component);
 		if(component instanceof JLabel) labels.add((JLabel) component);
 		else components.add(component);
 	}
@@ -144,7 +131,7 @@ public class MainGUI
 	
 	public void resizeGUI()
 	{
-		boolean isSmall = topBar.getWidth() < getGUIWidth(true);
+		boolean isSmall = getWidth() < getGUIWidth(true);
 		hideLabels(isSmall);
 		layout.setAlignment(isSmall ? FlowLayout.LEFT : FlowLayout.CENTER);
 	}

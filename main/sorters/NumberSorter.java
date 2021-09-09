@@ -1,6 +1,7 @@
 package main.sorters;
 
 import main.VisualSortingTool;
+import main.ui.custimization.CustomizationPanel;
 import main.vcs.VisualComponent;
 import main.visualizers.NumberFixedVisualizer;
 
@@ -10,6 +11,11 @@ public class NumberSorter extends Sorter
 	{
 		super(sortingTool, new NumberFixedVisualizer(sortingTool), "Numbers");
 		size = 100;
+	}
+	
+	@Override
+	public void addCustomizationComponents(CustomizationPanel cp)
+	{
 	}
 	
 	@Override

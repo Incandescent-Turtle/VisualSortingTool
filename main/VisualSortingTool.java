@@ -1,7 +1,6 @@
 package main;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -18,9 +17,8 @@ import main.sorters.ColorGradientSorter;
 import main.sorters.NumberSorter;
 import main.sorters.Sorter;
 import main.ui.FullscreenHandler;
+import main.ui.GUIHandler;
 import main.ui.Keybindings;
-import main.ui.MainGUI;
-import main.ui.custimization.CustimizationPanel;
 
 @SuppressWarnings("serial")
 /**
@@ -30,12 +28,11 @@ public class VisualSortingTool extends JPanel
 {	
 	private JFrame frame;
 	private VisualizationPanel visualizationPanel;
-	private CustimizationPanel customizer;
 	private Sorter sorter;
 	
 	private FullscreenHandler fullscreenHandler;
 	
-	private MainGUI mainGUI;
+	private GUIHandler guiHandler;
 
 	//all the sorters in the program
 	private Sorter[] sorters;
@@ -46,10 +43,7 @@ public class VisualSortingTool extends JPanel
 	{
 		//to allow for UI to be in top bar
 		super(new BorderLayout());
-		visualizationPanel = new VisualizationPanel(this);
-		visualizationPanel.setBackground(Color.GRAY);
-		customizer = new CustimizationPanel(this);
-		add(visualizationPanel, BorderLayout.CENTER);
+		add(visualizationPanel = new VisualizationPanel(this), BorderLayout.CENTER);
 		sorters = new Sorter[] {
 				sorter=new BarHeightSorter(this), 
 						new ColorGradientSorter(this),
@@ -61,15 +55,15 @@ public class VisualSortingTool extends JPanel
 		};
 		
 		new Keybindings(this);
-		mainGUI = new MainGUI(this);
+		guiHandler = new GUIHandler(this);
 		setUpFrame();
 		fullscreenHandler = new FullscreenHandler(this);
 		//initializes
 		//adds sorters and algorithms
-		Arrays.asList(sorters).forEach(s -> mainGUI.addSorter(s));
-		Arrays.asList(algorithms).forEach(a -> mainGUI.addAlgorithm(a));
+		Arrays.asList(sorters).forEach(s -> guiHandler.getTopBarGUI().addSorter(s));
+		Arrays.asList(algorithms).forEach(a -> guiHandler.getTopBarGUI().addAlgorithm(a));
 		//sets up the class, adds listeners etc
-		mainGUI.setUp();
+		guiHandler.setUp();
 		//whenever a resize occurs it attempts to update the array size
 		addComponentListener(new ComponentAdapter() {
 				
@@ -77,11 +71,8 @@ public class VisualSortingTool extends JPanel
 	        public void componentResized(ComponentEvent e) 
 			{
 				//only resizes when algorithm isnt running
-				mainGUI.resizeGUI();
-				sorter.tryResizeArray();
-				sorter.tryReloadArray();
-				sorter.tryShuffleArray();
-				repaint();
+				guiHandler.getTopBarGUI().resizeGUI();
+				sorter.recalculateAndRepaint();
 			}
 		});	
 		frame.setLocationRelativeTo(null);
@@ -89,7 +80,7 @@ public class VisualSortingTool extends JPanel
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.requestFocus();
 		frame.validate();
-		frame.setMinimumSize(new Dimension(mainGUI.getGUIWidth(false), 400));
+		frame.setMinimumSize(new Dimension(guiHandler.getTopBarGUI().getGUIWidth(false), 400));
 		frame.setVisible(true);
 	}
 	
@@ -97,10 +88,11 @@ public class VisualSortingTool extends JPanel
 	{
 		//overrides to improve fullscreen function
 		frame = new JFrame("Sorting Methods Visudal") {
+			
 			@Override
 			public Dimension getMinimumSize()
 			{
-				return new Dimension(mainGUI.getGUIWidth(false), 500);
+				return new Dimension(guiHandler.getTopBarGUI().getGUIWidth(false), 400);
 			}
 		};
 		Dimension dim = new Dimension(400, 400);
@@ -124,6 +116,11 @@ public class VisualSortingTool extends JPanel
 	public void setSorter(Sorter sorter)
 	{
 		this.sorter = sorter;
+	}
+	
+	public Sorter[] getSorters()
+	{
+		return sorters;
 	}
 	
 	public JFrame getFrame()
@@ -151,9 +148,9 @@ public class VisualSortingTool extends JPanel
 		return fullscreenHandler;
 	}
 	
-	public MainGUI getMainGUI()
+	public GUIHandler getGUIHandler()
 	{
-		return mainGUI;
+		return guiHandler;
 	}
 	
 	public static void delay(int ms)
@@ -173,10 +170,5 @@ public class VisualSortingTool extends JPanel
 			e.printStackTrace();
 		}
 		new VisualSortingTool();
-	}
-	
-	public CustimizationPanel getCustimizationPanel()
-	{
-		return customizer;
 	}
 }

@@ -3,6 +3,7 @@ package main.sorters;
 import java.util.Random;
 
 import main.VisualSortingTool;
+import main.ui.custimization.CustomizationPanel;
 import main.vcs.VisualComponent;
 import main.visualizers.ColorGradientVisualizer;
 
@@ -13,6 +14,12 @@ public class ColorGradientSorter extends Sorter
 		super(sortingTool, new ColorGradientVisualizer(sortingTool), "Color Gradient");
 	}
 
+	@Override
+	public void addCustomizationComponents(CustomizationPanel cp)
+	{
+		
+	}
+	
 	/**
 	 * resizes based on window size and bar sizes/gaps
 	 */

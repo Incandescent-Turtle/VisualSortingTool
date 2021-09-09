@@ -40,7 +40,7 @@ public abstract class Algorithm
 		System.out.println("Done " + name);
 		sortingTool.getSorter().setAlgorithm(null);
 		isSorted(sortingTool, true);
-		sortingTool.getMainGUI().enableComboBoxes();
+		sortingTool.getGUIHandler().setEnabled(true);
 	}
 	
 	/**

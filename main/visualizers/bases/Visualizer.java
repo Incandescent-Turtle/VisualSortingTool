@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 import main.VisualSortingTool;
 import main.sorters.Sorter;
+import main.ui.custimization.CustomizationPanel;
 import main.vcs.VisualComponent;
 
 /**
@@ -35,6 +36,7 @@ public abstract class Visualizer
 		this.sortingTool = sortingTool;
 	}
 	
+	public abstract void addCustomizationComponents(CustomizationPanel cp);
 	/**
 	 * This draws the Sorters array to the screen
 	 */

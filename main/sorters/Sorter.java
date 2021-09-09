@@ -5,6 +5,7 @@ import java.util.Random;
 
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
+import main.ui.custimization.CustomizationPanel;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.Visualizer;
 
@@ -15,6 +16,7 @@ public abstract class Sorter
 	protected Visualizer visualizer;
 	protected Algorithm algorithm;
 	protected VisualSortingTool sortingTool;
+	protected CustomizationPanel customizationPanel;
 	
 	protected int size = 200;
 	protected int delay = 10;
@@ -30,6 +32,12 @@ public abstract class Sorter
 		this.name = name;
 	}
 	
+	public final void setCustomizationPanel()
+	{
+		if(customizationPanel == null)
+			customizationPanel = new CustomizationPanel(sortingTool, this);
+	}
+	public abstract void addCustomizationComponents(CustomizationPanel cp);
 	/**
 	 * Swaps these two indices with each other in <b>array</b> with <i>no animation</i>
 	 * @param first first index to be swapped
@@ -64,7 +72,7 @@ public abstract class Sorter
 	/**
 	 * To be called when the window has changed size. If no algorithm is active calls resizeArray()
 	 */
-	public final void tryResizeArray()
+	protected final void tryResizeArray()
 	{
 		if(algorithm == null)
 			resizeArray();
@@ -82,7 +90,7 @@ public abstract class Sorter
 	/**
 	 * if no active algorithm, will either generate new values via generateValues() or reload via reloadArray()
 	 */
-	public final void tryReloadArray()
+	protected final void tryReloadArray()
 	{
 		if(algorithm == null)
 		{
@@ -111,6 +119,17 @@ public abstract class Sorter
 		{
 			shuffleArray();
 			visualizer.resetHighlights();
+		}
+	}
+	
+	public void recalculateAndRepaint()
+	{
+		if(algorithm == null)
+		{
+			tryResizeArray();
+			tryReloadArray();
+			tryShuffleArray();
+			sortingTool.repaint();
 		}
 	}
 	
@@ -172,6 +191,11 @@ public abstract class Sorter
 	public VisualComponent[] getArray()
 	{
 		return array;
+	}
+	
+	public CustomizationPanel getCustomizationPanel()
+	{
+		return customizationPanel;
 	}
 	
 	@Override

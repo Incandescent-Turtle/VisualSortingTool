@@ -6,6 +6,7 @@ import java.awt.Graphics;
 
 import main.VisualSortingTool;
 import main.sorters.Sorter;
+import main.ui.custimization.CustomizationPanel;
 import main.util.StringHelper;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.FixedSizeVisualizer;
@@ -19,6 +20,13 @@ public class NumberFixedVisualizer extends FixedSizeVisualizer
 		setDefaultColor(new Color(144, 193, 215));
 	}
 
+	@Override
+	public void addCustomizationComponents(CustomizationPanel cp)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	
 	@Override
 	protected void drawComponent(Graphics g, Sorter sorter, VisualComponent[] array, int i, int arraySize, int x, int y)
 	{
