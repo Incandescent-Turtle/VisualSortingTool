@@ -5,13 +5,15 @@ import java.awt.Graphics;
 
 import main.VisualSortingTool;
 import main.sorters.Sorter;
+import main.sorters.Sorter.Sorters;
+import main.ui.custimization.CustomizationGUI.Customizable;
 import main.vcs.VisualComponent;
 
 /**
  *  Base class
  *  Visualizers are what draw the arrays and keep all the variables relating to the drawing
  */
-public abstract class Visualizer
+public abstract class Visualizer implements Customizable
 {
 	//in px the min distance from the borders of the screen
 	protected int minMargin = 30;
@@ -27,12 +29,19 @@ public abstract class Visualizer
 	//this is used to colour certain elements, the index corrosponds to that of array in sorter
 	protected Color[] highlights;
 	
+	/**
+	 * whether should render components with {@link Visualizer#defaultColor}
+	 */
+	protected boolean confirmed = false;	
 	
 	protected VisualSortingTool sortingTool;
+	
+	protected Sorters identifier;
 
-	public Visualizer(VisualSortingTool sortingTool)
+	public Visualizer(VisualSortingTool sortingTool, Sorters identifier)
 	{
 		this.sortingTool = sortingTool;
+		this.identifier = identifier;
 	}
 	
 	/**
@@ -42,10 +51,11 @@ public abstract class Visualizer
 	{
 		Sorter sorter = sortingTool.getSorter();
 		if(sorter.getArraySize() > 0 && highlights != null)
-			drawArray(g, sorter, sorter.getArray(), sorter.getArraySize());
+			drawArray(g, sorter.getArray(), sorter.getArraySize());
 	}
 	
-	protected abstract void drawArray(Graphics g, Sorter sorter, VisualComponent[] array, int size);
+	//just a little helper method
+	protected abstract void drawArray(Graphics g, VisualComponent[] array, int size);
 
 	/**
 	 * resets all indices to the default colour
@@ -77,7 +87,7 @@ public abstract class Visualizer
 	 */
 	public final int getRealHMargins(int size)
 	{
-		return (sortingTool.getWidth() - getTotalWidth(size))/2;
+		return (sortingTool.getVisualizerWidth() - getTotalWidth(size))/2;
 	}
 	
 	public int getComponentWidth()
@@ -122,5 +132,15 @@ public abstract class Visualizer
 	public int getMinMargin()
 	{
 		return minMargin;
+	}
+	
+	public void setConfirmed(boolean bool)
+	{
+		confirmed = bool;
+	}
+	
+	public boolean isConfirmed()
+	{
+		return confirmed;
 	}
 }

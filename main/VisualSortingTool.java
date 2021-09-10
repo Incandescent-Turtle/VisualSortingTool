@@ -1,11 +1,7 @@
 package main;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Arrays;
@@ -13,17 +9,18 @@ import java.util.Arrays;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import main.algorithms.Algorithm;
 import main.algorithms.BubbleSort;
+import main.algorithms.SelectionSort;
 import main.sorters.BarHeightSorter;
 import main.sorters.ColorGradientSorter;
 import main.sorters.NumberSorter;
 import main.sorters.Sorter;
-import main.ui.CustimizationGUI;
-import main.ui.FullscreenHandler;
-import main.ui.Keybindings;
-import main.ui.MainGUI;
+import main.ui.GUIHandler;
+import main.ui.RoryFrame;
+import main.ui.TopBarGUI;
 
 @SuppressWarnings("serial")
 /**
@@ -32,11 +29,10 @@ import main.ui.MainGUI;
 public class VisualSortingTool extends JPanel
 {	
 	private JFrame frame;
+	private VisualizationPanel visualizationPanel;
 	private Sorter sorter;
-	
-	private FullscreenHandler fullscreenHandler;
-	
-	private MainGUI mainGUI;
+		
+	private GUIHandler guiHandler;
 
 	//all the sorters in the program
 	private Sorter[] sorters;
@@ -47,79 +43,62 @@ public class VisualSortingTool extends JPanel
 	{
 		//to allow for UI to be in top bar
 		super(new BorderLayout());
-		
-		
+    add(visualizationPanel = new VisualizationPanel(this), BorderLayout.CENTER);
 		sorters = new Sorter[] {
-				sorter=new BarHeightSorter(this), 
+			   sorter = new BarHeightSorter(this), 
 						new ColorGradientSorter(this),
-						 new NumberSorter(this)
+						new NumberSorter(this)
 		};
 		
 		algorithms = new Algorithm[] {
-				new BubbleSort(this)
+				new BubbleSort(this),
+				new SelectionSort(this)
 		};
 		
-		new Keybindings(this);
-		mainGUI = new MainGUI(this);
+		guiHandler = new GUIHandler();
+		guiHandler.init(this);
 		setUpFrame();
-		fullscreenHandler = new FullscreenHandler(this);
-		//initializes
 		//adds sorters and algorithms
-		Arrays.asList(sorters).forEach(s -> mainGUI.addSorter(s));
-		Arrays.asList(algorithms).forEach(a -> mainGUI.addAlgorithm(a));
-		//sets up the class, adds listeners etc
-		mainGUI.setUp();
-		//whenever a resize occurs it attempts to update the array size
+		Arrays.asList(sorters).forEach(s -> guiHandler.getTopBarGUI().addSorter(s));
+		Arrays.asList(algorithms).forEach(a -> guiHandler.getTopBarGUI().addAlgorithm(a));
+		//whenever a resize occurs it notifies 
 		addComponentListener(new ComponentAdapter() {
 				
 			@Override
 	        public void componentResized(ComponentEvent e) 
 			{
 				//only resizes when algorithm isnt running
-				mainGUI.resizeGUI();
-				sorter.tryResizeArray();
-				sorter.tryReloadArray();
-				sorter.tryShuffleArray();
-				repaint();
+				guiHandler.getTopBarGUI().resizeGUI();
+				sorter.recalculateAndRepaint();
 			}
 		});	
-		validate();
-		frame.setVisible(true);
-        frame.setMinimumSize(new Dimension(mainGUI.getGUIWidth(false), 400));
 		frame.setLocationRelativeTo(null);
 		//starts maximized
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.requestFocus();
-		new CustimizationGUI(this);
 		frame.validate();
+		frame.setMinimumSize(new Dimension(guiHandler.getTopBarGUI().getGUIWidth(false), 400));
+		frame.setVisible(true);
 	}
-
+	
 	private void setUpFrame()
 	{
 		//overrides to improve fullscreen function
-		frame = new JFrame("Sorting Methods Visudal");
+		frame = new RoryFrame(this, "Sorting Methods Visual") {
+			
+			@Override
+			public Dimension getMinimumSize()
+			{
+				TopBarGUI topBar = guiHandler.getTopBarGUI();
+				return new Dimension(topBar.getGUIWidth(false), guiHandler.getCustomizationGUI().getMinimumSize().height + topBar.getHeight() + 50);
+			}
+		};
 		Dimension dim = new Dimension(400, 400);
 		frame.setPreferredSize(dim);
-		frame.setMaximumSize(dim);
 		//frame.setMinimumSize(dim);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(true);
 		frame.add(this);
-	}
-	
-	@Override
-	protected void paintComponent(Graphics graphics)
-	{
-		super.paintComponent(graphics);
-		
-		Graphics2D g = (Graphics2D) graphics;
-	    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-	    
-		//makes a background
-		g.setColor(Color.DARK_GRAY);
-		g.fillRect(0, 0, getWidth(), getHeight());
-		if(getWidth() > 0)sorter.getVisualizer().drawArray(g);
 	}
 
 	public Sorter getSorter()
@@ -132,19 +111,53 @@ public class VisualSortingTool extends JPanel
 		this.sorter = sorter;
 	}
 	
+	public Sorter[] getSorters()
+	{
+		return sorters;
+	}
+	
+	/**
+	 * get {@link Sorter} instance based on identifier
+	 * @param identifier identifier corresponding to desired {@link Sorter}
+	 * @return desired {@link Sorter}
+	 */
+	public Sorter getSorter(Sorter.Sorters identifier)
+	{
+		for(Sorter sorter : sorters)
+		{
+			if(sorter.getIdentifier() == identifier) return sorter;
+		}
+		return null;
+	}
+	
+	public Algorithm[] getAlgorithms()
+	{
+		return algorithms;
+	}
+	
 	public JFrame getFrame()
 	{
 		return frame;
 	}
 	
-	public FullscreenHandler getFullscreenHandler()
+	public JPanel getVisualizationPanel()
 	{
-		return fullscreenHandler;
+		return visualizationPanel;
 	}
 	
-	public MainGUI getMainGUI()
+	public int getVisualizerHeight()
 	{
-		return mainGUI;
+		return visualizationPanel.getHeight();
+	}
+	
+	public int getVisualizerWidth()
+	{
+		return visualizationPanel.getWidth();
+	}
+	
+	public GUIHandler getGUIHandler()
+	{
+		return guiHandler;
 	}
 	
 	public static void delay(int ms)
@@ -158,10 +171,20 @@ public class VisualSortingTool extends JPanel
 	
 	public static void main(String[] args)
 	{
-		try{
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		//dope look and feel fr
+		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            UIManager.setLookAndFeel(info.getClassName());
+		            break;
+		        }
+		    }
 		} catch (Exception e) {
-			e.printStackTrace();
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			} 
 		}
 		new VisualSortingTool();
 	}

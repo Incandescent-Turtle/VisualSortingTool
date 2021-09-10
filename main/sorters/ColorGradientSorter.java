@@ -8,11 +8,14 @@ import main.visualizers.ColorGradientVisualizer;
 
 public class ColorGradientSorter extends Sorter
 {
+	/**
+	 * a {@link Sorter} to use a blue color gradient to visualize sorting
+	 */
 	public ColorGradientSorter(VisualSortingTool sortingTool)
 	{
-		super(sortingTool, new ColorGradientVisualizer(sortingTool), "Color Gradient");
+		super(sortingTool, new ColorGradientVisualizer(sortingTool), Sorters.COLOR_GRADIENT);
 	}
-
+	
 	/**
 	 * resizes based on window size and bar sizes/gaps
 	 */
@@ -21,7 +24,7 @@ public class ColorGradientSorter extends Sorter
 	{
 		int barWidth = visualizer.getComponentWidth();
 		int barGap = visualizer.getComponentGap();
-		size = (sortingTool.getWidth() - visualizer.getMinMargin()*2 + barGap)/(barWidth+barGap);
+		size = (sortingTool.getVisualizerWidth() - visualizer.getMinMargin()*2 + barGap)/(barWidth+barGap);
 		array = new VisualComponent[size];
 		visualizer.resizeHighlights(size);
 		sortingTool.repaint();

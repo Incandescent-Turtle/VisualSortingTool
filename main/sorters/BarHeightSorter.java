@@ -6,11 +6,14 @@ import main.visualizers.BarHeightVisualizer;
 
 public class BarHeightSorter extends Sorter
 {
+	/**
+	 * a {@link Sorter} to use different height of bars as a visualizer
+	 */
 	public BarHeightSorter(VisualSortingTool sortingTool)
 	{
-		super(sortingTool, new BarHeightVisualizer(sortingTool), "Bar Heights");
+		super(sortingTool, new BarHeightVisualizer(sortingTool), Sorters.BAR_HEIGHT);
 	}
-
+	
 	/**
 	 * <ul>
 	 * 	<li>changes the <b>size</b> variable based on window size</li>
@@ -22,7 +25,7 @@ public class BarHeightSorter extends Sorter
 	{
 		int barWidth = visualizer.getComponentWidth();
 		int barGap = visualizer.getComponentGap();
-		size = (sortingTool.getWidth() - visualizer.getMinMargin()*2 + barGap)/(barWidth+barGap);
+		size = (sortingTool.getVisualizerWidth() - visualizer.getMinMargin()*2 + barGap)/(barWidth+barGap);
 		if(size <=0 ) size = 10;
 		array = new VisualComponent[size];
 		visualizer.resizeHighlights(size);
@@ -34,7 +37,7 @@ public class BarHeightSorter extends Sorter
 	@Override
 	protected void reloadArray()
 	{
-		int maxHeight = sortingTool.getHeight() - sortingTool.getMainGUI().getTopBarHeight() - 20;
+		int maxHeight = sortingTool.getVisualizerHeight() - 20;
 		int minHeight = 15;
 		//difference between two adjacent bars
 		int step = (maxHeight - minHeight)/size;
