@@ -3,21 +3,17 @@ package main.sorters;
 import java.util.Random;
 
 import main.VisualSortingTool;
-import main.ui.custimization.CustomizationPanel;
 import main.vcs.VisualComponent;
 import main.visualizers.ColorGradientVisualizer;
 
 public class ColorGradientSorter extends Sorter
 {
+	/**
+	 * a {@link Sorter} to use a blue color gradient to visualize sorting
+	 */
 	public ColorGradientSorter(VisualSortingTool sortingTool)
 	{
-		super(sortingTool, new ColorGradientVisualizer(sortingTool), "Color Gradient");
-	}
-
-	@Override
-	public void addCustomizationComponents(CustomizationPanel cp)
-	{
-		
+		super(sortingTool, new ColorGradientVisualizer(sortingTool), Sorters.COLOR_GRADIENT);
 	}
 	
 	/**

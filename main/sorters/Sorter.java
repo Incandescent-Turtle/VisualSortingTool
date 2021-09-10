@@ -1,43 +1,68 @@
 package main.sorters;
 
-import java.awt.Color;
+import java.awt.Color; 
 import java.util.Random;
 
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
+import main.ui.TopBarGUI;
+import main.ui.custimization.CustomizationGUI.Customizable;
 import main.ui.custimization.CustomizationPanel;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.Visualizer;
 
-public abstract class Sorter
+public abstract class Sorter implements Customizable
 {
+	public static int delay = 10;
+	
 	protected VisualComponent[] array;
 	
 	protected Visualizer visualizer;
 	protected Algorithm algorithm;
 	protected VisualSortingTool sortingTool;
-	protected CustomizationPanel customizationPanel;
 	
 	protected int size = 200;
-	protected int delay = 10;
 	
-	private String name;
-	
+	//whether the values have been generated yet (used while reloading)
 	private boolean hasGenerated = false;
 		
-	public Sorter(VisualSortingTool sortingTool, Visualizer visualizer, String name)
+	protected Sorter.Sorters identifier;
+	
+	/**
+	 * has an array of {@link VisualComponent}s and uses algorithms to sort them <br>
+	 * handles the loading, shuffling, and resizing of said array <br>
+	 * has a {@link Visualizer} which uses the array to animate the sorting process <br>
+	 * each Sorter must have its own {@link Sorter.Sorters} entry
+	 * @param visualizer the visualizer to use
+	 * @param identifier every sorter has their own identifier
+	 */
+	public Sorter(VisualSortingTool sortingTool, Visualizer visualizer, Sorter.Sorters identifier)
 	{
-		this.visualizer = visualizer;
 		this.sortingTool = sortingTool;
-		this.name = name;
+		this.identifier = identifier;
+		this.visualizer = visualizer;
 	}
 	
-	public final void setCustomizationPanel()
+	/**
+	 * components added to this sorters personal {@link CustomizationPanel} <br>
+	 * adds title "Customization", adds componenets for the subclass, visualizer, and general
+	 * {@link Algorithm} components
+	 */
+	@Override
+	public void addCustomizationComponents(CustomizationPanel cp)
 	{
-		if(customizationPanel == null)
-			customizationPanel = new CustomizationPanel(sortingTool, this);
+		cp.addTitleSeperator("Customization", false);
+		addSorterCustomizationComponents(cp);
+		visualizer.addCustomizationComponents(cp);
+		Algorithm.addGeneralAlgorithmCustimizationComponents(sortingTool, cp);
 	}
-	public abstract void addCustomizationComponents(CustomizationPanel cp);
+	
+	/**
+	 * to be overriden if the sorter needs customization 
+	 * @param cp the sorters {@link CustomizationPanel}
+	 */
+	public void addSorterCustomizationComponents(CustomizationPanel cp) {}
+	
 	/**
 	 * Swaps these two indices with each other in <b>array</b> with <i>no animation</i>
 	 * @param first first index to be swapped
@@ -51,8 +76,8 @@ public abstract class Sorter
 	}
 	
 	/**
-	 * Called on start up to populate array
-	 * default imp just calls reloadArray()
+	 * Called on start up to populate array <br>
+	 * default imp just calls reloadArray() <br>
 	 * override if there is some special initial loading (and probably if this isnt resizeable)
 	 */
 	public void generateValues()
@@ -71,15 +96,18 @@ public abstract class Sorter
 	
 	/**
 	 * To be called when the window has changed size. If no algorithm is active calls resizeArray()
+	 * attempts to change the size variable
 	 */
 	protected final void tryResizeArray()
 	{
 		if(algorithm == null)
+			visualizer.setConfirmed(false);
 			resizeArray();
 	}
 	
 	/**
-	 * used to resize the array if applicable. never to be called directly outside of tryResizeArray()
+	 * used to resize the array if applicable. never to be called outside of tryResizeArray()
+	 * changes array lengths based on size variable
 	 */
 	protected void resizeArray()
 	{
@@ -88,12 +116,14 @@ public abstract class Sorter
 	}
 	
 	/**
+	 * to fill the array with new values (when size has changed for example)
 	 * if no active algorithm, will either generate new values via generateValues() or reload via reloadArray()
 	 */
 	protected final void tryReloadArray()
 	{
 		if(algorithm == null)
 		{
+			visualizer.setConfirmed(false);
 			if(hasGenerated) 
 			{
 				reloadArray();
@@ -111,17 +141,23 @@ public abstract class Sorter
 	protected void reloadArray() {}
 
 	/**
-	 * If there is no active algorithm, shuffles the array AND resets colors in the highlights array to default
+	 * If there is no active algorithm, shuffles the array AND resets 
+	 * colors in the highlights array to default
 	 */
 	public final void tryShuffleArray()
 	{
 		if(algorithm  == null)
 		{
+			visualizer.setConfirmed(false);
 			shuffleArray();
 			visualizer.resetHighlights();
 		}
 	}
 	
+	/**
+	 * when no algorithms are active this method will attempt to: 
+	 * 1. Resize 2. reload 3. shuffle 4. repaint
+	 */
 	public void recalculateAndRepaint()
 	{
 		if(algorithm == null)
@@ -156,7 +192,7 @@ public abstract class Sorter
 	}
 	
 	/**
-	 * <font color="red">Only to be used by <b>AlgorithmButton</b>s upon click</font color="green">
+	 * <font color="red">Only to be used by the run button in {@link TopBarGUI} </font>
 	 * @param algorithm the algorithm that the button represents
 	 */
 	public void setAlgorithm(Algorithm algorithm)
@@ -169,20 +205,6 @@ public abstract class Sorter
 		return algorithm;
 	}
 	
-	/**
-	 * <font color="red"> Only to be used when the spinner value in <b>SortingAlgorithm</b> changes</font color="red">
-	 * @param delay delay in ms for the animations
-	 */
-	public void setDelay(int delay)
-	{
-		this.delay = delay;
-	}
-	
-	public int getDelay()
-	{
-		return delay;
-	}
-	
 	public int getArraySize()
 	{
 		return size;
@@ -193,14 +215,37 @@ public abstract class Sorter
 		return array;
 	}
 	
-	public CustomizationPanel getCustomizationPanel()
-	{
-		return customizationPanel;
-	}
-	
 	@Override
 	public String toString()
 	{
-		return name;
+		return identifier.toString();
+	}
+	
+	public Sorter.Sorters getIdentifier()
+	{
+		return identifier;
+	}
+	
+	/**
+	 * Enum for identifying sorters (used for finding in getSorter(Sorters identfier) method is VisualSortingTool
+	 * an object should exist for each sorter
+	 */
+	public enum Sorters
+	{
+		BAR_HEIGHT("Bar Height"),
+		COLOR_GRADIENT("Color Gradient"),
+		NUMBER("Numbers");
+		
+		final String name;
+		Sorters(String name)
+		{
+			this.name = name;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return name;
+		}
 	}
 }

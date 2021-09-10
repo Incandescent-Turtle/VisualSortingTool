@@ -4,15 +4,24 @@ import java.awt.Graphics;
 
 import main.VisualSortingTool;
 import main.sorters.Sorter;
+import main.sorters.Sorter.Sorters;
 import main.vcs.VisualComponent;
 
 public abstract class FixedSizeVisualizer extends Visualizer
 {
+	//used instead of componentWidth
 	protected int componentSize = 0;
 	
-	public FixedSizeVisualizer(VisualSortingTool sortingTool)
+	/**
+	 * Used to change {@link FixedSizeVisualizer#componentSize} to fill the screen
+	 * with a fixed number of components <br>
+	 * this differs from how some sorter/visualizer pairs function where the array size 
+	 * on a frame resize
+	 * @param identifier identifier for the corresponding {@link Sorter}
+	 */
+	public FixedSizeVisualizer(VisualSortingTool sortingTool, Sorters identifier)
 	{
-		super(sortingTool);
+		super(sortingTool, identifier);
 		minMargin = 5;
 		componentGap = 10;
 		componentSize = 10;
@@ -20,17 +29,21 @@ public abstract class FixedSizeVisualizer extends Visualizer
 
 	/**
 	 * calls resize(), then calls drawComponent() for every VC with the x and y of its upper 
-	 * left hand position
+	 * left hand position <br>
 	 * dont override this 
 	 */
 	@Override
-	protected void drawArray(Graphics g, Sorter sorter, VisualComponent[] array, int arraySize)
+	protected void drawArray(Graphics g, VisualComponent[] array, int arraySize)
 	{				
-		resize();
+		//maxes componentSize
+		this.resize();
+		//limit per row
 		int limit = (sortingTool.getVisualizerWidth()-minMargin*2+componentGap)/((componentSize+componentGap));
 		int numOfRows = arraySize/limit + 1;
 		
+		//space above/below everything
 		int hMargins = getRealHMargins(limit);
+		//space to the left/right of everything
 		int vMargins = getRealVMargins(numOfRows);
 		
 		for(int i = 0; i < arraySize; i++)
@@ -38,10 +51,15 @@ public abstract class FixedSizeVisualizer extends Visualizer
 			int row = i/limit;
 			int x = hMargins + (i%limit)*(componentSize+componentGap);
 			int y = vMargins + (row*(componentGap+componentSize));
-			drawComponent(g, sorter, array, i, arraySize, x, y);
+			drawComponent(g, array, i, arraySize, x, y);
 		}
 	}
 	
+	/**
+	 * called from {@link #drawArray(Graphics, VisualComponent[], int)} for each component
+	 */
+	protected abstract void drawComponent(Graphics g, VisualComponent[] array, int index, int arraySize, int x, int y);
+
 	/**
 	 * is used to center the array vertically
 	 * @param size # of rows
@@ -53,7 +71,7 @@ public abstract class FixedSizeVisualizer extends Visualizer
 	}
 	
 	/**
-	 * sets componentSize  to be as big as possible to fill up all the window space
+	 * sets componentSize to be as big as possible to fill up all the window space
 	 */
 	public final void resize()
 	{
@@ -77,8 +95,6 @@ public abstract class FixedSizeVisualizer extends Visualizer
 		componentSize-=1;
 	}
 	
-	protected abstract void drawComponent(Graphics g, Sorter sorter, VisualComponent[] array, int index, int arraySize, int x, int y);
-
 	@Override
 	public int getComponentWidth()
 	{

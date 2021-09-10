@@ -3,11 +3,13 @@ package main.ui.custimization;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JColorChooser;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -15,104 +17,81 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import main.VisualSortingTool;
+import main.algorithms.Algorithm;
 import main.sorters.Sorter;
-import main.ui.custimization.interfaces.ColorAction;
-import main.ui.custimization.interfaces.ColorRetrieveAction;
-import main.ui.custimization.interfaces.SpinnerChangeAction;
 import main.visualizers.bases.Visualizer;
 
 @SuppressWarnings("serial")
 public class CustomizationGUI extends JPanel
 {
-	private CardLayout cl = new CardLayout();
+	private CardLayout sorterLayout = new CardLayout();
+	private CardLayout algorithmLayout = new CardLayout();
+
+	private JPanel sorterPanels, algorithmPanels;
 	
-	public CustomizationGUI(VisualSortingTool sortingTool) 
+	/**
+	 * the right side bar that contains all the customization settings 
+	 * for all sorters/visualizers/algorithms
+	 */
+	public CustomizationGUI() {}
+	
+	/**
+	 * to be called right after instantiation 
+	 */
+	public void init(VisualSortingTool sortingTool)
 	{
-		setLayout(cl);
-		for(Sorter s : sortingTool.getSorters())
+		//will stack panels on top of eachother, starting from top
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		//panel to hold sorter/visualizer settings
+		sorterPanels = new JPanel(sorterLayout);
+		//panel to hold individual algorithm settings
+		algorithmPanels = new JPanel(algorithmLayout);
+		
+		for(Sorter sorter : sortingTool.getSorters())
 		{
-			s.setCustomizationPanel();
-			add(s.getCustomizationPanel(), s.toString());
+			sorterPanels.add(new CustomizationPanel(sortingTool, sorter), sorter.toString());
 		}
 		
-	//	add(new SorterPanel(sortingTool), "Bar Heights");
-	//	add(new SorterPanel(sortingTool), "Color Gradient");
+		for(Algorithm algorithm : sortingTool.getAlgorithms())
+		{
+			algorithmPanels.add(new CustomizationPanel(sortingTool, algorithm), algorithm.toString());
+		}
+	
+		add(sorterPanels);
+		add(algorithmPanels);
+		
+		//creates an invisible JLabel to push all the elemnents to the top....a little hacky
+		JLabel fill = new JLabel();
+		fill.setPreferredSize(new Dimension(3, 1000));
+		fill.setMinimumSize(new Dimension(3, 0));
+		add(fill);
+		
 		sortingTool.add(this, BorderLayout.LINE_END);
 	}
 	
-	public void changePanel(Sorter sorter)
+	/**
+	 * this makes the specified {@link Sorter}s {@link CustomizationPanel} display
+	 */
+	public void changeSorterPanel(Sorter sorter)
 	{
-		cl.show(this, sorter.toString());
+		sorterLayout.show(sorterPanels, sorter.toString());
 	}
 	
-	public static JButton createMakePinkButton(VisualSortingTool sortingTool)
+	/**
+	 * this makes the specified {@link Algorithm}s {@link CustomizationPanel} display
+	 */
+	public void changeAlgorithmPanel(Algorithm algorithm)
 	{
-		JButton makePink = new JButton("Make Pink");
-		makePink.addActionListener(e -> {
-			sortingTool.getSorter().getVisualizer().setDefaultColor(new Color(222, 165,164));
-			sortingTool.getSorter().getVisualizer().resetHighlights();
-			sortingTool.repaint();
-		});
-		return makePink;
+		algorithmLayout.show(algorithmPanels, algorithm.toString());
 	}
 	
-	public static JButton createColorPickingButton(VisualSortingTool sortingTool, ColorAction okAction, ColorRetrieveAction retrieveAction)
-	{
-		JButton button = new JButton("Choose Color");
-		button.addActionListener(e -> {
-		    final JColorChooser colorChooser = new JColorChooser(retrieveAction.retrieveColor());
-		    ActionListener al = new ActionListener()
-			{
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					okAction.doStuff(colorChooser.getColor());
-				}
-			};
-			
-		    JColorChooser.createDialog(
-					sortingTool.getFrame(), 
-					"Choose Background Color", 
-					false,
-					colorChooser, 
-					al,
-					null).setVisible(true);
-		});
-		return button;
-	}
-	
-	public static JButton createDefaultColorPickingButton(VisualSortingTool sortingTool)
-	{
-		ColorAction okAction = new ColorAction() {
-			
-			@Override
-			public void doStuff(Color color)
-			{
-				Visualizer visualizer = sortingTool.getSorter().getVisualizer();
-				visualizer.setDefaultColor(color);
-				if(sortingTool.getSorter().getAlgorithm() == null)
-				{
-					visualizer.resetHighlights();
-					sortingTool.repaint();
-				}
-			}
-	};
-		
-		ColorRetrieveAction retrieveAction = new ColorRetrieveAction() {
-			
-			@Override
-			public Color retrieveColor()
-			{
-				return sortingTool.getSorter().getVisualizer().getDefaultColor(); 
-			}
-		};
-		
-		return createColorPickingButton(sortingTool, okAction, retrieveAction);
-	}
-	
+	/**
+	 * Helper method to easily create spinners to modify int values
+	 * @param scl this will be called with the new value passed in on a change
+	 * @return
+	 */
 	public static JSpinner createJSpinner(VisualSortingTool sortingTool, SpinnerNumberModel nm, SpinnerChangeAction scl)
 	{
-
 		JSpinner spinner = new JSpinner(nm);
 		spinner.addChangeListener(new ChangeListener()
 		{
@@ -120,10 +99,51 @@ public class CustomizationGUI extends JPanel
 			public void stateChanged(ChangeEvent e)
 			{
 				scl.changeAction((int) spinner.getValue());
-				if(sortingTool != null) sortingTool.getSorter().recalculateAndRepaint();
+				sortingTool.getSorter().recalculateAndRepaint();
 			}
 		});
 		return spinner;
+	}
 	
+	/**
+	 * @return a button that switches the default color to pink
+	 */
+	public static JButton createMakePinkButton(VisualSortingTool sortingTool)
+	{
+		JButton makePink = new JButton("Make Pink");
+		makePink.setBackground(new Color(222, 165,164));
+		makePink.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				Visualizer vis = sortingTool.getSorter().getVisualizer();
+				
+				//pastel pink
+				vis.setDefaultColor(new Color(222, 165,164));
+				ColorButton.recolorButtons();
+				vis.resetHighlights();
+				sortingTool.repaint();
+			}
+		});
+		return makePink;
+	}
+	
+	/**
+	 *	for things such as {@link Sorter}s and {@link Algorithm}s that have their own
+	 *	{@link CustomizationPanel}s
+	 */
+	public interface Customizable
+	{
+		void addCustomizationComponents(CustomizationPanel cp);
+	}
+	
+	/**
+	 *	used for easily setting values on a jspinner change <br>
+	 *	for use as function interface
+	 */
+	public interface SpinnerChangeAction
+	{
+		void changeAction(int value);
 	}
 }

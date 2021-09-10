@@ -8,35 +8,41 @@ import main.vcs.VisualComponent;
 
 public class BubbleSort extends Algorithm
 {	
+	private Color swapColor, compareColor;
+	
 	public BubbleSort(VisualSortingTool sortingTool)
 	{
 		super("Bubble Sort", sortingTool);
+		swapColor = Color.RED;
+		compareColor = Color.GREEN;
 	}
 	
 	@Override
-	public void run()
+	public void runAlgorithm()
 	{
 		Sorter sorter = sortingTool.getSorter();
 		final VisualComponent[] array = sorter.getArray();
 		final int size = array.length;
 		
+		//loops through array (final element is always gonna be sorted by the end)
 		for(int i = 0; i < size-1; i++)
 		{
+			//loops through what hasnt already been sorted
 			for(int j = 0; j < size-1-i; j++)
 			{
-				Color[] highlights = sorter.getVisualizer().getHighlights();
-				highlights[j] = Color.GREEN;
-				highlights[j+1] = Color.GREEN;
+				sorter.getVisualizer().resetHighlights();
+				sorter.highlight(j, compareColor);
+				sorter.highlight(j+1, compareColor);
+				//comparing adjecent components
 				if(array[j].getValue() > array[j+1].getValue())
 				{
 					sorter.swap(j, j+1);
-					highlights[j] = Color.RED;
-					highlights[j+1] = Color.RED;
+					sorter.highlight(j, swapColor);
+					sorter.highlight(j+1, swapColor);
 				}
 				delay(sorter);
 				sortingTool.repaint();
 			}
 		}
-		finishRun();
 	}
 }

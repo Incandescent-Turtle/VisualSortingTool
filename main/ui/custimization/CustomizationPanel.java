@@ -1,6 +1,5 @@
 package main.ui.custimization;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -14,47 +13,41 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import main.VisualSortingTool;
-import main.sorters.Sorter;
+import main.ui.GUIHandler;
+import main.ui.custimization.CustomizationGUI.Customizable;
 
 @SuppressWarnings("serial")
 public class CustomizationPanel extends JPanel
 {
-	protected GridBagConstraints c = new GridBagConstraints();
-	protected int row = 0;
 	protected VisualSortingTool sortingTool;
+
+	protected GridBagConstraints c = new GridBagConstraints();
 	protected CustomizationGUI customizer;
-	protected Sorter sorter;
+
+	//the current row this panel is on
+	protected int row = 0;
 	
-	public CustomizationPanel(VisualSortingTool sortingTool, Sorter sorter)
+	/**
+	 * 
+	 * @param sortingTool
+	 * @param customizable
+	 */
+	public CustomizationPanel(VisualSortingTool sortingTool, Customizable customizable)
 	{
 		super(new GridBagLayout());
 		this.sortingTool = sortingTool;
-		this.sorter = sorter;
+		//padding
 		c.insets = new Insets(1,5,1,3);
-		addTitleSeperator(c, "Custimization", false);
-		sorter.addCustomizationComponents(this);
-		sorter.getVisualizer().addCustomizationComponents(this);
-		fillBottom();
-	}
-		
-	private final void fillBottom()
-	{
-		c.gridx = 0;
-        c.gridy = row;
-        c.weighty = 1;
-        c.weightx = 1;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        c.ipady = 0;
-        c.anchor = GridBagConstraints.NORTHEAST;
-        c.fill = GridBagConstraints.VERTICAL;
-        JLabel fill = new JLabel();
-        fill.setBackground(Color.GRAY);
-        fill.setOpaque(true);
-        add(fill, c);
+		//adds components to the frame
+		customizable.addCustomizationComponents(this);
 	}
 	
-	public void addTitleSeperator(GridBagConstraints c, String text, boolean hasVertGap)
+	/**
+	 * creates an "underlined" label to denote category
+	 * @param text the title to display
+	 * @param hasVertGap whether this should be spaced out from whatever is above it
+	 */
+	public void addTitleSeperator(String text, boolean hasVertGap)
 	{
 		if(hasVertGap)
 		{
@@ -74,6 +67,7 @@ public class CustomizationPanel extends JPanel
 		}
 		JLabel label = new JLabel(text);
 		addRow(label, true);
+		//adds space/underline below
 		JSeparator sep = new JSeparator(SwingConstants.HORIZONTAL);
 		sep.setPreferredSize(new Dimension(20,5));
 		sep.setVisible(true);
@@ -90,6 +84,11 @@ public class CustomizationPanel extends JPanel
         add(sep, c);
 	}
 	
+	/**
+	 * creates a new row and adds a singular component to it
+	 * @param component probably a button - something self explanatory
+	 * @param center whether it should be centered or right aligned
+	 */
 	public void addRow(Component component, boolean center)
 	{
 		c.gridx = 0;
@@ -102,11 +101,18 @@ public class CustomizationPanel extends JPanel
         c.anchor = center ? GridBagConstraints.CENTER : GridBagConstraints.NORTHEAST;
         c.fill = GridBagConstraints.VERTICAL;
         add(component, c);
+        //sortingTool.getGUIHandler().addToggleable(component);
         row++;
 	}
 	
+	/**
+	 * creates a new row and adds a right-aligned componenet with a label to its left
+	 * @param labelText the text to be on the label
+	 * @param right whatever the label is describing
+	 */
 	public void addRow(String labelText, Component right)
 	{
+		//placing label
 		c.gridx = 0;
         c.gridy = row;
         c.weighty = 0;
@@ -117,6 +123,7 @@ public class CustomizationPanel extends JPanel
         c.anchor = GridBagConstraints.NORTHEAST;
         c.fill = GridBagConstraints.VERTICAL;
         add(new JLabel(labelText), c);
+        //placing right-aligned componenet
         c.fill = GridBagConstraints.NONE;
         c.weightx = 0;
         c.gridx = 1;
@@ -124,6 +131,8 @@ public class CustomizationPanel extends JPanel
         c.fill = GridBagConstraints.NONE;
         c.anchor =  GridBagConstraints.NORTHEAST;
         add(right, c);
+        //so it can be disabled when an algoroithm is running
+        GUIHandler.addToggleable(right);
         row++;
 	}
 }

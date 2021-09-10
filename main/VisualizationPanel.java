@@ -12,6 +12,9 @@ public class VisualizationPanel extends JPanel
 {
 	private VisualSortingTool sortingTool;
 	
+	/**
+	 * the panel the visualizers draw on
+	 */
 	public VisualizationPanel(VisualSortingTool sortingTool)
 	{
 		this.sortingTool = sortingTool;

@@ -1,14 +1,16 @@
 package main.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -17,11 +19,12 @@ import javax.swing.SpinnerNumberModel;
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
 import main.sorters.Sorter;
+import main.ui.custimization.ColorButton;
 
 @SuppressWarnings("serial")
 public class TopBarGUI extends JPanel
 {
-	 private FlowLayout layout = new FlowLayout(FlowLayout.CENTER, 5, 5);
+	private FlowLayout layout = new FlowLayout(FlowLayout.CENTER, 5, 5);
 	
 	//the button that shuffles the sorters array
 	private JButton shuffleButton = new JButton("Shuffle");
@@ -34,14 +37,14 @@ public class TopBarGUI extends JPanel
     
 	private JLabel delayLabel = new JLabel("Delay(ms):");
 	//updates the sorters delay
-    private JSpinner delaySpinner = new JSpinner(new SpinnerNumberModel(10, 1, 10000, 1));
+    private JSpinner delaySpinner = new JSpinner(new SpinnerNumberModel(10, 0, 10000, 1));
     
 	private JLabel sorterLabel = new JLabel("Method of Visualization:");
 	//drop down list of sorters to pick visualization methods
     private JComboBox<Sorter> sorterList = new JComboBox<Sorter>();
     
     private ArrayList<JLabel> labels = new ArrayList<>();
-    private ArrayList<JComponent> components = new ArrayList<>();
+    private ArrayList<Component> components = new ArrayList<>();
 
     private VisualSortingTool sortingTool;
     
@@ -50,29 +53,32 @@ public class TopBarGUI extends JPanel
 		this.sortingTool = sortingTool;
 	}
     
-
 	/**
 	 * To call after sorters have been added to thei combobox
 	 */
-	public void setUp()
+	public void init()
 	{
 		sortingTool.add(this, BorderLayout.PAGE_START); //top of the screen
-		
 		//Shuffle button
 		shuffleButton.addActionListener(e -> {
 			sortingTool.getSorter().recalculateAndRepaint();
 		});
 		
 		//Delay Spinner
-        delaySpinner.addChangeListener(e -> sortingTool.getSorter().setDelay((int) delaySpinner.getValue()));
+        delaySpinner.addChangeListener(e -> Sorter.delay = ((int) delaySpinner.getValue()));
 
         //sorter combobox. when switches it resizes/reloads/shuffles the sorter as well as carrying over the delay
         sorterList.addItemListener(e -> {
+    		ColorButton.recolorButtons();
         	sortingTool.setSorter((Sorter) e.getItem());
         	Sorter sorter = sortingTool.getSorter();
-        	sortingTool.getGUIHandler().getCustimizationPanel().changePanel(sorter);
-        	sorter.setDelay((int) delaySpinner.getValue());
+        	sortingTool.getGUIHandler().getCustomizationGUI().changeSorterPanel(sorter);
+        	Sorter.delay = ((int) delaySpinner.getValue());
         	sorter.recalculateAndRepaint();
+        });
+        
+        algorithmList.addItemListener(e -> {
+        	sortingTool.getGUIHandler().getCustomizationGUI().changeAlgorithmPanel((Algorithm)e.getItem());
         });
                         
         setUpRunButton(sortingTool);
@@ -86,7 +92,8 @@ public class TopBarGUI extends JPanel
         addToGUI(delaySpinner);
         addToGUI(sorterLabel);
         addToGUI(sorterList);
-        sortingTool.getGUIHandler().addToggleable(shuffleButton, algorithmList, runAlgorithmButton, sorterList);
+        //adds all the things that need to be turned off while algorithm running
+        GUIHandler.addToggleable(shuffleButton, algorithmList, runAlgorithmButton, sorterList);
         sortingTool.validate();
 	}
 
@@ -106,7 +113,7 @@ public class TopBarGUI extends JPanel
 		    	{
 					System.out.println(algorithmList.getSelectedItem().toString() + " has been pushed");
 					sorter.setAlgorithm((Algorithm)algorithmList.getSelectedItem());
-		    		sortingTool.getGUIHandler().setEnabled(false);
+		    		GUIHandler.setEnabled(false);
 		    		//runs the current algorithm
 				    Thread thread = new Thread(() -> ((Algorithm)algorithmList.getSelectedItem()).run());
 		    		//runs logic on another thread so swing can update 
@@ -116,24 +123,24 @@ public class TopBarGUI extends JPanel
 		});		
 	}
 	
-	private void addToGUI(JComponent component)
+	/**
+	 * auto-adds all non-JButton componenets to {@link GUIHandler}'s toggleable array
+	 * @param component
+	 */
+	private void addToGUI(Component component)
 	{
 		add(component);
 		if(component instanceof JLabel) labels.add((JLabel) component);
 		else components.add(component);
 	}
 	
-	public void enableComboBoxes()
-	{
-		sorterList.setEnabled(true);
-		algorithmList.setEnabled(true);
-	}
-	
+	/**
+	 * called when frame resized <br>
+	 * if bar size is smaller than the GUI width, labels are hidden, opposite if it it larger
+	 */
 	public void resizeGUI()
 	{
-		boolean isSmall = getWidth() < getGUIWidth(true);
-		hideLabels(isSmall);
-		layout.setAlignment(isSmall ? FlowLayout.LEFT : FlowLayout.CENTER);
+		hideLabels(getWidth() < getGUIWidth(true));
 	}
 	
 	private void hideLabels(boolean hide)
@@ -144,10 +151,15 @@ public class TopBarGUI extends JPanel
 		}
 	}
 	
+	/**
+	 * returns the horizontal width of this GUI
+	 * @param withLabels whether the lengths of the labels are included in the return value
+	 * @return the length the topBar GUI takes up
+	 */
 	public int getGUIWidth(boolean withLabels)
 	{
 		int width = 20;
-		for(JComponent component : components)
+		for(Component component : components)
 		{
 			width += component.getWidth() + layout.getHgap();
 		}
