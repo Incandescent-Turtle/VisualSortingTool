@@ -49,6 +49,7 @@ public abstract class FixedSizeVisualizer extends Visualizer
 		for(int i = 0; i < arraySize; i++)
 		{
 			int row = i/limit;
+			//x and y are the coords of the top left of the component
 			int x = hMargins + (i%limit)*(componentSize+componentGap);
 			int y = vMargins + (row*(componentGap+componentSize));
 			drawComponent(g, array, i, arraySize, x, y);
@@ -57,6 +58,15 @@ public abstract class FixedSizeVisualizer extends Visualizer
 	
 	/**
 	 * called from {@link #drawArray(Graphics, VisualComponent[], int)} for each component
+	 */
+	/**
+	 * 
+	 * @param g graphics object to paint with
+	 * @param array the VC array
+	 * @param index the current index
+	 * @param arraySize the size of the VC array
+	 * @param x pos of the left side of the component
+	 * @param y pos of the top of the component
 	 */
 	protected abstract void drawComponent(Graphics g, VisualComponent[] array, int index, int arraySize, int x, int y);
 
