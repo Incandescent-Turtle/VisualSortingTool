@@ -1,1 +1,1 @@
-
+This program has different methods of visualization, as well as a customization menu to tweak colors etc for your viewing pleasure! <a href="https://github.com/Incandescent-Turtle/VisualSortingTool/raw/main/sorting-visualizer.jar">Download the jar here</a>.
