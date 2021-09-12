@@ -2,10 +2,13 @@ package main.sorters;
 
 import java.awt.Color; 
 import java.util.Random;
+import java.util.prefs.Preferences;
 
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
+import main.ui.RoryFrame;
 import main.ui.TopBarGUI;
+import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationGUI.Customizable;
 import main.ui.custimization.CustomizationPanel;
 import main.vcs.VisualComponent;
@@ -41,6 +44,8 @@ public abstract class Sorter implements Customizable
 		this.sortingTool = sortingTool;
 		this.identifier = identifier;
 		this.visualizer = visualizer;
+		loadValues(CustomizationGUI.PREFS, getPrefix());
+		RoryFrame.addClosable(this);
 	}
 	
 	/**
@@ -63,6 +68,18 @@ public abstract class Sorter implements Customizable
 	 */
 	public void addSorterCustomizationComponents(CustomizationPanel cp) {}
 	
+	@Override
+	/**
+	 * Only needs to be overridden if this sorter has customization settings to be stored <br>
+	 * called from constructor
+	 */
+	public void loadValues(Preferences prefs, String prefix) {}
+	@Override
+	/**
+	 * Only needs to be overridden if this sorter has customization settings to be stored <br>
+	 * called on window closed by {@link RoryFrame}
+	 */
+	public void storeValues(Preferences prefs, String prefix) {}
 	/**
 	 * Swaps these two indices with each other in <b>array</b> with <i>no animation</i>
 	 * @param first first index to be swapped

@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import main.VisualSortingTool;
 import main.sorters.Sorter;
 import main.sorters.Sorter.Sorters;
+import main.ui.RoryFrame;
+import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationGUI.Customizable;
 import main.vcs.VisualComponent;
 
@@ -15,6 +17,12 @@ import main.vcs.VisualComponent;
  */
 public abstract class Visualizer implements Customizable
 {
+	/*
+	 * Keys for preferences
+	 */
+	public static final String MARGIN = "margin", WIDTH = "width", HEIGHT = "height", GAP = "gap";
+	public static final String DEFAULT_COLOR = "defaultColor";
+	
 	//in px the min distance from the borders of the screen
 	protected int minMargin = 30;
 	//the width of individual components
@@ -42,8 +50,10 @@ public abstract class Visualizer implements Customizable
 	{
 		this.sortingTool = sortingTool;
 		this.identifier = identifier;
+		loadValues(CustomizationGUI.PREFS, this.getPrefix());
+		RoryFrame.addClosable(this);
 	}
-	
+
 	/**
 	 * This draws the Sorters array to the screen
 	 */

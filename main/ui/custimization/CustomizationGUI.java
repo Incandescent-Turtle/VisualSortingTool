@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.prefs.Preferences;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -13,21 +14,26 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
+import main.interfaces.Closable;
 import main.sorters.Sorter;
 import main.visualizers.bases.Visualizer;
 
 @SuppressWarnings("serial")
 public class CustomizationGUI extends JPanel
 {
+	public static final Preferences PREFS = Preferences.userRoot().node(VisualSortingTool.class.getName());
+
+	//these panels stack on top of eachother, each showing the respective sorter/algorithm
+	private JPanel sorterPanels, algorithmPanels;
+	
 	private CardLayout sorterLayout = new CardLayout();
 	private CardLayout algorithmLayout = new CardLayout();
-
-	private JPanel sorterPanels, algorithmPanels;
 	
 	/**
 	 * the right side bar that contains all the customization settings 
@@ -61,10 +67,16 @@ public class CustomizationGUI extends JPanel
 		add(algorithmPanels);
 		
 		//creates an invisible JLabel to push all the elemnents to the top....a little hacky
-		JLabel fill = new JLabel();
+		JLabel fill = new JLabel("1");
 		fill.setPreferredSize(new Dimension(3, 1000));
 		fill.setMinimumSize(new Dimension(3, 0));
+	//	fill.setBackground(Color.BLUE);
+		//fill.setOpaque(true);
 		add(fill);
+		JButton reset = new JButton("Reset");
+		reset.setAlignmentX(CENTER_ALIGNMENT);
+		
+		add(reset);
 		
 		sortingTool.add(this, BorderLayout.LINE_END);
 	}
@@ -131,11 +143,28 @@ public class CustomizationGUI extends JPanel
 	
 	/**
 	 *	for things such as {@link Sorter}s and {@link Algorithm}s that have their own
-	 *	{@link CustomizationPanel}s
+	 *	{@link CustomizationPanel}s <br>
 	 */
-	public interface Customizable
+	public interface Customizable extends Closable
 	{
+		/**
+		 * to add components to the side bar to change values
+		 * @param cp the customization Panel
+		 */
 		void addCustomizationComponents(CustomizationPanel cp);
+		void loadValues(Preferences prefs, String prefix);
+		void storeValues(Preferences prefs, String prefix);
+		
+		default String getPrefix()
+		{
+			return this.getClass().getSimpleName().toLowerCase() + "_";
+		}
+		
+		@Override
+		default void close()
+		{
+			storeValues(CustomizationGUI.PREFS, getPrefix());
+		}
 	}
 	
 	/**

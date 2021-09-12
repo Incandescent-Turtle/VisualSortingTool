@@ -27,7 +27,7 @@ import main.ui.TopBarGUI;
  *	the window/panel for display
  */
 public class VisualSortingTool extends JPanel
-{	
+{		
 	private JFrame frame;
 	private VisualizationPanel visualizationPanel;
 	private Sorter sorter;
@@ -43,7 +43,7 @@ public class VisualSortingTool extends JPanel
 	{
 		//to allow for UI to be in top bar
 		super(new BorderLayout());
-    add(visualizationPanel = new VisualizationPanel(this), BorderLayout.CENTER);
+		add(visualizationPanel = new VisualizationPanel(this), BorderLayout.CENTER);
 		sorters = new Sorter[] {
 			   sorter = new BarHeightSorter(this), 
 						new ColorGradientSorter(this),
@@ -95,8 +95,8 @@ public class VisualSortingTool extends JPanel
 		};
 		Dimension dim = new Dimension(400, 400);
 		frame.setPreferredSize(dim);
-		//frame.setMinimumSize(dim);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//so closing event is called
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setResizable(true);
 		frame.add(this);
 	}

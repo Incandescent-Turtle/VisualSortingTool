@@ -2,6 +2,7 @@ package main.visualizers;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.prefs.Preferences;
 
 import javax.swing.SpinnerNumberModel;
 
@@ -18,11 +19,6 @@ public class ColorGradientVisualizer extends Visualizer
 	public ColorGradientVisualizer(VisualSortingTool sortingTool)
 	{
 		super(sortingTool, Sorters.COLOR_GRADIENT);
-		minMargin = 2;
-		componentWidth = 15;
-		//not used
-		componentHeight = 0;
-		componentGap = 2;
 	}
 
 	@Override
@@ -43,6 +39,23 @@ public class ColorGradientVisualizer extends Visualizer
 		
 		//change background button
 		cp.addRow(ColorButton.createBackgroundColorPickingButton(sortingTool), true);
+	}
+	
+
+	@Override
+	public void loadValues(Preferences prefs, String prefix)
+	{
+		componentWidth = prefs.getInt(prefix + WIDTH, 15);
+		componentGap = prefs.getInt(prefix + GAP, 2);
+		minMargin = prefs.getInt(prefix + MARGIN, 2);
+	}
+	
+	@Override
+	public void storeValues(Preferences prefs, String prefix)
+	{
+		prefs.putInt(prefix + WIDTH, componentWidth);
+		prefs.putInt(prefix + GAP, componentGap);
+		prefs.putInt(prefix + MARGIN, minMargin);
 	}
 	
 	@Override

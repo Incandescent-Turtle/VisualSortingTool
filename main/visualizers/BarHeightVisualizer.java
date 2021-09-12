@@ -2,6 +2,7 @@ package main.visualizers;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.prefs.Preferences;
 
 import javax.swing.SpinnerNumberModel;
 
@@ -11,6 +12,7 @@ import main.sorters.Sorter.Sorters;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
+import main.util.Util;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.Visualizer;
 
@@ -22,11 +24,6 @@ public class BarHeightVisualizer extends Visualizer
 	public BarHeightVisualizer(VisualSortingTool sortingTool)
 	{
 		super(sortingTool, Sorters.BAR_HEIGHT);
-		//a nice blue
-		setDefaultColor(new Color(144, 193, 215));
-		minMargin = 2;
-		componentWidth = 15;
-		componentGap = 2;
 	}
 	
 	@Override
@@ -50,6 +47,25 @@ public class BarHeightVisualizer extends Visualizer
 		cp.addRow(ColorButton.createBackgroundColorPickingButton(sortingTool), true);
 		//sets default color to pink button
 		cp.addRow(CustomizationGUI.createMakePinkButton(sortingTool), true);
+	}
+	
+	@Override
+	public void loadValues(Preferences prefs, String prefix)
+	{
+		componentWidth = prefs.getInt(prefix + WIDTH, 15);
+		componentGap = prefs.getInt(prefix + GAP, 2);
+		minMargin = prefs.getInt(prefix + MARGIN, 2);
+		defaultColor = Util.getColor(DEFAULT_COLOR, getPrefix(), new Color(144, 193, 215));
+	}
+	
+	@Override
+	public void storeValues(Preferences prefs, String prefix)
+	{
+		System.out.println(prefix);
+		prefs.putInt(prefix + WIDTH, componentWidth);
+		prefs.putInt(prefix + GAP, componentGap);
+		prefs.putInt(prefix + MARGIN, minMargin);
+		Util.putColor(DEFAULT_COLOR, getPrefix(), defaultColor);
 	}
 	
 	/**

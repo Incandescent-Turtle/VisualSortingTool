@@ -1,14 +1,17 @@
 package main.algorithms;
 
 import java.awt.Color;
+import java.util.prefs.Preferences;
 
 import main.VisualSortingTool;
 import main.sorters.Sorter;
 import main.ui.GUIHandler;
+import main.ui.RoryFrame;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.ColorButton.ColorRetrieveAction;
 import main.ui.custimization.CustomizationGUI.Customizable;
 import main.ui.custimization.CustomizationPanel;
+import main.util.Util;
 import main.vcs.VisualComponent;
 
 /**
@@ -23,14 +26,20 @@ public abstract class Algorithm implements Customizable
 {
 	//all algorithms have the same color for ending/confirming an algorithm run
 	public static Color confirmationColor;
-
+	public static String CONFIRMATION_COLOR = "confirmationColor";
+	
+	private final static String SWAP_COLOR = "swapColor";
+	private static final String COMPARE_COLOR = "compareColor";
+	
 	private String name;
 	protected VisualSortingTool sortingTool;
 	protected Color swapColor, compareColor;
 	
 	static
 	{
-		confirmationColor = Color.GREEN;
+		String prefix = Algorithm.class.getSimpleName().toLowerCase() + "_";
+		confirmationColor = Util.getColor(COMPARE_COLOR, prefix, Color.GREEN);
+		RoryFrame.addClosable(() -> Util.putColor(COMPARE_COLOR, prefix, confirmationColor));
 	}
 	
 	public Algorithm(String name, VisualSortingTool sortingTool)
@@ -54,6 +63,20 @@ public abstract class Algorithm implements Customizable
 		cp.addRow(new ColorButton(sortingTool, c -> swapColor = c, () -> swapColor, "Swap Color"), true);
 		cp.addRow(new ColorButton(sortingTool, c -> compareColor = c, () -> compareColor, "Compare Color"), true);
 	}
+	
+	@Override
+	public void loadValues(Preferences prefs, String prefix)
+	{
+		prefs.getInt(SWAP_COLOR, Util.colorToInt(Color.RED));
+		prefs.getInt(COMPARE_COLOR, Util.colorToInt(Color.GREEN));
+	}
+
+	@Override
+	public void storeValues(Preferences prefs, String prefix)
+	{
+		
+	}
+	
 	/**
 	 * This gets called when this is the selected algorithm and the run button is hit <br>
 	 * gets run on a seperate thread. 

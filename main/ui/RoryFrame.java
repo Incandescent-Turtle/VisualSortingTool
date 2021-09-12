@@ -5,6 +5,9 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -13,9 +16,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import main.interfaces.Closable;
+
 @SuppressWarnings("serial")
 public class RoryFrame extends JFrame
 {
+	private static ArrayList<Closable> CLOSABLES = new ArrayList<>();
+	
 	//the size/location before fullscreen (used for resizing
 	private Rectangle nonFullScreenBounds = null;
 	//window state before fullscreening
@@ -47,7 +54,7 @@ public class RoryFrame extends JFrame
 		Action escape = new AbstractAction() {
 		    public void actionPerformed(ActionEvent e) 
 		    {
-		    	System.exit(0);
+		    	closeWindow();
 		    }
 		};
 		setUpMaps(panel, "ESCAPE", "escape", escape);
@@ -100,6 +107,15 @@ public class RoryFrame extends JFrame
 					nonFullScreenBounds = e.getComponent().getBounds();	
 			}
 		});
+		
+		addWindowListener(new WindowAdapter()
+		{
+			@Override
+			public void windowClosing(WindowEvent e)
+			{
+				closeWindow();
+			}
+		});
 	}
 	
 	/**
@@ -135,5 +151,20 @@ public class RoryFrame extends JFrame
 			setUndecorated(true);
 		}
 	    setVisible(true);
+	}
+	
+	private void closeWindow()
+	{
+
+		CLOSABLES.stream().forEach(c -> {
+			System.out.println("Closing + " + c.getClass());
+			c.close();
+		});
+		System.exit(0);
+	}
+	
+	public static void addClosable(Closable closable)
+	{
+		CLOSABLES.add(closable);
 	}
 }
