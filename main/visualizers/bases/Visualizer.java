@@ -4,9 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import main.VisualSortingTool;
+import main.algorithms.Algorithm;
 import main.sorters.Sorter;
 import main.sorters.Sorter.Sorters;
-import main.ui.custimization.CustomizationGUI.Customizable;
+import main.ui.custimization.Customizable;
+import main.ui.custimization.values.IntStorageValue;
+import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
 
 /**
@@ -14,7 +17,7 @@ import main.vcs.VisualComponent;
  *  Visualizers are what draw the arrays and keep all the variables relating to the drawing
  */
 public abstract class Visualizer implements Customizable
-{
+{	
 	//in px the min distance from the borders of the screen
 	protected int minMargin = 30;
 	//the width of individual components
@@ -30,7 +33,7 @@ public abstract class Visualizer implements Customizable
 	protected Color[] highlights;
 	
 	/**
-	 * whether should render components with {@link Visualizer#defaultColor}
+	 * whether should render components with {@link Visualizer#defaultColor} or {@link Algorithm#confirmationColor}
 	 */
 	protected boolean confirmed = false;	
 	
@@ -42,8 +45,10 @@ public abstract class Visualizer implements Customizable
 	{
 		this.sortingTool = sortingTool;
 		this.identifier = identifier;
+		setDefaultValues();
+		addStorageValues();
 	}
-	
+
 	/**
 	 * This draws the Sorters array to the screen
 	 */
@@ -112,6 +117,27 @@ public abstract class Visualizer implements Customizable
 	public final void resizeHighlights(int size)
 	{
 		highlights = new Color[size];
+	}
+	
+	protected StorageValue<Integer> createWidthStorageValue()
+	{
+		return new IntStorageValue(getPrefix(), "width", componentWidth, n -> componentWidth = n, () -> componentWidth);
+	}
+	
+	protected StorageValue<Integer> createGapStorageValue()
+	{
+		return new IntStorageValue(getPrefix(), "gap", componentGap, n -> componentGap = n, () -> componentGap);
+	}
+	
+	protected StorageValue<Integer> createMarginStorageValue()
+	{
+		return new IntStorageValue(getPrefix(), "margin", minMargin, n -> minMargin = n, () -> minMargin);
+	}
+	
+	protected StorageValue<Integer> createDefaultColorStorageValue()
+	{
+		return StorageValue.createColorStorageValue(getPrefix(), "defaultColor", defaultColor, c -> defaultColor = c, () -> defaultColor);
+
 	}
 	
 	public final Color[] getHighlights()

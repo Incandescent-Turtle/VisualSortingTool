@@ -5,18 +5,19 @@ import javax.swing.SpinnerNumberModel;
 import main.VisualSortingTool;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
+import main.ui.custimization.values.IntStorageValue;
+import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
 import main.visualizers.NumberFixedVisualizer;
 
 public class NumberSorter extends Sorter
-{
+{	
 	/**
 	 * a {@link Sorter} to use actual numbers to visualize sorting
 	 */
 	public NumberSorter(VisualSortingTool sortingTool)
 	{
 		super(sortingTool, new NumberFixedVisualizer(sortingTool), Sorters.NUMBER);
-		size = 100;
 	}
 	
 	/**
@@ -26,7 +27,19 @@ public class NumberSorter extends Sorter
 	public void addSorterCustomizationComponents(CustomizationPanel cp)
 	{
 		SpinnerNumberModel nm = new SpinnerNumberModel(size, 10, 500, 1);
-		cp.addRow("# of Numbers:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> size = n));	
+		cp.addRow("# of Numbers:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> size = n, () -> size));	
+	}
+	
+	@Override
+	public void setDefaultValues()
+	{
+		size = 100;
+	}
+	
+	@Override
+	public void addStorageValues()
+	{
+		StorageValue.addStorageValues(new IntStorageValue(getPrefix(), "amount", size, n -> size = n, () -> size));
 	}
 	
 	@Override

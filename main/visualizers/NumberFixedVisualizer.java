@@ -10,6 +10,7 @@ import main.sorters.Sorter.Sorters;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
+import main.ui.custimization.values.StorageValue;
 import main.util.StringHelper;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.FixedSizeVisualizer;
@@ -19,7 +20,12 @@ public class NumberFixedVisualizer extends FixedSizeVisualizer
 	public NumberFixedVisualizer(VisualSortingTool sortingTool)
 	{
 		super(sortingTool, Sorters.NUMBER);
-		setDefaultColor(new Color(144, 193, 215));
+	}
+	
+	@Override
+	public void setDefaultValues()
+	{
+		defaultColor = new Color(144, 193, 215);		
 	}
 
 	@Override
@@ -28,6 +34,12 @@ public class NumberFixedVisualizer extends FixedSizeVisualizer
 		cp.addRow(ColorButton.createDefaultColorPickingButton(sortingTool, sortingTool.getSorter(identifier)), true);
 		cp.addRow(ColorButton.createBackgroundColorPickingButton(sortingTool), true);
 		cp.addRow(CustomizationGUI.createMakePinkButton(sortingTool), true);
+	}
+	
+	@Override
+	public void addStorageValues()
+	{
+		StorageValue.addStorageValues(createDefaultColorStorageValue());
 	}
 	
 	@Override

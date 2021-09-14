@@ -3,15 +3,7 @@ sound effects
 Screenshot button
 
 
-SAHIR-INSPIRED:
-JSON support ?
-
-
-Customization menu:
-Reads/stores from file
 Image settings
 File location
 
 ScortingImage to have a scaled instance of itself (so you can enlarge it)
-
-PreferencesLoader -> returns array of values, parse it, if value not found generate one

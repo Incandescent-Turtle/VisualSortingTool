@@ -11,8 +11,13 @@ public class SelectionSort extends Algorithm
 	public SelectionSort(VisualSortingTool sortingTool)
 	{
 		super("Selection Sort", sortingTool);
+	}
+	
+	@Override
+	public void setDefaultValues()
+	{
 		swapColor = Color.GREEN;
-		 compareColor = Color.RED;
+		compareColor = Color.RED;
 	}
 
 	@Override

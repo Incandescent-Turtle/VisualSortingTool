@@ -10,6 +10,7 @@ import main.sorters.Sorter.Sorters;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
+import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.Visualizer;
 
@@ -18,11 +19,14 @@ public class ColorGradientVisualizer extends Visualizer
 	public ColorGradientVisualizer(VisualSortingTool sortingTool)
 	{
 		super(sortingTool, Sorters.COLOR_GRADIENT);
-		minMargin = 2;
+	}
+	
+	@Override
+	public void setDefaultValues()
+	{
 		componentWidth = 15;
-		//not used
-		componentHeight = 0;
 		componentGap = 2;
+		minMargin = 2;		
 	}
 
 	@Override
@@ -31,18 +35,28 @@ public class ColorGradientVisualizer extends Visualizer
 		SpinnerNumberModel nm = new SpinnerNumberModel(componentWidth, 4, 100, 1);
 		
 		//spinner to change bar width
-		cp.addRow("Bar Width:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> componentWidth = n));
+		cp.addRow("Bar Width:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> componentWidth = n, () -> componentWidth));
 		
 		//spinner to change gap between bars
 		nm = new SpinnerNumberModel(componentGap, 0, 20, 1);
-		cp.addRow("Gap:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> componentGap = n));
+		cp.addRow("Gap:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> componentGap = n, () -> componentGap));
 		
 		//spinner to change left/right margin
-		nm = new SpinnerNumberModel(componentGap, 0, 100, 1);
-		cp.addRow("Margin:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> minMargin = n));	
+		nm = new SpinnerNumberModel(minMargin, 0, 100, 1);
+		cp.addRow("Margin:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> minMargin = n, () -> minMargin));	
 		
 		//change background button
 		cp.addRow(ColorButton.createBackgroundColorPickingButton(sortingTool), true);
+	}
+	
+	@Override
+	public void addStorageValues()
+	{
+		StorageValue.addStorageValues(
+				createWidthStorageValue(),
+				createGapStorageValue(),
+				createMarginStorageValue()
+		);
 	}
 	
 	@Override

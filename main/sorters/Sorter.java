@@ -1,19 +1,21 @@
 package main.sorters;
 
-import java.awt.Color; 
+import java.awt.Color;
 import java.util.Random;
 
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
 import main.ui.TopBarGUI;
-import main.ui.custimization.CustomizationGUI.Customizable;
+import main.ui.custimization.Customizable;
 import main.ui.custimization.CustomizationPanel;
+import main.ui.custimization.values.IntStorageValue;
+import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.Visualizer;
 
 public abstract class Sorter implements Customizable
 {
-	public static int delay = 10;
+	public static int delay;
 	
 	protected VisualComponent[] array;
 	
@@ -28,6 +30,11 @@ public abstract class Sorter implements Customizable
 		
 	protected Sorter.Sorters identifier;
 	
+	static 
+	{
+		delay = 10;
+        StorageValue.addStorageValues(new IntStorageValue(VisualSortingTool.getPrefix(Sorter.class), "delay", delay, n -> delay = n, () -> delay));
+	}
 	/**
 	 * has an array of {@link VisualComponent}s and uses algorithms to sort them <br>
 	 * handles the loading, shuffling, and resizing of said array <br>
@@ -41,20 +48,24 @@ public abstract class Sorter implements Customizable
 		this.sortingTool = sortingTool;
 		this.identifier = identifier;
 		this.visualizer = visualizer;
+		setDefaultValues();
+		addStorageValues();
 	}
 	
 	/**
 	 * components added to this sorters personal {@link CustomizationPanel} <br>
 	 * adds title "Customization", adds componenets for the subclass, visualizer, and general
-	 * {@link Algorithm} components
+	 * {@link Algorithm} components <br>
+	 * 
 	 */
 	@Override
 	public void addCustomizationComponents(CustomizationPanel cp)
 	{
-		cp.addTitleSeperator("Customization", false);
 		addSorterCustomizationComponents(cp);
 		visualizer.addCustomizationComponents(cp);
-		Algorithm.addGeneralAlgorithmCustimizationComponents(sortingTool, cp);
+		//Algorithm.addGeneralAlgorithmCustimizationComponents(sortingTool, cp);\JLabel fill = new JLabel("1");
+		//cp.fill();
+		cp.fill();
 	}
 	
 	/**
@@ -62,6 +73,21 @@ public abstract class Sorter implements Customizable
 	 * @param cp the sorters {@link CustomizationPanel}
 	 */
 	public void addSorterCustomizationComponents(CustomizationPanel cp) {}
+	
+	
+	/**
+	 * to override if the sorter needs to set any default values before loading from preferences <br>
+	 * called from constructor before values loaded
+	 */
+	@Override
+	public void setDefaultValues() {}
+	
+	@Override
+	/**
+	 * Only needs to be overridden if this sorter has customization settings to be stored <br>
+	 * called from constructor
+	 */
+	public void addStorageValues() {}
 	
 	/**
 	 * Swaps these two indices with each other in <b>array</b> with <i>no animation</i>
@@ -233,15 +259,15 @@ public abstract class Sorter implements Customizable
 	public enum Sorters
 	{
 		BAR_HEIGHT("Bar Height"),
-		COLOR_GRADIENT("Color Gradient"),
-		NUMBER("Numbers");
+		COLOR_GRADIENT("Blue Gradient"),
+		NUMBER("Number Grid");
 		
-		final String name;
-		Sorters(String name)
+		private final String name;
+		
+		private Sorters(String name)
 		{
 			this.name = name;
 		}
-		
 		@Override
 		public String toString()
 		{

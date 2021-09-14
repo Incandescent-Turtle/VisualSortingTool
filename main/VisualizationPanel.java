@@ -7,6 +7,8 @@ import java.awt.RenderingHints;
 
 import javax.swing.JPanel;
 
+import main.ui.custimization.values.StorageValue;
+
 @SuppressWarnings("serial")
 public class VisualizationPanel extends JPanel
 {
@@ -19,6 +21,8 @@ public class VisualizationPanel extends JPanel
 	{
 		this.sortingTool = sortingTool;
 		setBackground((Color.GRAY));
+		final String prefix = VisualSortingTool.getPrefix(this.getClass());
+		StorageValue.addStorageValues(StorageValue.createColorStorageValue(prefix, "bgColor", getBackground(), c -> setBackground(c), () -> getBackground()));
 	}
 	
 	@Override
