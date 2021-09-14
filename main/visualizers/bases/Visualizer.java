@@ -8,7 +8,8 @@ import main.algorithms.Algorithm;
 import main.sorters.Sorter;
 import main.sorters.Sorter.Sorters;
 import main.ui.custimization.Customizable;
-import main.ui.custimization.storage.StorageValue;
+import main.ui.custimization.values.IntStorageValue;
+import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
 
 /**
@@ -118,22 +119,22 @@ public abstract class Visualizer implements Customizable
 		highlights = new Color[size];
 	}
 	
-	protected StorageValue createWidthStorageValue()
+	protected StorageValue<Integer> createWidthStorageValue()
 	{
-		return new StorageValue(getPrefix(), "width", componentWidth, n -> componentWidth = n, () -> componentWidth);
+		return new IntStorageValue(getPrefix(), "width", componentWidth, n -> componentWidth = n, () -> componentWidth);
 	}
 	
-	protected StorageValue createGapStorageValue()
+	protected StorageValue<Integer> createGapStorageValue()
 	{
-		return new StorageValue(getPrefix(), "gap", componentGap, n -> componentGap = n, () -> componentGap);
+		return new IntStorageValue(getPrefix(), "gap", componentGap, n -> componentGap = n, () -> componentGap);
 	}
 	
-	protected StorageValue createMarginStorageValue()
+	protected StorageValue<Integer> createMarginStorageValue()
 	{
-		return new StorageValue(getPrefix(), "margin", minMargin, n -> minMargin = n, () -> minMargin);
+		return new IntStorageValue(getPrefix(), "margin", minMargin, n -> minMargin = n, () -> minMargin);
 	}
 	
-	protected StorageValue createDefaultColorStorageValue()
+	protected StorageValue<Integer> createDefaultColorStorageValue()
 	{
 		return StorageValue.createColorStorageValue(getPrefix(), "defaultColor", defaultColor, c -> defaultColor = c, () -> defaultColor);
 

@@ -5,7 +5,8 @@ import javax.swing.SpinnerNumberModel;
 import main.VisualSortingTool;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
-import main.ui.custimization.storage.StorageValue;
+import main.ui.custimization.values.IntStorageValue;
+import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
 import main.visualizers.NumberFixedVisualizer;
 
@@ -38,7 +39,7 @@ public class NumberSorter extends Sorter
 	@Override
 	public void addStorageValues()
 	{
-		StorageValue.addStorageValues(new StorageValue(getPrefix(), "amount", size, n -> size = n, () -> size));
+		StorageValue.addStorageValues(new IntStorageValue(getPrefix(), "amount", size, n -> size = n, () -> size));
 	}
 	
 	@Override

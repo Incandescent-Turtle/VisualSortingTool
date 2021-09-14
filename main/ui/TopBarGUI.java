@@ -18,6 +18,8 @@ import main.VisualSortingTool;
 import main.algorithms.Algorithm;
 import main.sorters.Sorter;
 import main.ui.custimization.ColorButton;
+import main.ui.custimization.values.StorageValue;
+import main.ui.custimization.values.StringStorageValue;
 
 @SuppressWarnings("serial")
 public class TopBarGUI extends JPanel
@@ -76,10 +78,12 @@ public class TopBarGUI extends JPanel
         	Sorter.delay = ((int) delaySpinner.getValue());
         	sorter.recalculateAndRepaint();
         });
+        StorageValue.addStorageValues(new StringStorageValue(prefix, "sorter", Sorter.Sorters.BAR_HEIGHT.toString(), name -> sorterList.setSelectedItem(sortingTool.getSorter(name)), () -> sorterList.getSelectedItem().toString()));
         
         algorithmList.addItemListener(e -> {
         	sortingTool.getGUIHandler().getCustomizationGUI().changeAlgorithmPanel((Algorithm)e.getItem());
         });
+        StorageValue.addStorageValues(new StringStorageValue(prefix, "algorithm", sortingTool.getAlgorithms()[0].toString(), name -> algorithmList.setSelectedItem(sortingTool.getAlgorithm(name)), () -> algorithmList.getSelectedItem().toString()));
                         
         setUpRunButton(sortingTool);
         

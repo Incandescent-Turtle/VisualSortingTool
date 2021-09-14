@@ -12,7 +12,7 @@ import main.ui.GUIHandler;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.Customizable;
 import main.ui.custimization.CustomizationPanel;
-import main.ui.custimization.storage.StorageValue;
+import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
 
 /**

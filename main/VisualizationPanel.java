@@ -7,7 +7,7 @@ import java.awt.RenderingHints;
 
 import javax.swing.JPanel;
 
-import main.ui.custimization.storage.StorageValue;
+import main.ui.custimization.values.StorageValue;
 
 @SuppressWarnings("serial")
 public class VisualizationPanel extends JPanel

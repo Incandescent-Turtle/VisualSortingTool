@@ -23,7 +23,8 @@ import main.ui.RoryFrame;
 import main.ui.TopBarGUI;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationGUI;
-import main.ui.custimization.storage.StorageValue;
+import main.ui.custimization.values.StorageValue;
+import main.ui.custimization.values.StorageValue.StorageAction;
 
 @SuppressWarnings("serial")
 /**
@@ -75,7 +76,7 @@ public class VisualSortingTool extends JPanel
 				sorter.recalculateAndRepaint();
 			}
 		});	
-		StorageValue.loadAll(CustomizationGUI.PREFS);
+		StorageValue.performStorageAction(CustomizationGUI.PREFS, StorageAction.LOAD);
 		ColorButton.recolorButtons();
 		frame.setLocationRelativeTo(null);
 		//starts maximized
@@ -135,9 +136,32 @@ public class VisualSortingTool extends JPanel
 		return null;
 	}
 	
+	/**
+	 * get {@link Sorter} instance based on String name of identifier
+	 * @param name name corresponding to desired {@link Sorter}
+	 * @return desired {@link Sorter} or bar height sorter if not found
+	 */
+	public Sorter getSorter(String name)
+	{
+		for(Sorter sorter : sorters)
+		{
+			if(sorter.getIdentifier().toString().equals(name)) return sorter;
+		}
+		return getSorters()[0];
+	}
+	
 	public Algorithm[] getAlgorithms()
 	{
 		return algorithms;
+	}
+	
+	public Algorithm getAlgorithm(String name)
+	{
+		for(Algorithm algorithm : algorithms)
+		{
+			if(algorithm.toString().equals(name)) return algorithm;
+		}
+		return getAlgorithms()[0];
 	}
 	
 	public JFrame getFrame()

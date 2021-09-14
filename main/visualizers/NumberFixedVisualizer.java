@@ -10,7 +10,7 @@ import main.sorters.Sorter.Sorters;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
-import main.ui.custimization.storage.StorageValue;
+import main.ui.custimization.values.StorageValue;
 import main.util.StringHelper;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.FixedSizeVisualizer;

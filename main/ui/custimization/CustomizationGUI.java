@@ -25,7 +25,8 @@ import main.interfaces.OnChangeAction;
 import main.interfaces.RetrieveAction;
 import main.sorters.Sorter;
 import main.ui.GUIHandler;
-import main.ui.custimization.storage.StorageValue;
+import main.ui.custimization.values.StorageValue;
+import main.ui.custimization.values.StorageValue.StorageAction;
 import main.visualizers.bases.Visualizer;
 
 @SuppressWarnings("serial")
@@ -88,7 +89,7 @@ public class CustomizationGUI extends JPanel
 		resetToSave.setAlignmentX(CENTER_ALIGNMENT);
 		resetToSave.addActionListener(e -> 
 		{
-			StorageValue.loadAll(PREFS);
+			StorageValue.performStorageAction(PREFS, StorageAction.LOAD);
 			sortingTool.getSorter().getVisualizer().resetHighlights();
 			ColorButton.recolorButtons();
 			sortingTool.getSorter().recalculateAndRepaint();
@@ -103,8 +104,8 @@ public class CustomizationGUI extends JPanel
 		resetToDefaultValues.addActionListener(e -> 
 		{
 			//delete
-			StorageValue.removeAll(PREFS);
-			StorageValue.loadAll(PREFS);
+			StorageValue.performStorageAction(PREFS, StorageAction.REMOVE);
+			StorageValue.performStorageAction(PREFS, StorageAction.LOAD);
 			sortingTool.getSorter().getVisualizer().resetHighlights();
 			ColorButton.recolorButtons();
 			sortingTool.getSorter().recalculateAndRepaint();
