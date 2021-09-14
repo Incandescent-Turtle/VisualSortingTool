@@ -21,6 +21,7 @@ import main.interfaces.Closable;
 @SuppressWarnings("serial")
 public class RoryFrame extends JFrame
 {
+	//for things that need code run before the program exists - called on window close
 	private static ArrayList<Closable> CLOSABLES = new ArrayList<>();
 	
 	//the size/location before fullscreen (used for resizing
@@ -156,9 +157,7 @@ public class RoryFrame extends JFrame
 	private void closeWindow()
 	{
 
-		CLOSABLES.stream().forEach(c -> {
-			c.close();
-		});
+		CLOSABLES.stream().forEach(c -> c.close());
 		System.exit(0);
 	}
 	

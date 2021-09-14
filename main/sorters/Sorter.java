@@ -8,15 +8,11 @@ import main.algorithms.Algorithm;
 import main.ui.TopBarGUI;
 import main.ui.custimization.Customizable;
 import main.ui.custimization.CustomizationPanel;
-import main.ui.custimization.values.IntStorageValue;
-import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.Visualizer;
 
 public abstract class Sorter implements Customizable
 {
-	public static int delay;
-	
 	protected VisualComponent[] array;
 	
 	protected Visualizer visualizer;
@@ -30,11 +26,6 @@ public abstract class Sorter implements Customizable
 		
 	protected Sorter.Sorters identifier;
 	
-	static 
-	{
-		delay = 10;
-        StorageValue.addStorageValues(new IntStorageValue(VisualSortingTool.getPrefix(Sorter.class), "delay", delay, n -> delay = n, () -> delay));
-	}
 	/**
 	 * has an array of {@link VisualComponent}s and uses algorithms to sort them <br>
 	 * handles the loading, shuffling, and resizing of said array <br>
@@ -63,8 +54,7 @@ public abstract class Sorter implements Customizable
 	{
 		addSorterCustomizationComponents(cp);
 		visualizer.addCustomizationComponents(cp);
-		//Algorithm.addGeneralAlgorithmCustimizationComponents(sortingTool, cp);\JLabel fill = new JLabel("1");
-		//cp.fill();
+		//pushes everything to the top
 		cp.fill();
 	}
 	

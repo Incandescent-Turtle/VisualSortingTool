@@ -39,6 +39,7 @@ public class NumberFixedVisualizer extends FixedSizeVisualizer
 	@Override
 	public void addStorageValues()
 	{
+		//setting up default color with preferences
 		StorageValue.addStorageValues(createDefaultColorStorageValue());
 	}
 	

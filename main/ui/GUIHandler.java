@@ -67,6 +67,9 @@ public class GUIHandler
 		}
 	}
 	
+	/**
+	 * updates all updatables
+	 */
 	public static void update()
 	{
 		UPDATABLES.stream().forEach(u -> u.update());

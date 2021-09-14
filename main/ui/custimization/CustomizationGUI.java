@@ -32,6 +32,7 @@ import main.visualizers.bases.Visualizer;
 @SuppressWarnings("serial")
 public class CustomizationGUI extends JPanel
 {
+	//the only preferences instance to be used
 	public static final Preferences PREFS = Preferences.userRoot().node(VisualSortingTool.class.getSimpleName());
 	
 	//these panels stack on top of eachother, each showing the respective sorter/algorithm
@@ -67,48 +68,68 @@ public class CustomizationGUI extends JPanel
 		{
 			algorithmPanels.add(new CustomizationPanel(sortingTool, algorithm), algorithm.toString());
 		}
-		
+		//main title
 		addSectionTitle("Customization");
+		//adds sorter panel right below title (gets pushed to the top)
 		add(sorterPanels);
 		
+		//for values (like confirmationColor) that are static among algorithms
 		JPanel generalAlgorithmPanel = new JPanel();
 		addSectionTitle("All Algorithms");
+		//vertical box layout
 		generalAlgorithmPanel.setLayout(new BoxLayout(generalAlgorithmPanel, BoxLayout.Y_AXIS));
+		//adds the components
 		Algorithm.addGeneralAlgorithmCustimizationComponents(sortingTool, generalAlgorithmPanel);
+		//adds the panel after the sorter card panel
 		add(generalAlgorithmPanel);
 		
+		//adds algorithm card panel after general algorithms
 		add(algorithmPanels);
 		
-		//creates an invisible JLabel to push all the elemnents to the top....a little hacky
+		//creates an invisible JLabel to push all the elemnents to the top/bottom....a little hacky
 		JLabel fill = new JLabel();
 		fill.setPreferredSize(new Dimension(0, 1000));
 		fill.setMinimumSize(new Dimension(0, 0));
 		add(fill);
 		
+		//this button reverts all values to what they were on the previous saves(just loads them again)
+		//centered on the botto
 		JButton resetToSave = new JButton("Reset to Saved Values");
 		resetToSave.setAlignmentX(CENTER_ALIGNMENT);
 		resetToSave.addActionListener(e -> 
 		{
+			//reloads all values
 			StorageValue.performStorageAction(PREFS, StorageAction.LOAD);
+			//resets highlights (incase new default color)
 			sortingTool.getSorter().getVisualizer().resetHighlights();
+			//recolours all buttons according to their corrosponding color
 			ColorButton.recolorButtons();
+			//resizes, reloads, reshuffles, paints
 			sortingTool.getSorter().recalculateAndRepaint();
+			//updates all the spinner etc so their values match with reality
 			GUIHandler.update();
 
 		});
-		add(resetToSave);
+		//disabled when algo is running
 		GUIHandler.addToggleable(resetToSave);
-
+		add(resetToSave);
+		
+		//at the very bottom middle of panel, resets all values to their ORIGINAL defaults
 		JButton resetToDefaultValues = new JButton("Reset to Default Values");
 		resetToDefaultValues.setAlignmentX(CENTER_ALIGNMENT);
 		resetToDefaultValues.addActionListener(e -> 
 		{
-			//delete
+			//removes ALL preferences 
 			StorageValue.performStorageAction(PREFS, StorageAction.REMOVE);
+			//loading fails so default values are used to load
 			StorageValue.performStorageAction(PREFS, StorageAction.LOAD);
+			//resets highlights (incase new default color)
 			sortingTool.getSorter().getVisualizer().resetHighlights();
+			//recolours all buttons according to their corrosponding color
 			ColorButton.recolorButtons();
+			//resizes, reloads, reshuffles, paints
 			sortingTool.getSorter().recalculateAndRepaint();
+			//updates all the spinner etc so their values match with reality
 			GUIHandler.update();
 		});
 		GUIHandler.addToggleable(resetToDefaultValues);
@@ -117,6 +138,10 @@ public class CustomizationGUI extends JPanel
 		sortingTool.add(this, BorderLayout.LINE_END);
 	}
 	
+	/**
+	 * an underlined centered piece of text to denote category
+	 * @param title
+	 */
 	public void addSectionTitle(String title)
 	{
 		JLabel label = new JLabel("All Algorithns");

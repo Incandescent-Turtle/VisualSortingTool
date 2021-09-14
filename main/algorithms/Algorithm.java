@@ -12,6 +12,7 @@ import main.ui.GUIHandler;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.Customizable;
 import main.ui.custimization.CustomizationPanel;
+import main.ui.custimization.values.IntStorageValue;
 import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
 
@@ -27,18 +28,29 @@ public abstract class Algorithm implements Customizable
 {
 	//all algorithms have the same color for ending/confirming an algorithm run
 	public static Color confirmationColor;
-		
+	public static int delay;
+
 	private String name;
 	protected VisualSortingTool sortingTool;
 	
 	protected Color swapColor, compareColor;
 	
+	//for setting up static values for all algorithms
 	static
 	{
+		//class prefix
 		final String prefix = VisualSortingTool.getPrefix(Algorithm.class);
+
+		delay = 10;
+        StorageValue.addStorageValues(new IntStorageValue(prefix, "delay", delay, n -> delay = n, () -> delay));
+	
 		confirmationColor = Color.GREEN;
+		//attemps to load confirmationColor, if cant its GREEN, sets up storage as well
 		StorageValue.addStorageValues(StorageValue.createColorStorageValue(prefix, "confirmationColor", confirmationColor, c -> confirmationColor = c, () -> confirmationColor));
 	}
+	
+
+	
 	
 	public Algorithm(String name, VisualSortingTool sortingTool)
 	{
@@ -81,6 +93,7 @@ public abstract class Algorithm implements Customizable
 	@Override
 	public void addStorageValues() 
 	{
+		//swap and compare colors getting set up for preferences
 		StorageValue.addStorageValues(
 				StorageValue.createColorStorageValue(getPrefix(), "swapColor", swapColor, c -> swapColor = c, () -> swapColor),
 				StorageValue.createColorStorageValue(getPrefix(), "compareColor", compareColor, c -> compareColor = c, () -> compareColor)
@@ -119,7 +132,7 @@ public abstract class Algorithm implements Customizable
 	 */
 	protected final static void delay(Sorter sorter)
 	{
-		VisualSortingTool.delay(Sorter.delay);
+		VisualSortingTool.delay(delay);
 	}
 	
 	/**

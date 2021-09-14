@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -67,22 +69,30 @@ public class TopBarGUI extends JPanel
 		});
 		
 		//Delay Spinner
-        delaySpinner.addChangeListener(e -> Sorter.delay = ((int) delaySpinner.getValue()));
-        GUIHandler.addUpdatables(() -> delaySpinner.setValue(Sorter.delay));
+        delaySpinner.addChangeListener(e -> Algorithm.delay = ((int) delaySpinner.getValue()));
+        GUIHandler.addUpdatables(() -> delaySpinner.setValue(Algorithm.delay));
         //sorter combobox. when switches it resizes/reloads/shuffles the sorter as well as carrying over the delay
-        sorterList.addItemListener(e -> {
-    		ColorButton.recolorButtons();
-        	sortingTool.setSorter((Sorter) e.getItem());
-        	Sorter sorter = sortingTool.getSorter();
-        	sortingTool.getGUIHandler().getCustomizationGUI().changeSorterPanel(sorter);
-        	Sorter.delay = ((int) delaySpinner.getValue());
-        	sorter.recalculateAndRepaint();
-        });
+        sorterList.addItemListener(new ItemListener()
+		{
+			@Override
+			public void itemStateChanged(ItemEvent e)
+			{
+	    		ColorButton.recolorButtons();
+	        	sortingTool.setSorter((Sorter) e.getItem());
+	        	Sorter sorter = sortingTool.getSorter();
+	        	sortingTool.getGUIHandler().getCustomizationGUI().changeSorterPanel(sorter);
+	        	Algorithm.delay = ((int) delaySpinner.getValue());
+	        	sorter.recalculateAndRepaint();
+			}
+		});
+        //sets up preferences for the sorter open on program close
+        //a little hacky...uses id string name to find the sorter
         StorageValue.addStorageValues(new StringStorageValue(prefix, "sorter", Sorter.Sorters.BAR_HEIGHT.toString(), name -> sorterList.setSelectedItem(sortingTool.getSorter(name)), () -> sorterList.getSelectedItem().toString()));
         
-        algorithmList.addItemListener(e -> {
-        	sortingTool.getGUIHandler().getCustomizationGUI().changeAlgorithmPanel((Algorithm)e.getItem());
-        });
+        //changes algorithm panel on algorithm change
+        algorithmList.addItemListener(e -> sortingTool.getGUIHandler().getCustomizationGUI().changeAlgorithmPanel((Algorithm)e.getItem()));
+        //sets up preferences for the algorithn open on program close
+        //a little hacky...uses toString on the algorithm to save/load it
         StorageValue.addStorageValues(new StringStorageValue(prefix, "algorithm", sortingTool.getAlgorithms()[0].toString(), name -> algorithmList.setSelectedItem(sortingTool.getAlgorithm(name)), () -> algorithmList.getSelectedItem().toString()));
                         
         setUpRunButton(sortingTool);
@@ -117,7 +127,8 @@ public class TopBarGUI extends JPanel
 		    	{
 					System.out.println(algorithmList.getSelectedItem().toString() + " has been pushed");
 					sorter.setAlgorithm((Algorithm)algorithmList.getSelectedItem());
-		    		GUIHandler.setEnabled(false);
+		    		//disables resizing components etc
+					GUIHandler.setEnabled(false);
 		    		//runs the current algorithm
 				    Thread thread = new Thread(() -> ((Algorithm)algorithmList.getSelectedItem()).run());
 		    		//runs logic on another thread so swing can update 

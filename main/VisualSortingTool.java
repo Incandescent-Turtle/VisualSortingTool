@@ -76,6 +76,7 @@ public class VisualSortingTool extends JPanel
 				sorter.recalculateAndRepaint();
 			}
 		});	
+		//loads ALL values in from preferences
 		StorageValue.performStorageAction(CustomizationGUI.PREFS, StorageAction.LOAD);
 		ColorButton.recolorButtons();
 		frame.setLocationRelativeTo(null);
@@ -137,7 +138,7 @@ public class VisualSortingTool extends JPanel
 	}
 	
 	/**
-	 * get {@link Sorter} instance based on String name of identifier
+	 * get {@link Sorter} instance based on STRING NAME (toString) of identifier
 	 * @param name name corresponding to desired {@link Sorter}
 	 * @return desired {@link Sorter} or bar height sorter if not found
 	 */
@@ -155,6 +156,11 @@ public class VisualSortingTool extends JPanel
 		return algorithms;
 	}
 	
+	/**
+	 * get {@link Algorithm} instance based on STRING NAME (toString) 
+	 * @param name name corresponding to desired {@link Algorithm}
+	 * @return desired {@link Algorithm} or algorithm 0 in list
+	 */
 	public Algorithm getAlgorithm(String name)
 	{
 		for(Algorithm algorithm : algorithms)

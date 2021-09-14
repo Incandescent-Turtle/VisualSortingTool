@@ -119,21 +119,33 @@ public abstract class Visualizer implements Customizable
 		highlights = new Color[size];
 	}
 	
+	/**
+	 * @return the storagevalue all set up to load/save etc the componentWidth variable
+	 */
 	protected StorageValue<Integer> createWidthStorageValue()
 	{
 		return new IntStorageValue(getPrefix(), "width", componentWidth, n -> componentWidth = n, () -> componentWidth);
 	}
 	
+	/**
+	 * @return the storagevalue all set up to load/save etc the componentGap variable
+	 */
 	protected StorageValue<Integer> createGapStorageValue()
 	{
 		return new IntStorageValue(getPrefix(), "gap", componentGap, n -> componentGap = n, () -> componentGap);
 	}
 	
+	/**
+	 * @return the storagevalue all set up to load/save etc the minMargin variable
+	 */
 	protected StorageValue<Integer> createMarginStorageValue()
 	{
 		return new IntStorageValue(getPrefix(), "margin", minMargin, n -> minMargin = n, () -> minMargin);
 	}
 	
+	/**
+	 * @return the storagevalue all set up to load/save etc the defaultColor variable
+	 */
 	protected StorageValue<Integer> createDefaultColorStorageValue()
 	{
 		return StorageValue.createColorStorageValue(getPrefix(), "defaultColor", defaultColor, c -> defaultColor = c, () -> defaultColor);
@@ -163,10 +175,5 @@ public abstract class Visualizer implements Customizable
 	public void setConfirmed(boolean bool)
 	{
 		confirmed = bool;
-	}
-	
-	public boolean isConfirmed()
-	{
-		return confirmed;
 	}
 }

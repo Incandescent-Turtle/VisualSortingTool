@@ -74,7 +74,7 @@ public abstract class StorageValue<T> implements Closable
 	/**
 	 * loads, stores, or removes preferences based on the actin thats passed in
 	 * @param prefs
-	 * @param action corrosponding action
+	 * @param action corresponding action
 	 */
 	public static void performStorageAction(Preferences prefs, StorageAction action)
 	{
@@ -119,7 +119,7 @@ public abstract class StorageValue<T> implements Closable
 	 * @param defaultColor the default color this should be
 	 * @param changeAction the loaded color is passed into this param, c -> myColor = c is what it should look like
 	 * @param retrieveAction this is used to fetch the current state of this color variable to store it
-	 * @return
+	 * @return the storagevalue equipped to load/save the color
 	 */
 	public static IntStorageValue createColorStorageValue(String prefix, String key, Color defaultColor, OnChangeAction<Color> changeAction, RetrieveAction<Color> retrieveAction)
 	{
