@@ -46,6 +46,8 @@ public class TopBarGUI extends JPanel
 
     private VisualSortingTool sortingTool;
     
+    private final String prefix = VisualSortingTool.getPrefix(getClass());
+    
     public TopBarGUI(VisualSortingTool sortingTool)
 	{
 		this.sortingTool = sortingTool;
@@ -64,7 +66,7 @@ public class TopBarGUI extends JPanel
 		
 		//Delay Spinner
         delaySpinner.addChangeListener(e -> Sorter.delay = ((int) delaySpinner.getValue()));
-
+        GUIHandler.addUpdatables(() -> delaySpinner.setValue(Sorter.delay));
         //sorter combobox. when switches it resizes/reloads/shuffles the sorter as well as carrying over the delay
         sorterList.addItemListener(e -> {
     		ColorButton.recolorButtons();

@@ -1,20 +1,16 @@
 package main.sorters;
 
-import java.util.prefs.Preferences;
-
 import javax.swing.SpinnerNumberModel;
 
 import main.VisualSortingTool;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
+import main.ui.custimization.storage.StorageValue;
 import main.vcs.VisualComponent;
 import main.visualizers.NumberFixedVisualizer;
 
 public class NumberSorter extends Sorter
-{
-	//key for getting/putting values in preferences
-	private static final String AMOUNT = "amount";
-	
+{	
 	/**
 	 * a {@link Sorter} to use actual numbers to visualize sorting
 	 */
@@ -30,19 +26,19 @@ public class NumberSorter extends Sorter
 	public void addSorterCustomizationComponents(CustomizationPanel cp)
 	{
 		SpinnerNumberModel nm = new SpinnerNumberModel(size, 10, 500, 1);
-		cp.addRow("# of Numbers:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> size = n));	
+		cp.addRow("# of Numbers:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> size = n, () -> size));	
 	}
 	
 	@Override
-	public void loadValues(Preferences prefs, String prefix)
+	public void setDefaultValues()
 	{
-		size = prefs.getInt(prefix + AMOUNT, 100);
+		size = 100;
 	}
 	
 	@Override
-	public void storeValues(Preferences prefs, String prefix)
+	public void addStorageValues()
 	{
-		prefs.putInt(prefix + AMOUNT, size);
+		StorageValue.addStorageValues(new StorageValue(getPrefix(), "amount", size, n -> size = n, () -> size));
 	}
 	
 	@Override

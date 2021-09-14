@@ -14,7 +14,6 @@ import javax.swing.SwingConstants;
 
 import main.VisualSortingTool;
 import main.ui.GUIHandler;
-import main.ui.custimization.CustomizationGUI.Customizable;
 
 @SuppressWarnings("serial")
 public class CustomizationPanel extends JPanel
@@ -134,5 +133,22 @@ public class CustomizationPanel extends JPanel
         //so it can be disabled when an algoroithm is running
         GUIHandler.addToggleable(right);
         row++;
+	}
+	
+	public void fill()
+	{
+		c.gridx = 0;
+        c.gridy = row;
+        c.weighty = 1;
+        c.weightx = 1;
+        c.gridheight = 1;
+        c.gridwidth = 2;
+        c.ipady = 20;
+        c.anchor = GridBagConstraints.NORTH;
+        c.fill = GridBagConstraints.BOTH;
+        row++;
+        JLabel l = new JLabel();
+        l.setMinimumSize(new Dimension(0,0));
+        add(new JLabel(), c);
 	}
 }

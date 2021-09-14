@@ -2,16 +2,21 @@ package main.ui;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 import main.VisualSortingTool;
 import main.ui.custimization.CustomizationGUI;
+import main.ui.custimization.Updatable;
 
 public class GUIHandler
 {
-	private TopBarGUI topBar;
-	private CustomizationGUI customizationGUI;
+	//updated when customization values are reset
+	private static final ArrayList<Updatable> UPDATABLES = new ArrayList<>();
 	//all components across any GUI that need to be disabled when algorithm is running
 	private static final ArrayList<Component> TOGGLEABLE = new ArrayList<>();
+	
+	private TopBarGUI topBar;
+	private CustomizationGUI customizationGUI;
 	
 	/**
 	 * holds the customization menus and the top utility bar
@@ -60,5 +65,15 @@ public class GUIHandler
 		{
 			TOGGLEABLE.add(c);
 		}
+	}
+	
+	public static void update()
+	{
+		UPDATABLES.stream().forEach(u -> u.update());
+	}
+	
+	public static void addUpdatables(Updatable... updatables)
+	{
+		Stream.of(updatables).forEach(u -> UPDATABLES.add(u));
 	}
 }

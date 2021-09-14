@@ -23,17 +23,24 @@ public class Util
 	
 	/**
 	 * Retrieves the specified Color from its key using {@link CustomizationGUI#PREFS}
+	 * @param prefix the prefix to be used
 	 * @param key the key storing the int color value
 	 * @param defaultColor if the key doesnt exist, the Color that should be returned instead
 	 * @return either the stored color if it exists or the default color
 	 */
-	public static Color getColor(String key, String prefix, Color defaultColor)
+	public static Color getColor(String fullKey, Color defaultColor)
 	{
-		return new Color(CustomizationGUI.PREFS.getInt(prefix + key, Util.colorToInt(defaultColor)));
+		return new Color(CustomizationGUI.PREFS.getInt(fullKey, Util.colorToInt(defaultColor)));
 	}
 	
-	public static void putColor(String key, String prefix, Color color)
+	/**
+	 * Stores the specified Color by its key using {@link CustomizationGUI#PREFS}
+	 * @param prefix the prefix to be used
+	 * @param key the key to store the int color value
+	 * @param color the color to store
+	 */
+	public static void putColor(String fullKey, Color color)
 	{
-		CustomizationGUI.PREFS.putInt(prefix + key, Util.colorToInt(color));
+		CustomizationGUI.PREFS.putInt(fullKey, Util.colorToInt(color));
 	}
 }

@@ -2,7 +2,6 @@ package main.visualizers;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.prefs.Preferences;
 
 import javax.swing.SpinnerNumberModel;
 
@@ -11,6 +10,7 @@ import main.sorters.Sorter.Sorters;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
+import main.ui.custimization.storage.StorageValue;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.Visualizer;
 
@@ -20,6 +20,14 @@ public class ColorGradientVisualizer extends Visualizer
 	{
 		super(sortingTool, Sorters.COLOR_GRADIENT);
 	}
+	
+	@Override
+	public void setDefaultValues()
+	{
+		componentWidth = 15;
+		componentGap = 2;
+		minMargin = 2;		
+	}
 
 	@Override
 	public void addCustomizationComponents(CustomizationPanel cp)
@@ -27,35 +35,28 @@ public class ColorGradientVisualizer extends Visualizer
 		SpinnerNumberModel nm = new SpinnerNumberModel(componentWidth, 4, 100, 1);
 		
 		//spinner to change bar width
-		cp.addRow("Bar Width:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> componentWidth = n));
+		cp.addRow("Bar Width:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> componentWidth = n, () -> componentWidth));
 		
 		//spinner to change gap between bars
 		nm = new SpinnerNumberModel(componentGap, 0, 20, 1);
-		cp.addRow("Gap:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> componentGap = n));
+		cp.addRow("Gap:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> componentGap = n, () -> componentGap));
 		
 		//spinner to change left/right margin
-		nm = new SpinnerNumberModel(componentGap, 0, 100, 1);
-		cp.addRow("Margin:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> minMargin = n));	
+		nm = new SpinnerNumberModel(minMargin, 0, 100, 1);
+		cp.addRow("Margin:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> minMargin = n, () -> minMargin));	
 		
 		//change background button
 		cp.addRow(ColorButton.createBackgroundColorPickingButton(sortingTool), true);
 	}
 	
-
 	@Override
-	public void loadValues(Preferences prefs, String prefix)
+	public void addStorageValues()
 	{
-		componentWidth = prefs.getInt(prefix + WIDTH, 15);
-		componentGap = prefs.getInt(prefix + GAP, 2);
-		minMargin = prefs.getInt(prefix + MARGIN, 2);
-	}
-	
-	@Override
-	public void storeValues(Preferences prefs, String prefix)
-	{
-		prefs.putInt(prefix + WIDTH, componentWidth);
-		prefs.putInt(prefix + GAP, componentGap);
-		prefs.putInt(prefix + MARGIN, minMargin);
+		StorageValue.addStorageValues(
+				createWidthStorageValue(),
+				createGapStorageValue(),
+				createMarginStorageValue()
+		);
 	}
 	
 	@Override

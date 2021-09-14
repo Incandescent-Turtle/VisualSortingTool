@@ -7,16 +7,19 @@ import main.sorters.Sorter;
 import main.vcs.VisualComponent;
 
 public class BubbleSort extends Algorithm
-{	
-	private Color swapColor, compareColor;
-	
+{		
 	public BubbleSort(VisualSortingTool sortingTool)
 	{
 		super("Bubble Sort", sortingTool);
+	}
+	
+	@Override
+	public void setDefaultValues()
+	{
 		swapColor = Color.RED;
 		compareColor = Color.GREEN;
 	}
-	
+
 	@Override
 	public void runAlgorithm()
 	{

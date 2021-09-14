@@ -12,23 +12,27 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingUtilities;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
-import main.interfaces.Closable;
+import main.interfaces.OnChangeAction;
+import main.interfaces.RetrieveAction;
 import main.sorters.Sorter;
+import main.ui.GUIHandler;
+import main.ui.custimization.storage.StorageValue;
 import main.visualizers.bases.Visualizer;
 
 @SuppressWarnings("serial")
 public class CustomizationGUI extends JPanel
 {
-	public static final Preferences PREFS = Preferences.userRoot().node(VisualSortingTool.class.getName());
-
+	public static final Preferences PREFS = Preferences.userRoot().node(VisualSortingTool.class.getSimpleName());
+	
 	//these panels stack on top of eachother, each showing the respective sorter/algorithm
 	private JPanel sorterPanels, algorithmPanels;
 	
@@ -62,23 +66,66 @@ public class CustomizationGUI extends JPanel
 		{
 			algorithmPanels.add(new CustomizationPanel(sortingTool, algorithm), algorithm.toString());
 		}
-	
+		
+		addSectionTitle("Customization");
 		add(sorterPanels);
+		
+		JPanel generalAlgorithmPanel = new JPanel();
+		addSectionTitle("All Algorithms");
+		generalAlgorithmPanel.setLayout(new BoxLayout(generalAlgorithmPanel, BoxLayout.Y_AXIS));
+		Algorithm.addGeneralAlgorithmCustimizationComponents(sortingTool, generalAlgorithmPanel);
+		add(generalAlgorithmPanel);
+		
 		add(algorithmPanels);
 		
 		//creates an invisible JLabel to push all the elemnents to the top....a little hacky
-		JLabel fill = new JLabel("1");
-		fill.setPreferredSize(new Dimension(3, 1000));
-		fill.setMinimumSize(new Dimension(3, 0));
-	//	fill.setBackground(Color.BLUE);
-		//fill.setOpaque(true);
+		JLabel fill = new JLabel();
+		fill.setPreferredSize(new Dimension(0, 1000));
+		fill.setMinimumSize(new Dimension(0, 0));
 		add(fill);
-		JButton reset = new JButton("Reset");
-		reset.setAlignmentX(CENTER_ALIGNMENT);
 		
-		add(reset);
+		JButton resetToSave = new JButton("Reset to Saved Values");
+		resetToSave.setAlignmentX(CENTER_ALIGNMENT);
+		resetToSave.addActionListener(e -> 
+		{
+			StorageValue.loadAll(PREFS);
+			sortingTool.getSorter().getVisualizer().resetHighlights();
+			ColorButton.recolorButtons();
+			sortingTool.getSorter().recalculateAndRepaint();
+			GUIHandler.update();
+
+		});
+		add(resetToSave);
+		GUIHandler.addToggleable(resetToSave);
+
+		JButton resetToDefaultValues = new JButton("Reset to Default Values");
+		resetToDefaultValues.setAlignmentX(CENTER_ALIGNMENT);
+		resetToDefaultValues.addActionListener(e -> 
+		{
+			//delete
+			StorageValue.removeAll(PREFS);
+			StorageValue.loadAll(PREFS);
+			sortingTool.getSorter().getVisualizer().resetHighlights();
+			ColorButton.recolorButtons();
+			sortingTool.getSorter().recalculateAndRepaint();
+			GUIHandler.update();
+		});
+		GUIHandler.addToggleable(resetToDefaultValues);
+		add(resetToDefaultValues);
 		
 		sortingTool.add(this, BorderLayout.LINE_END);
+	}
+	
+	public void addSectionTitle(String title)
+	{
+		JLabel label = new JLabel("All Algorithns");
+		label.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+		add(label);
+		//adds space/underline below
+		JSeparator line = new JSeparator(SwingConstants.HORIZONTAL);
+		line.setPreferredSize(new Dimension(20,30));
+		line.setVisible(true);
+		add(line);
 	}
 	
 	/**
@@ -99,18 +146,20 @@ public class CustomizationGUI extends JPanel
 	
 	/**
 	 * Helper method to easily create spinners to modify int values
-	 * @param scl this will be called with the new value passed in on a change
+	 * @param changeAction this will be called with the new value passed in on a change
+	 * @param onUpdate returns the value that when {@link #update()} is called will replace the spinners value
 	 * @return
 	 */
-	public static JSpinner createJSpinner(VisualSortingTool sortingTool, SpinnerNumberModel nm, SpinnerChangeAction scl)
+	public static JSpinner createJSpinner(VisualSortingTool sortingTool, SpinnerNumberModel nm, OnChangeAction<Integer> changeAction, RetrieveAction<Integer> onUpdate)
 	{
 		JSpinner spinner = new JSpinner(nm);
+		GUIHandler.addUpdatables(() -> spinner.setValue(onUpdate.retrieve()));
 		spinner.addChangeListener(new ChangeListener()
 		{
 			@Override
 			public void stateChanged(ChangeEvent e)
 			{
-				scl.changeAction((int) spinner.getValue());
+				changeAction.doStuff((int) spinner.getValue());
 				sortingTool.getSorter().recalculateAndRepaint();
 			}
 		});
@@ -139,40 +188,5 @@ public class CustomizationGUI extends JPanel
 			}
 		});
 		return makePink;
-	}
-	
-	/**
-	 *	for things such as {@link Sorter}s and {@link Algorithm}s that have their own
-	 *	{@link CustomizationPanel}s <br>
-	 */
-	public interface Customizable extends Closable
-	{
-		/**
-		 * to add components to the side bar to change values
-		 * @param cp the customization Panel
-		 */
-		void addCustomizationComponents(CustomizationPanel cp);
-		void loadValues(Preferences prefs, String prefix);
-		void storeValues(Preferences prefs, String prefix);
-		
-		default String getPrefix()
-		{
-			return this.getClass().getSimpleName().toLowerCase() + "_";
-		}
-		
-		@Override
-		default void close()
-		{
-			storeValues(CustomizationGUI.PREFS, getPrefix());
-		}
-	}
-	
-	/**
-	 *	used for easily setting values on a jspinner change <br>
-	 *	for use as function interface
-	 */
-	public interface SpinnerChangeAction
-	{
-		void changeAction(int value);
 	}
 }

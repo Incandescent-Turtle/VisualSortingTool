@@ -21,6 +21,9 @@ import main.sorters.Sorter;
 import main.ui.GUIHandler;
 import main.ui.RoryFrame;
 import main.ui.TopBarGUI;
+import main.ui.custimization.ColorButton;
+import main.ui.custimization.CustomizationGUI;
+import main.ui.custimization.storage.StorageValue;
 
 @SuppressWarnings("serial")
 /**
@@ -72,6 +75,8 @@ public class VisualSortingTool extends JPanel
 				sorter.recalculateAndRepaint();
 			}
 		});	
+		StorageValue.loadAll(CustomizationGUI.PREFS);
+		ColorButton.recolorButtons();
 		frame.setLocationRelativeTo(null);
 		//starts maximized
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -167,6 +172,11 @@ public class VisualSortingTool extends JPanel
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static String getPrefix(Class<?> cls)
+	{
+		return cls.getSimpleName().toLowerCase() + "_";
 	}
 	
 	public static void main(String[] args)

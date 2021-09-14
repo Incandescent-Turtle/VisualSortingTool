@@ -10,6 +10,8 @@ import javax.swing.JColorChooser;
 
 import main.VisualSortingTool;
 import main.VisualizationPanel;
+import main.interfaces.OnChangeAction;
+import main.interfaces.RetrieveAction;
 import main.sorters.Sorter;
 import main.visualizers.bases.Visualizer;
 
@@ -23,8 +25,8 @@ public class ColorButton extends JButton implements ActionListener
 	private final static ArrayList<ColorButton> COLOR_BUTTONS = new ArrayList<>();
 	
 	private VisualSortingTool sortingTool;
-	private ColorAction okAction;
-	private ColorRetrieveAction retrieveAction;
+	private OnChangeAction<Color> okAction;
+	private RetrieveAction<Color> retrieveAction;
 	private String text;
 	
 	/**
@@ -37,7 +39,7 @@ public class ColorButton extends JButton implements ActionListener
 	 * @param retrieveAction action to get the default color
 	 * @param text the text to appear on the button and frame
 	 */
-	public ColorButton(VisualSortingTool sortingTool, ColorAction okAction, ColorRetrieveAction retrieveAction, String text)
+	public ColorButton(VisualSortingTool sortingTool, OnChangeAction<Color> okAction, RetrieveAction<Color> retrieveAction, String text)
 	{
 		super(text);
 		COLOR_BUTTONS.add(this);
@@ -46,7 +48,7 @@ public class ColorButton extends JButton implements ActionListener
 		this.retrieveAction = retrieveAction;
 		this.text = text;
 		
-		setBackground(retrieveAction.retrieveColor());
+		setBackground(retrieveAction.retrieve());
 		addActionListener(this);	
 	} 
 	
@@ -55,7 +57,7 @@ public class ColorButton extends JButton implements ActionListener
 	{
 		//disables all color buttons until done
 		enableColorButtons(false);
-	    final JColorChooser colorChooser = new JColorChooser(retrieveAction.retrieveColor());
+	    final JColorChooser colorChooser = new JColorChooser(retrieveAction.retrieve());
 	    ActionListener al = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -96,7 +98,7 @@ public class ColorButton extends JButton implements ActionListener
 	{
 		for(ColorButton colorButton : COLOR_BUTTONS)
 		{
-			colorButton.setBackground(colorButton.retrieveAction.retrieveColor());
+			colorButton.setBackground(colorButton.retrieveAction.retrieve());
 		}
 	}
 	
@@ -109,7 +111,7 @@ public class ColorButton extends JButton implements ActionListener
 	public static ColorButton createDefaultColorPickingButton(VisualSortingTool sortingTool, Sorter sorter)
 	{
 		Visualizer visualizer = sorter.getVisualizer();
-		ColorAction okAction = new ColorAction() {
+		OnChangeAction<Color> okAction = new OnChangeAction<Color>() {
 			
 			@Override
 			public void doStuff(Color color)
@@ -130,7 +132,7 @@ public class ColorButton extends JButton implements ActionListener
 	 */
 	public static ColorButton createBackgroundColorPickingButton(VisualSortingTool sortingTool)
 	{
-		ColorAction okAction = new ColorAction() {
+		OnChangeAction<Color> okAction = new OnChangeAction<Color>() {
 			
 			@Override
 			public void doStuff(Color color)
@@ -140,23 +142,5 @@ public class ColorButton extends JButton implements ActionListener
 			}
 		};
 		return new ColorButton(sortingTool, okAction, () -> sortingTool.getVisualizationPanel().getBackground(), "Background Color");
-	}
-	
-	/**
-	  * when a new color is picked, this action is carried out <br>
-	  *	for use as function interface
-	 */
-	public interface ColorAction
-	{
-		void doStuff(Color color);	
-	}
-	
-	/**
-	 *	for setting the default choose color in case no color is selected <br>
-	 *	for use as function interface
-	 */
-	public interface ColorRetrieveAction
-	{
-		Color retrieveColor();
 	}
 }

@@ -1,17 +1,18 @@
 package main.algorithms;
 
 import java.awt.Color;
-import java.util.prefs.Preferences;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import main.VisualSortingTool;
+import main.interfaces.RetrieveAction;
 import main.sorters.Sorter;
 import main.ui.GUIHandler;
-import main.ui.RoryFrame;
 import main.ui.custimization.ColorButton;
-import main.ui.custimization.ColorButton.ColorRetrieveAction;
-import main.ui.custimization.CustomizationGUI.Customizable;
+import main.ui.custimization.Customizable;
 import main.ui.custimization.CustomizationPanel;
-import main.util.Util;
+import main.ui.custimization.storage.StorageValue;
 import main.vcs.VisualComponent;
 
 /**
@@ -26,20 +27,17 @@ public abstract class Algorithm implements Customizable
 {
 	//all algorithms have the same color for ending/confirming an algorithm run
 	public static Color confirmationColor;
-	public static String CONFIRMATION_COLOR = "confirmationColor";
-	
-	private final static String SWAP_COLOR = "swapColor";
-	private static final String COMPARE_COLOR = "compareColor";
-	
+		
 	private String name;
 	protected VisualSortingTool sortingTool;
+	
 	protected Color swapColor, compareColor;
 	
 	static
 	{
-		String prefix = Algorithm.class.getSimpleName().toLowerCase() + "_";
-		confirmationColor = Util.getColor(COMPARE_COLOR, prefix, Color.GREEN);
-		RoryFrame.addClosable(() -> Util.putColor(COMPARE_COLOR, prefix, confirmationColor));
+		final String prefix = VisualSortingTool.getPrefix(Algorithm.class);
+		confirmationColor = Color.GREEN;
+		StorageValue.addStorageValues(StorageValue.createColorStorageValue(prefix, "confirmationColor", confirmationColor, c -> confirmationColor = c, () -> confirmationColor));
 	}
 	
 	public Algorithm(String name, VisualSortingTool sortingTool)
@@ -48,6 +46,8 @@ public abstract class Algorithm implements Customizable
 		this.sortingTool = sortingTool;
 		swapColor = Color.RED;
 		compareColor = Color.GREEN;
+		setDefaultValues();
+		addStorageValues();
 	}
 		
 	/**
@@ -64,17 +64,27 @@ public abstract class Algorithm implements Customizable
 		cp.addRow(new ColorButton(sortingTool, c -> compareColor = c, () -> compareColor, "Compare Color"), true);
 	}
 	
+	/**
+	 * to override if this algorithm needs to set any default values before loading from preferences <br>
+	 * called from constructor before values loaded
+	 */
 	@Override
-	public void loadValues(Preferences prefs, String prefix)
-	{
-		prefs.getInt(SWAP_COLOR, Util.colorToInt(Color.RED));
-		prefs.getInt(COMPARE_COLOR, Util.colorToInt(Color.GREEN));
-	}
-
+	public void setDefaultValues() 
+	{}
+	
+	/**
+	 * to override if this algorithm needs to load/save any other values <br>
+	 * by default all algorithms already save/store their swap color and compare color <br>
+	 * called from constructor <br>
+	 * <font color="red"> must call super() </font>
+	 */
 	@Override
-	public void storeValues(Preferences prefs, String prefix)
+	public void addStorageValues() 
 	{
-		
+		StorageValue.addStorageValues(
+				StorageValue.createColorStorageValue(getPrefix(), "swapColor", swapColor, c -> swapColor = c, () -> swapColor),
+				StorageValue.createColorStorageValue(getPrefix(), "compareColor", compareColor, c -> compareColor = c, () -> compareColor)
+		);
 	}
 	
 	/**
@@ -116,19 +126,21 @@ public abstract class Algorithm implements Customizable
 	 * adds customization for all the static values shared by algorithms, such as {@link #confirmationColor}
 	 * @param cp this {@link CustomizationPanel} belongs to a sorter
 	 */
-	public static void addGeneralAlgorithmCustimizationComponents(VisualSortingTool sortingTool, CustomizationPanel cp)
+	public static void addGeneralAlgorithmCustimizationComponents(VisualSortingTool sortingTool, JPanel panel)
 	{
 		//title placed with a little spacing under the sorter customization components
-		cp.addTitleSeperator("All Algorithms", true);
-		ColorRetrieveAction retrieveAction = new ColorRetrieveAction() {
+		//cp.addTitleSeperator("All Algorithms", true);
+		RetrieveAction<Color> retrieveAction = new RetrieveAction<Color>() {
 			
 			@Override
-			public Color retrieveColor()
+			public Color retrieve()
 			{
 				return confirmationColor; 
 			}
 		};
-		cp.addRow(new ColorButton(sortingTool, c -> confirmationColor = c, retrieveAction, "Confirmation Color"), true);	
+		JButton button = new ColorButton(sortingTool, c -> confirmationColor = c, retrieveAction, "Confirmation Color");
+		button.setAlignmentX(JButton.CENTER_ALIGNMENT);
+		panel.add(button);	
 	}
 
 	/**

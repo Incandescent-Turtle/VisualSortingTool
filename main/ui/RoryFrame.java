@@ -157,7 +157,6 @@ public class RoryFrame extends JFrame
 	{
 
 		CLOSABLES.stream().forEach(c -> {
-			System.out.println("Closing + " + c.getClass());
 			c.close();
 		});
 		System.exit(0);

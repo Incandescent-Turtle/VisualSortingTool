@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import main.VisualSortingTool;
+import main.algorithms.Algorithm;
 import main.sorters.Sorter;
 import main.sorters.Sorter.Sorters;
-import main.ui.RoryFrame;
-import main.ui.custimization.CustomizationGUI;
-import main.ui.custimization.CustomizationGUI.Customizable;
+import main.ui.custimization.Customizable;
+import main.ui.custimization.storage.StorageValue;
 import main.vcs.VisualComponent;
 
 /**
@@ -16,13 +16,7 @@ import main.vcs.VisualComponent;
  *  Visualizers are what draw the arrays and keep all the variables relating to the drawing
  */
 public abstract class Visualizer implements Customizable
-{
-	/*
-	 * Keys for preferences
-	 */
-	public static final String MARGIN = "margin", WIDTH = "width", HEIGHT = "height", GAP = "gap";
-	public static final String DEFAULT_COLOR = "defaultColor";
-	
+{	
 	//in px the min distance from the borders of the screen
 	protected int minMargin = 30;
 	//the width of individual components
@@ -38,7 +32,7 @@ public abstract class Visualizer implements Customizable
 	protected Color[] highlights;
 	
 	/**
-	 * whether should render components with {@link Visualizer#defaultColor}
+	 * whether should render components with {@link Visualizer#defaultColor} or {@link Algorithm#confirmationColor}
 	 */
 	protected boolean confirmed = false;	
 	
@@ -50,8 +44,8 @@ public abstract class Visualizer implements Customizable
 	{
 		this.sortingTool = sortingTool;
 		this.identifier = identifier;
-		loadValues(CustomizationGUI.PREFS, this.getPrefix());
-		RoryFrame.addClosable(this);
+		setDefaultValues();
+		addStorageValues();
 	}
 
 	/**
@@ -122,6 +116,27 @@ public abstract class Visualizer implements Customizable
 	public final void resizeHighlights(int size)
 	{
 		highlights = new Color[size];
+	}
+	
+	protected StorageValue createWidthStorageValue()
+	{
+		return new StorageValue(getPrefix(), "width", componentWidth, n -> componentWidth = n, () -> componentWidth);
+	}
+	
+	protected StorageValue createGapStorageValue()
+	{
+		return new StorageValue(getPrefix(), "gap", componentGap, n -> componentGap = n, () -> componentGap);
+	}
+	
+	protected StorageValue createMarginStorageValue()
+	{
+		return new StorageValue(getPrefix(), "margin", minMargin, n -> minMargin = n, () -> minMargin);
+	}
+	
+	protected StorageValue createDefaultColorStorageValue()
+	{
+		return StorageValue.createColorStorageValue(getPrefix(), "defaultColor", defaultColor, c -> defaultColor = c, () -> defaultColor);
+
 	}
 	
 	public final Color[] getHighlights()
