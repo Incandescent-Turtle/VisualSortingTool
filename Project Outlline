@@ -13,5 +13,3 @@ To make a sorter:
 	if its data is random, override reload and put the code to fill the array there
 	if it loads data from a file or something, override generateValues(), this will only ever be run once
 	if the data is re-sizeable override resizeArray()
-	
-requires https://code.google.com/archive/p/json-simple/
