@@ -117,8 +117,10 @@ public abstract class Sorter implements Customizable
 	protected final void tryResizeArray()
 	{
 		if(algorithm == null)
+		{
 			visualizer.setConfirmed(false);
 			resizeArray();
+		}
 	}
 	
 	/**

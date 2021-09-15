@@ -44,7 +44,7 @@ public abstract class Algorithm implements Customizable
 		delay = 10;
         StorageValue.addStorageValues(new IntStorageValue(prefix, "delay", delay, n -> delay = n, () -> delay));
 	
-		confirmationColor = Color.GREEN;
+		confirmationColor = new Color(162, 255, 143);
 		//attemps to load confirmationColor, if cant its GREEN, sets up storage as well
 		StorageValue.addStorageValues(StorageValue.createColorStorageValue(prefix, "confirmationColor", confirmationColor, c -> confirmationColor = c, () -> confirmationColor));
 	}
@@ -66,7 +66,8 @@ public abstract class Algorithm implements Customizable
 	 * from {@link Customizable}, populates its own {@link CustomizationPanel} with a title using
 	 * the {@link Algorithm#name} variable and
 	 * {@link ColorButton}s to change {@link Algorithm#swapColor} and {@link Algorithm#compareColor}
-	 * @param cp this Algorithms own {@link CustomizationPanel}
+	 * @param cp this Algorithms own {@link CustomizationPanel} <br>
+	 * <font color="red"> must call super() </font>
 	 */
 	@Override
 	public void addCustomizationComponents(CustomizationPanel cp)
@@ -122,8 +123,8 @@ public abstract class Algorithm implements Customizable
 	private final void finishRun()
 	{
 		System.out.println("Done " + name);
-		sortingTool.getSorter().setAlgorithm(null);
 		isSorted(sortingTool, true);
+		sortingTool.getSorter().setAlgorithm(null);
 		GUIHandler.setEnabled(true);
 	}
 	

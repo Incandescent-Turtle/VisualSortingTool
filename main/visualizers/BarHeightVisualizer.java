@@ -60,6 +60,7 @@ public class BarHeightVisualizer extends Visualizer
 	@Override
 	public void addStorageValues()
 	{	
+		//setting up specified values with preferences
 		StorageValue.addStorageValues(
 				createWidthStorageValue(),
 				createGapStorageValue(),
