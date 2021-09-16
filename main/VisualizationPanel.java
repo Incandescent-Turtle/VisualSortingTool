@@ -20,7 +20,7 @@ public class VisualizationPanel extends JPanel
 	public VisualizationPanel(VisualSortingTool sortingTool)
 	{
 		this.sortingTool = sortingTool;
-		setBackground((Color.GRAY));
+		setBackground(new Color(102, 102, 102));
 		final String prefix = VisualSortingTool.getPrefix(this.getClass());
 		//stores the background color of the background
 		StorageValue.addStorageValues(StorageValue.createColorStorageValue(prefix, "bgColor", getBackground(), c -> setBackground(c), () -> getBackground()));
