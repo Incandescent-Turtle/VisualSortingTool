@@ -39,7 +39,7 @@ public class TopBarGUI extends JPanel
     
 	private JLabel delayLabel = new JLabel("Delay(ms):");
 	//updates the sorters delay
-    private JSpinner delaySpinner = new JSpinner(new SpinnerNumberModel(10, 0, 10000, 1));
+    private JSpinner delaySpinner = new JSpinner(new SpinnerNumberModel(Algorithm.delay, 0, 10000, 1));
     
 	private JLabel sorterLabel = new JLabel("Method of Visualization:");
 	//drop down list of sorters to pick visualization methods

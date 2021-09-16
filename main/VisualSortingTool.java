@@ -79,6 +79,7 @@ public class VisualSortingTool extends JPanel
 		//loads ALL values in from preferences
 		StorageValue.performStorageAction(CustomizationGUI.PREFS, StorageAction.LOAD);
 		ColorButton.recolorButtons();
+		GUIHandler.update();
 		frame.setLocationRelativeTo(null);
 		//starts maximized
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);

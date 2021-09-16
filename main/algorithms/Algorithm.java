@@ -11,6 +11,7 @@ import main.sorters.Sorter;
 import main.ui.GUIHandler;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.Customizable;
+import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
 import main.ui.custimization.values.IntStorageValue;
 import main.ui.custimization.values.StorageValue;
@@ -43,7 +44,9 @@ public abstract class Algorithm implements Customizable
 
 		delay = 10;
         StorageValue.addStorageValues(new IntStorageValue(prefix, "delay", delay, n -> delay = n, () -> delay));
-	
+		//this line is needed because the delay spinner in TopBar will do weird stuff
+        delay = CustomizationGUI.PREFS.getInt(prefix + "delay", delay);
+
 		confirmationColor = new Color(162, 255, 143);
 		//attemps to load confirmationColor, if cant its GREEN, sets up storage as well
 		StorageValue.addStorageValues(StorageValue.createColorStorageValue(prefix, "confirmationColor", confirmationColor, c -> confirmationColor = c, () -> confirmationColor));
@@ -172,6 +175,7 @@ public abstract class Algorithm implements Customizable
 			if(i == array.length-1)
 			{
 				sorter.getVisualizer().setConfirmed(true);
+				sortingTool.repaint();
 				return true;
 			}
 			
@@ -184,8 +188,8 @@ public abstract class Algorithm implements Customizable
 				{
 					highlights[j] = confirmationColor;
 				}
-				VisualSortingTool.delay(10);
 				sortingTool.repaint();
+				VisualSortingTool.delay(10);
 			}
 		}
 		return true;
