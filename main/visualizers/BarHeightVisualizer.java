@@ -37,11 +37,11 @@ public class BarHeightVisualizer extends Visualizer
 	@Override
 	public void addCustomizationComponents(CustomizationPanel cp)
 	{
-		SpinnerNumberModel nm = new SpinnerNumberModel(componentWidth, 2, 100, 1);
+		SpinnerNumberModel nm = new SpinnerNumberModel(componentWidth, 1, 100, 1);
 		//spinner to change bar width
 		cp.addRow("Bar Width:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> componentWidth = n, () -> componentWidth));
 		
-		nm = new SpinnerNumberModel(componentGap, 2, 20, 1);
+		nm = new SpinnerNumberModel(componentGap, 0, 20, 1);
 		//spinner to change gap between bars
 		cp.addRow("Gap:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> componentGap = n, () -> componentGap));
 		
@@ -77,7 +77,6 @@ public class BarHeightVisualizer extends Visualizer
 	{			
 		for(int i = 0; i < size; i++)
 		{
-			if(highlights[i] == Color.RED) g.setColor(Color.RED);
 			//highlights in specified color
 			g.setColor(confirmed ? Algorithm.confirmationColor : highlights[i]);
 			g.fillRect(getRealHMargins(size) + i*(componentWidth+componentGap), sortingTool.getVisualizerHeight()-array[i].getValue(), componentWidth, array[i].getValue());

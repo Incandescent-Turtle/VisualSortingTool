@@ -37,7 +37,7 @@ public abstract class StorageValue<T> implements Closable
 	 * class to make storing data in preferences super easy
 	 * @param prefix the class prefix
 	 * @param key variable name
-	 * @param defaultValue if nothing loads this is the default value
+	 * @param defaultValue if differing from retrieve action
 	 * @param changeAction the interface to help set a variable while passing in its stored value
 	 * @param retrieveAction the interface to get the current value to store
 	 */
@@ -47,6 +47,18 @@ public abstract class StorageValue<T> implements Closable
 		this.retrieveAction = retrieveAction;
 		this.defaultValue = defaultValue;
 		this.changeAction = changeAction;
+	}
+	
+	/**
+	 * class to make storing data in preferences super easy. sets default value to current retrive
+	 * @param prefix the class prefix
+	 * @param key variable name
+	 * @param changeAction the interface to help set a variable while passing in its stored value
+	 * @param retrieveAction the interface to get the current value to store
+	 */
+	protected StorageValue(String prefix, String key, OnChangeAction<T> changeAction, RetrieveAction<T> retrieveAction)
+	{
+		this(prefix, key, retrieveAction.retrieve(), changeAction, retrieveAction);
 	}
 	
 	/**
@@ -121,8 +133,8 @@ public abstract class StorageValue<T> implements Closable
 	 * @param retrieveAction this is used to fetch the current state of this color variable to store it
 	 * @return the storagevalue equipped to load/save the color
 	 */
-	public static IntStorageValue createColorStorageValue(String prefix, String key, Color defaultColor, OnChangeAction<Color> changeAction, RetrieveAction<Color> retrieveAction)
+	public static IntStorageValue createColorStorageValue(String prefix, String key, OnChangeAction<Color> changeAction, RetrieveAction<Color> retrieveAction)
 	{
-		return new IntStorageValue(prefix, key, Util.colorToInt(defaultColor), num -> changeAction.doStuff(new Color(num)), () -> Util.colorToInt(retrieveAction.retrieve()));
+		return new IntStorageValue(prefix, key, num -> changeAction.doStuff(new Color(num)), () -> Util.colorToInt(retrieveAction.retrieve()));
 	}
 }

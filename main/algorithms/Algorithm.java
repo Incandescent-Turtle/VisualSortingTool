@@ -1,9 +1,12 @@
 package main.algorithms;
 
 import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import main.VisualSortingTool;
 import main.interfaces.RetrieveAction;
@@ -13,6 +16,7 @@ import main.ui.custimization.ColorButton;
 import main.ui.custimization.Customizable;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
+import main.ui.custimization.values.BooleanStorageValue;
 import main.ui.custimization.values.IntStorageValue;
 import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
@@ -29,12 +33,20 @@ public abstract class Algorithm implements Customizable
 {
 	//all algorithms have the same color for ending/confirming an algorithm run
 	public static Color confirmationColor;
+	//whether a there should be a animation for the confirmation (all bars slowly turning green)
+	private static boolean animateConfirmation;
+	
+	//delay is ms
 	public static int delay;
+	//whether it renders/delays for every every, every other, etc
+	public static int stepSize;
 
 	private String name;
 	protected VisualSortingTool sortingTool;
 	
 	protected Color swapColor, compareColor;
+	//whether this is the first (0), second (1) etc step to check if delay and render is needed
+	protected int currentStep = 0;
 	
 	//for setting up static values for all algorithms
 	static
@@ -43,17 +55,23 @@ public abstract class Algorithm implements Customizable
 		final String prefix = VisualSortingTool.getPrefix(Algorithm.class);
 
 		delay = 10;
-        StorageValue.addStorageValues(new IntStorageValue(prefix, "delay", delay, n -> delay = n, () -> delay));
+        StorageValue.addStorageValues(new IntStorageValue(prefix, "delay", n -> delay = n, () -> delay));
 		//this line is needed because the delay spinner in TopBar will do weird stuff
         delay = CustomizationGUI.PREFS.getInt(prefix + "delay", delay);
 
-		confirmationColor = new Color(162, 255, 143);
-		//attemps to load confirmationColor, if cant its GREEN, sets up storage as well
-		StorageValue.addStorageValues(StorageValue.createColorStorageValue(prefix, "confirmationColor", confirmationColor, c -> confirmationColor = c, () -> confirmationColor));
-	}
-	
+        stepSize = 1;
+        StorageValue.addStorageValues(new IntStorageValue(prefix, "step", n -> stepSize = n, () -> stepSize));
+        stepSize = CustomizationGUI.PREFS.getInt(prefix + "step", stepSize);
 
+        confirmationColor = new Color(162, 255, 143);
+		//attemps to load confirmationColor, if cant its GREEN, sets up storage as well
+		StorageValue.addStorageValues(StorageValue.createColorStorageValue(prefix, "confirmationColor", c -> confirmationColor = c, () -> confirmationColor));
 	
+		animateConfirmation = false;
+		StorageValue.addStorageValues(new BooleanStorageValue(prefix, "animateConfirmation", b -> animateConfirmation = b, () -> animateConfirmation));
+		animateConfirmation = CustomizationGUI.PREFS.getBoolean(prefix + "animateConfirmation", animateConfirmation);
+		System.out.println("loading with " + animateConfirmation);
+	}
 	
 	public Algorithm(String name, VisualSortingTool sortingTool)
 	{
@@ -99,8 +117,8 @@ public abstract class Algorithm implements Customizable
 	{
 		//swap and compare colors getting set up for preferences
 		StorageValue.addStorageValues(
-				StorageValue.createColorStorageValue(getPrefix(), "swapColor", swapColor, c -> swapColor = c, () -> swapColor),
-				StorageValue.createColorStorageValue(getPrefix(), "compareColor", compareColor, c -> compareColor = c, () -> compareColor)
+				StorageValue.createColorStorageValue(getPrefix(), "swapColor", c -> swapColor = c, () -> swapColor),
+				StorageValue.createColorStorageValue(getPrefix(), "compareColor", c -> compareColor = c, () -> compareColor)
 		);
 	}
 	
@@ -110,6 +128,7 @@ public abstract class Algorithm implements Customizable
 	 */
 	public final void run()
 	{
+		currentStep = stepSize;
 		runAlgorithm();
 		finishRun();
 	}
@@ -129,6 +148,22 @@ public abstract class Algorithm implements Customizable
 		isSorted(sortingTool, true);
 		sortingTool.getSorter().setAlgorithm(null);
 		GUIHandler.setEnabled(true);
+		//VisualSortingTool.delay(250);
+		//sortingTool.getSorter().recalculateAndRepaint();
+		//sortingTool.getSorter().setAlgorithm(this);
+		//VisualSortingTool.delay(0);
+		//run();
+	}
+	
+	protected final void paintWithDelayAndStep()
+	{
+		currentStep++;
+		if(currentStep >= stepSize)
+		{
+			delay(sortingTool.getSorter());
+			sortingTool.repaint();
+			currentStep = 0;
+		}
 	}
 	
 	/**
@@ -157,7 +192,16 @@ public abstract class Algorithm implements Customizable
 		};
 		JButton button = new ColorButton(sortingTool, c -> confirmationColor = c, retrieveAction, "Confirmation Color");
 		button.setAlignmentX(JButton.CENTER_ALIGNMENT);
-		panel.add(button);	
+		panel.add(button);
+		
+		JCheckBox cb = new JCheckBox(" Animate Confirmation");
+		cb.setAlignmentX(JButton.CENTER_ALIGNMENT);
+		cb.setHorizontalTextPosition(SwingConstants.LEFT);
+		cb.setFont(new Font(Font.SANS_SERIF,0,12));
+		cb.setSelected(animateConfirmation);
+		cb.addChangeListener(e -> animateConfirmation = cb.isSelected());
+		panel.add(cb);
+		GUIHandler.addUpdatables(() -> cb.setSelected(animateConfirmation));
 	}
 
 	/**
@@ -168,13 +212,13 @@ public abstract class Algorithm implements Customizable
 	{
 		Sorter sorter = sortingTool.getSorter();
 		VisualComponent[] array = sorter.getArray();
-		Color[] highlights = sorter.getVisualizer().getHighlights();
+		Color[] highlights = sorter.getVisualizer().getHighlights().clone();
 		for(int i = 0; i<array.length; i++)
 		{
 			//if last element
 			if(i == array.length-1)
 			{
-				sorter.getVisualizer().setConfirmed(true);
+				if(animateConfirmation) sorter.getVisualizer().setConfirmed(true);
 				sortingTool.repaint();
 				return true;
 			}
@@ -182,12 +226,13 @@ public abstract class Algorithm implements Customizable
 			//returns false if incorrect
 			if(i != array.length-1 && array[i].getValue()>array[i+1].getValue()) return false;
 			//one by one colors them with confirmationColor
-			if(shouldPaint)
+			if(shouldPaint && animateConfirmation)
 			{
 				for(int j = 0; j <= i+1; j++)
 				{
 					highlights[j] = confirmationColor;
 				}
+				sorter.getVisualizer().setHighlights(highlights);
 				sortingTool.repaint();
 				VisualSortingTool.delay(10);
 			}

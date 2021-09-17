@@ -124,7 +124,7 @@ public abstract class Visualizer implements Customizable
 	 */
 	protected StorageValue<Integer> createWidthStorageValue()
 	{
-		return new IntStorageValue(getPrefix(), "width", componentWidth, n -> componentWidth = n, () -> componentWidth);
+		return new IntStorageValue(getPrefix(), "width", n -> componentWidth = n, () -> componentWidth);
 	}
 	
 	/**
@@ -132,7 +132,7 @@ public abstract class Visualizer implements Customizable
 	 */
 	protected StorageValue<Integer> createGapStorageValue()
 	{
-		return new IntStorageValue(getPrefix(), "gap", componentGap, n -> componentGap = n, () -> componentGap);
+		return new IntStorageValue(getPrefix(), "gap", n -> componentGap = n, () -> componentGap);
 	}
 	
 	/**
@@ -140,7 +140,7 @@ public abstract class Visualizer implements Customizable
 	 */
 	protected StorageValue<Integer> createMarginStorageValue()
 	{
-		return new IntStorageValue(getPrefix(), "margin", minMargin, n -> minMargin = n, () -> minMargin);
+		return new IntStorageValue(getPrefix(), "margin", n -> minMargin = n, () -> minMargin);
 	}
 	
 	/**
@@ -148,13 +148,18 @@ public abstract class Visualizer implements Customizable
 	 */
 	protected StorageValue<Integer> createDefaultColorStorageValue()
 	{
-		return StorageValue.createColorStorageValue(getPrefix(), "defaultColor", defaultColor, c -> defaultColor = c, () -> defaultColor);
+		return StorageValue.createColorStorageValue(getPrefix(), "defaultColor", c -> defaultColor = c, () -> defaultColor);
 
 	}
 	
 	public final Color[] getHighlights()
 	{
 		return highlights;
+	}
+	
+	public void setHighlights(Color[] highlights)
+	{
+		this.highlights = highlights;
 	}
 	
 	public final Color getDefaultColor()

@@ -23,7 +23,7 @@ public class VisualizationPanel extends JPanel
 		setBackground(new Color(102, 102, 102));
 		final String prefix = VisualSortingTool.getPrefix(this.getClass());
 		//stores the background color of the background
-		StorageValue.addStorageValues(StorageValue.createColorStorageValue(prefix, "bgColor", getBackground(), c -> setBackground(c), () -> getBackground()));
+		StorageValue.addStorageValues(StorageValue.createColorStorageValue(prefix, "bgColor", c -> setBackground(c), () -> getBackground()));
 	}
 	
 	@Override
@@ -33,6 +33,7 @@ public class VisualizationPanel extends JPanel
 		Graphics2D g = (Graphics2D) graphics;
 	    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		if(getWidth() > 0)sortingTool.getSorter().getVisualizer().drawArray(g);
+	    if(getWidth() > 0)sortingTool.getSorter().getVisualizer().drawArray(g);
+		g.dispose();
 	}
 }

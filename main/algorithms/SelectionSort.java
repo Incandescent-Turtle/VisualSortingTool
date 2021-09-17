@@ -40,8 +40,8 @@ public class SelectionSort extends Algorithm
 	{
 		super.addStorageValues();
 		StorageValue.addStorageValues(
-				StorageValue.createColorStorageValue(getPrefix(), "startColor", startColor, c -> startColor = c, () -> startColor),
-				StorageValue.createColorStorageValue(getPrefix(), "minColor", minColor, c -> minColor = c, () -> minColor)
+				StorageValue.createColorStorageValue(getPrefix(), "startColor", c -> startColor = c, () -> startColor),
+				StorageValue.createColorStorageValue(getPrefix(), "minColor", c -> minColor = c, () -> minColor)
 		);
 	}
 
@@ -70,14 +70,12 @@ public class SelectionSort extends Algorithm
                     sorter.highlight(j, swapColor);
                     minIndex = j;//searching for lowest index  
                 }  
-                delay(sorter);
-                sortingTool.repaint();
+    			paintWithDelayAndStep();
             }  
             sorter.highlight(minIndex, swapColor);
             sorter.highlight(i, swapColor);
             sorter.swap(minIndex, i);
-            delay(sorter);
-            sortingTool.repaint();
+			paintWithDelayAndStep();
         }  
 	}
 }

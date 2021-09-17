@@ -40,7 +40,7 @@ public class NumberSorter extends Sorter
 	public void addStorageValues()
 	{
 		//sets up preferences for the amount of numbers
-		StorageValue.addStorageValues(new IntStorageValue(getPrefix(), "amount", size, n -> size = n, () -> size));
+		StorageValue.addStorageValues(new IntStorageValue(getPrefix(), "amount", n -> size = n, () -> size));
 	}
 	
 	@Override

@@ -75,12 +75,12 @@ public class CustomizationGUI extends JPanel
 		
 		//for values (like confirmationColor) that are static among algorithms
 		JPanel generalAlgorithmPanel = new JPanel();
-		addSectionTitle("All Algorithms");
 		//vertical box layout
 		generalAlgorithmPanel.setLayout(new BoxLayout(generalAlgorithmPanel, BoxLayout.Y_AXIS));
 		//adds the components
 		Algorithm.addGeneralAlgorithmCustimizationComponents(sortingTool, generalAlgorithmPanel);
 		//adds the panel after the sorter card panel
+		addSectionTitle("All Algorithms");
 		add(generalAlgorithmPanel);
 		
 		//adds algorithm card panel after general algorithms

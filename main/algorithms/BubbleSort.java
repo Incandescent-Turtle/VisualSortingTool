@@ -43,8 +43,7 @@ public class BubbleSort extends Algorithm
 					sorter.highlight(j, swapColor);
 					sorter.highlight(j+1, swapColor);
 				}
-				delay(sorter);
-				sortingTool.repaint();
+				paintWithDelayAndStep();
 			}
 		}
 	}

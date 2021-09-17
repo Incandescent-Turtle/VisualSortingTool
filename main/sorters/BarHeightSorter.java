@@ -41,9 +41,13 @@ public class BarHeightSorter extends Sorter
 		int minHeight = 15;
 		//difference between two adjacent bars
 		int step = (maxHeight - minHeight)/size;
+		/* 
+		 	steps have to be whole numbers, so its not possible to have a proper range between min and max
+		 	so this counts down from max height so at least the screen is filled
+		 */
 		for(int i = 0; i < size; i++)
 		{
-			array[i] = new VisualComponent(minHeight + i*(step));
+			array[i] = new VisualComponent(maxHeight - i*(step));
 		}
 	}
 }

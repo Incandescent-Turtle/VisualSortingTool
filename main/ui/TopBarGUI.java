@@ -41,7 +41,10 @@ public class TopBarGUI extends JPanel
 	//updates the sorters delay
     private JSpinner delaySpinner = new JSpinner(new SpinnerNumberModel(Algorithm.delay, 0, 10000, 1));
     
-	private JLabel sorterLabel = new JLabel("Method of Visualization:");
+	private JLabel stepLabel = new JLabel("Step:");
+    private JSpinner stepSpinner = new JSpinner(new SpinnerNumberModel(Algorithm.stepSize, 1, 500, 1));
+
+	private JLabel sorterLabel = new JLabel("Visualization:");
 	//drop down list of sorters to pick visualization methods
     private JComboBox<Sorter> sorterList = new JComboBox<Sorter>();
     
@@ -71,6 +74,9 @@ public class TopBarGUI extends JPanel
 		//Delay Spinner
         delaySpinner.addChangeListener(e -> Algorithm.delay = ((int) delaySpinner.getValue()));
         GUIHandler.addUpdatables(() -> delaySpinner.setValue(Algorithm.delay));
+        
+        //step spinner
+        stepSpinner.addChangeListener(e -> Algorithm.stepSize = ((int) stepSpinner.getValue()));
         //sorter combobox. when switches it resizes/reloads/shuffles the sorter as well as carrying over the delay
         sorterList.addItemListener(new ItemListener()
 		{
@@ -104,6 +110,8 @@ public class TopBarGUI extends JPanel
         addToGUI(runAlgorithmButton);
         addToGUI(delayLabel);
         addToGUI(delaySpinner);
+        addToGUI(stepLabel);
+        addToGUI(stepSpinner);
         addToGUI(sorterLabel);
         addToGUI(sorterList);
         //adds all the things that need to be turned off while algorithm running
@@ -123,8 +131,9 @@ public class TopBarGUI extends JPanel
 			{
 				Sorter sorter = sortingTool.getSorter();
 		    	//if there isn't an algorithm active and it isnt sorted
-		    	if(!Algorithm.isSorted(sortingTool, false) && sorter.getAlgorithm() == null)
+		    	if(sorter.getAlgorithm() == null)
 		    	{
+		    		sorter.tryShuffleArray();
 					System.out.println(algorithmList.getSelectedItem().toString() + " has been pushed");
 					sorter.setAlgorithm((Algorithm)algorithmList.getSelectedItem());
 		    		//disables resizing components etc

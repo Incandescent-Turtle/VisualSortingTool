@@ -32,7 +32,7 @@ public class ColorGradientVisualizer extends Visualizer
 	@Override
 	public void addCustomizationComponents(CustomizationPanel cp)
 	{
-		SpinnerNumberModel nm = new SpinnerNumberModel(componentWidth, 4, 100, 1);
+		SpinnerNumberModel nm = new SpinnerNumberModel(componentWidth, 1, 100, 1);
 		
 		//spinner to change bar width
 		cp.addRow("Bar Width:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> componentWidth = n, () -> componentWidth));

@@ -25,6 +25,8 @@ public class ColorGradientSorter extends Sorter
 		int barWidth = visualizer.getComponentWidth();
 		int barGap = visualizer.getComponentGap();
 		size = (sortingTool.getVisualizerWidth() - visualizer.getMinMargin()*2 + barGap)/(barWidth+barGap);
+		//size was -1 when visualizer had 0 width...this solved it
+		if(size <= 0) size = 10;
 		array = new VisualComponent[size];
 		visualizer.resizeHighlights(size);
 		sortingTool.repaint();
