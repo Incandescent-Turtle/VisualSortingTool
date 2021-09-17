@@ -219,6 +219,7 @@ public abstract class Algorithm implements Customizable
 			if(i == array.length-1)
 			{
 				if(animateConfirmation) sorter.getVisualizer().setConfirmed(true);
+				sorter.getVisualizer().resetHighlights();
 				sortingTool.repaint();
 				return true;
 			}
