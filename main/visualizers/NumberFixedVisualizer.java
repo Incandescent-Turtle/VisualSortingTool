@@ -51,6 +51,5 @@ public class NumberFixedVisualizer extends FixedSizeVisualizer
 		String value = "" + array[i].getValue();
 		//draws number centered around the passed in coors
 		StringHelper.drawCenteredString(value, x+componentSize/2, y+componentSize/2, g);
-		highlights[i] = defaultColor;
 	}
 }

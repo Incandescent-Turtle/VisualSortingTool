@@ -49,7 +49,6 @@ public class NumberSorter extends Sorter
 		for(int i = 0; i < size; i++)
 		{
 			array[i] = new VisualComponent(i);
-			visualizer.getHighlights()[i] = visualizer.getDefaultColor();
 		}
 	}
 }

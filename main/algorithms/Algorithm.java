@@ -2,6 +2,10 @@ package main.algorithms;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.stream.Stream;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -212,9 +216,11 @@ public abstract class Algorithm implements Customizable
 			//if last element
 			if(i == array.length-1)
 			{
+				
 				if(animateConfirmation) sorter.getVisualizer().setConfirmed(true);
 				sorter.getVisualizer().resetHighlights();
 				sortingTool.repaint();
+				//printArray(sortingTool); //debug
 				return true;
 			}
 			
@@ -233,6 +239,31 @@ public abstract class Algorithm implements Customizable
 			}
 		}
 		return true;
+	}
+	
+	/*
+	 * debugger for the arrays. prints the sorted list to a textfile
+	 */
+	private static void printArray(VisualSortingTool sortingTool)
+	{
+		try
+		{
+			FileWriter pw = new FileWriter(new File("sorter.txt"));
+			Stream.of(sortingTool.getSorter().getArray()).forEach(vc -> {
+				try
+				{
+					pw.write("" + vc.getValue() + "\n");
+				} catch (IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
+			pw.close();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

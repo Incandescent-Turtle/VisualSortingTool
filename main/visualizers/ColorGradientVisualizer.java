@@ -1,6 +1,5 @@
 package main.visualizers;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.SpinnerNumberModel;
@@ -11,6 +10,7 @@ import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
 import main.ui.custimization.values.StorageValue;
+import main.vcs.ColorVisualComponent;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.Visualizer;
 
@@ -25,8 +25,8 @@ public class ColorGradientVisualizer extends Visualizer
 	public void setDefaultValues()
 	{
 		componentWidth = 15;
-		componentGap = 2;
-		minMargin = 2;		
+		componentGap = 0;
+		minMargin = 0;		
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class ColorGradientVisualizer extends Visualizer
 		//spinner to change bar width
 		cp.addRow("Bar Width:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> componentWidth = n, () -> componentWidth));
 		
-		//spinner to change gap between bars
+		//spinner to change gap between bars, min of 0 for flawless gradient
 		nm = new SpinnerNumberModel(componentGap, 0, 20, 1);
 		cp.addRow("Gap:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> componentGap = n, () -> componentGap));
 		
@@ -65,25 +65,24 @@ public class ColorGradientVisualizer extends Visualizer
 	{
 		for(int i = 0; i < size; i++)
 		{
-			//honestly idk what this is, i just dont know how to make a gradient, but somehow i made this
-			int red, green, blue;
-			red = green = blue = 255;
-			if(array[i].getValue() <= 255)
-			{
-				red = 255 - array[i].getValue();
-			} else if(array[i].getValue() <= 255*2) {
-				red = 0;
-				green = 255 - (array[i].getValue() - 255);
-			} else {
-				red = 0;
-				green = 0;
-				blue = 255 - (array[i].getValue() - 255 - 255);
-				if(blue < 0 || blue > 255) blue = 255;
-			}
-			g.setColor(highlights[i] != defaultColor ? highlights[i] : new Color(red, green, blue));
-			int maxHeight = sortingTool.getVisualizerHeight() - 20;
-			g.fillRect(getRealHMargins(size) + i*(componentWidth + componentGap), sortingTool.getVisualizerHeight()-maxHeight, componentWidth, maxHeight);
-			highlights[i] = defaultColor; 
+			//either proper gradient color or a highlight
+			g.setColor(highlights[i]);
+			int x = getRealHMargins(size) + i*(componentWidth + componentGap);
+			//bars fill the height of the screen
+			g.fillRect(x, 0, componentWidth, sortingTool.getVisualizerHeight());
+		}
+	}
+	
+	/**
+	 * this is overriden to populate the highlights array with gradient values before real <br>
+	 * highlights are set
+	 */
+	@Override
+	public void resetHighlights()
+	{
+		for(int i = 0; i < highlights.length; i++)
+		{
+			highlights[i] = ((ColorVisualComponent) sortingTool.getSorter(identifier).getArray()[i]).getColor();
 		}
 	}
 }

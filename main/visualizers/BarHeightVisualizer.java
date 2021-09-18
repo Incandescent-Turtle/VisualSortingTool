@@ -80,8 +80,6 @@ public class BarHeightVisualizer extends Visualizer
 			//highlights in specified color
 			g.setColor(confirmed ? Algorithm.confirmationColor : highlights[i]);
 			g.fillRect(getRealHMargins(size) + i*(componentWidth+componentGap), sortingTool.getVisualizerHeight()-array[i].getValue(), componentWidth, array[i].getValue());
-			//resets the highlights array
-			highlights[i] = defaultColor; 
 		}
 	}
 }

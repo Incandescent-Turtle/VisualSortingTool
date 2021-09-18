@@ -52,6 +52,7 @@ public class BetterFrame
 		{
 			frame = new JFrame(title) {
 				
+				//min-size so the UI is always shown
 				@Override
 				public Dimension getMinimumSize()
 				{

@@ -41,6 +41,7 @@ public class TopBarGUI extends JPanel
 	//updates the sorters delay
     private JSpinner delaySpinner = new JSpinner(new SpinnerNumberModel(Algorithm.delay, 0, 10000, 1));
     
+    //for adjusting the algorithm "step" size (how many runs are skipped)
 	private JLabel stepLabel = new JLabel("Step:");
     private JSpinner stepSpinner = new JSpinner(new SpinnerNumberModel(Algorithm.stepSize, 1, 500, 1));
 
@@ -57,6 +58,7 @@ public class TopBarGUI extends JPanel
     
     public TopBarGUI(VisualSortingTool sortingTool)
 	{
+    	setLayout(layout);
 		this.sortingTool = sortingTool;
 	}
     
@@ -75,10 +77,10 @@ public class TopBarGUI extends JPanel
         delaySpinner.addChangeListener(e -> Algorithm.delay = ((int) delaySpinner.getValue()));
         GUIHandler.addUpdatables(() -> delaySpinner.setValue(Algorithm.delay));
         
-        //step spinner
+        //step spinner to adjust Algorithm.stepSize
         stepSpinner.addChangeListener(e -> Algorithm.stepSize = ((int) stepSpinner.getValue()));
-        //updates
         GUIHandler.addUpdatables(() -> stepSpinner.setValue(Algorithm.stepSize));
+        
         //sorter combobox. when switches it resizes/reloads/shuffles the sorter as well as carrying over the delay
         sorterList.addItemListener(new ItemListener()
 		{
@@ -157,7 +159,7 @@ public class TopBarGUI extends JPanel
 	{
 		add(component);
 		if(component instanceof JLabel) labels.add((JLabel) component);
-		else components.add(component);
+			else components.add(component);
 	}
 	
 	/**

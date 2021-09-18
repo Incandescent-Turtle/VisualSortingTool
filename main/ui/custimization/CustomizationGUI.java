@@ -61,7 +61,8 @@ public class CustomizationGUI extends JPanel
 		
 		for(Sorter sorter : sortingTool.getSorters())
 		{
-			sorterPanels.add(new CustomizationPanel(sortingTool, sorter), sorter.toString());
+			//also inserts fill at the bottom (inside) the cp, to push everything to the top
+			sorterPanels.add(new CustomizationPanel(sortingTool, sorter).fill(), sorter.toString());
 		}
 		
 		for(Algorithm algorithm : sortingTool.getAlgorithms())

@@ -54,8 +54,6 @@ public abstract class Sorter implements Customizable
 	{
 		addSorterCustomizationComponents(cp);
 		visualizer.addCustomizationComponents(cp);
-		//pushes everything to the top
-		cp.fill();
 	}
 	
 	/**
@@ -67,7 +65,8 @@ public abstract class Sorter implements Customizable
 	
 	/**
 	 * to override if the sorter needs to set any default values before loading from preferences <br>
-	 * called from constructor before values loaded
+	 * called from constructor before values loaded <br>
+	 * no super() needed
 	 */
 	@Override
 	public void setDefaultValues() {}
@@ -190,7 +189,7 @@ public abstract class Sorter implements Customizable
 	/**
 	 * shuffles the values of the array around randomly
 	 */
-	protected final void shuffleArray()
+	protected void shuffleArray()
 	{
 		for(int i = 0; i < size; i++)
 		{
@@ -251,7 +250,7 @@ public abstract class Sorter implements Customizable
 	public enum Sorters
 	{
 		BAR_HEIGHT("Bar Height"),
-		COLOR_GRADIENT("Blue Gradient"),
+		COLOR_GRADIENT("Color Gradient"),
 		NUMBER("Number Grid");
 		
 		private final String name;

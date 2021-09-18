@@ -135,7 +135,11 @@ public class CustomizationPanel extends JPanel
         row++;
 	}
 	
-	public void fill()
+	/**
+	 * pushes element to the top
+	 * @return this panel
+	 */
+	public CustomizationPanel fill()
 	{
 		c.gridx = 0;
         c.gridy = row;
@@ -148,7 +152,9 @@ public class CustomizationPanel extends JPanel
         c.fill = GridBagConstraints.BOTH;
         row++;
         JLabel l = new JLabel();
-        l.setMinimumSize(new Dimension(0,0));
+        Dimension dim = new Dimension(0,0);
+        l.setMinimumSize(dim);
         add(new JLabel(), c);
+        return this;
 	}
 }

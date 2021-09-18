@@ -22,6 +22,7 @@ import main.visualizers.bases.Visualizer;
  */
 public class ColorButton extends JButton implements ActionListener
 {
+	//used for recoloring/enabling/disabling color buttons
 	private final static ArrayList<ColorButton> COLOR_BUTTONS = new ArrayList<>();
 	
 	private VisualSortingTool sortingTool;
@@ -42,6 +43,7 @@ public class ColorButton extends JButton implements ActionListener
 	public ColorButton(VisualSortingTool sortingTool, OnChangeAction<Color> okAction, RetrieveAction<Color> retrieveAction, String text)
 	{
 		super(text);
+		//adds for recolouring etc
 		COLOR_BUTTONS.add(this);
 		this.sortingTool = sortingTool;
 		this.okAction = okAction;
@@ -56,13 +58,14 @@ public class ColorButton extends JButton implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		//disables all color buttons until done
-		enableColorButtons(false);
+		ColorButton.enableColorButtons(false);
 	    final JColorChooser colorChooser = new JColorChooser(retrieveAction.retrieve());
 	    ActionListener al = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				enableColorButtons(true);
+				//re-enables all color buttons
+				ColorButton.enableColorButtons(true);
 				//sets the color to the chosen color
 				okAction.doStuff(colorChooser.getColor());
 				//sets the new button background to represent the new color
@@ -78,6 +81,30 @@ public class ColorButton extends JButton implements ActionListener
 	    		al,
 				e1 -> enableColorButtons(true)) //on cancel re-enables color buttons
 	    .setVisible(true);
+	}
+	
+	/**
+	 * switches from black or white to make text more readable
+	 */
+	private void makeTextReadable()
+	{
+		Color bgColor = getBackground();
+		
+		/*
+		 * https://stackoverflow.com/questions/4672271/reverse-opposing-colors
+		 * brimborium on stackoverflow
+		 * checks the brightness to see whether black or white is needed
+		 */
+		double y = (299 * bgColor.getRed() + 587 * bgColor.getGreen() + 114 * bgColor.getBlue()) / 1000;
+		setForeground(y >= 128 ? Color.black : Color.white);
+	}
+	
+	//overriding to make text readable
+	@Override
+	public void setBackground(Color bg)
+	{
+		super.setBackground(bg);
+		makeTextReadable();
 	}
 	
 	/**

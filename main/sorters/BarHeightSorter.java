@@ -27,8 +27,7 @@ public class BarHeightSorter extends Sorter
 		int barGap = visualizer.getComponentGap();
 		size = (sortingTool.getVisualizerWidth() - visualizer.getMinMargin()*2 + barGap)/(barWidth+barGap);
 		if(size <=0 ) size = 10;
-		array = new VisualComponent[size];
-		visualizer.resizeHighlights(size);
+		super.resizeArray();
 	}
 	
 	/*

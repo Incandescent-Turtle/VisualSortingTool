@@ -56,7 +56,10 @@ public abstract class Visualizer implements Customizable
 	{
 		Sorter sorter = sortingTool.getSorter();
 		if(sorter.getArraySize() > 0 && highlights != null)
+		{
 			drawArray(g, sorter.getArray(), sorter.getArraySize());
+			resetHighlights();
+		}
 	}
 	
 	//just a little helper method
