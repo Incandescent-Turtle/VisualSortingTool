@@ -95,15 +95,15 @@ public class TopBarGUI extends JPanel
 	        	sorter.recalculateAndRepaint();
 			}
 		});
-        //sets up preferences for the sorter open on program close
+        //sets up preferences for the sorter open on program close. on reset nothing happens
         //a little hacky...uses id string name to find the sorter
-        StorageValue.addStorageValues(new StringStorageValue(prefix, "sorter", Sorter.Sorters.BAR_HEIGHT.toString(), name -> sorterList.setSelectedItem(sortingTool.getSorter(name)), () -> sorterList.getSelectedItem().toString()));
+        StorageValue.addStorageValues(new StringStorageValue(prefix, "sorter", Sorter.Sorters.BAR_HEIGHT.toString(), name -> sorterList.setSelectedItem(sortingTool.getSorter(name)), () -> sorterList.getSelectedItem().toString()).setResetable(false));
         
         //changes algorithm panel on algorithm change
         algorithmList.addItemListener(e -> sortingTool.getGUIHandler().getCustomizationGUI().changeAlgorithmPanel((Algorithm)e.getItem()));
-        //sets up preferences for the algorithn open on program close
+        //sets up preferences for the algorithn open on program close. on reset nothing happens
         //a little hacky...uses toString on the algorithm to save/load it
-        StorageValue.addStorageValues(new StringStorageValue(prefix, "algorithm", sortingTool.getAlgorithms()[0].toString(), name -> algorithmList.setSelectedItem(sortingTool.getAlgorithm(name)), () -> algorithmList.getSelectedItem().toString()));
+        StorageValue.addStorageValues(new StringStorageValue(prefix, "algorithm", sortingTool.getAlgorithms()[0].toString(), name -> algorithmList.setSelectedItem(sortingTool.getAlgorithm(name)), () -> algorithmList.getSelectedItem().toString()).setResetable(false));
                         
         setUpRunButton(sortingTool);
         

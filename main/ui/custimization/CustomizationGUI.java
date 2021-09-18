@@ -100,7 +100,7 @@ public class CustomizationGUI extends JPanel
 		resetToSave.addActionListener(e -> 
 		{
 			//reloads all values
-			StorageValue.performStorageAction(PREFS, StorageAction.LOAD);
+			StorageValue.performStorageAction(PREFS, StorageAction.RESET_TO_SAVE);
 			//resets highlights (incase new default color)
 			sortingTool.getSorter().getVisualizer().resetHighlights();
 			//recolours all buttons according to their corrosponding color
@@ -120,10 +120,8 @@ public class CustomizationGUI extends JPanel
 		resetToDefaultValues.setAlignmentX(CENTER_ALIGNMENT);
 		resetToDefaultValues.addActionListener(e -> 
 		{
-			//removes ALL preferences 
-			StorageValue.performStorageAction(PREFS, StorageAction.REMOVE);
-			//loading fails so default values are used to load
-			StorageValue.performStorageAction(PREFS, StorageAction.LOAD);
+			//removes ALL preferences and reloads them - everything goes to defaults
+			StorageValue.performStorageAction(PREFS, StorageAction.RESET_TO_DEFAULTS);
 			//resets highlights (incase new default color)
 			sortingTool.getSorter().getVisualizer().resetHighlights();
 			//recolours all buttons according to their corrosponding color

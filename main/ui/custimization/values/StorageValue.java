@@ -17,7 +17,7 @@ public abstract class StorageValue<T> implements Closable
 	//enum to identify storage action in certain methods
 	public static enum StorageAction
 	{
-		LOAD, STORE, REMOVE;
+		LOAD, STORE, REMOVE, RESET_TO_SAVE, RESET_TO_DEFAULTS;
 	}
 	
 	//list that holds all storable objects for automatic loading/saving/deletion
@@ -32,6 +32,9 @@ public abstract class StorageValue<T> implements Closable
 	protected final T defaultValue;
 	//prefix + key
 	protected final String fullKey;
+	
+	//whether or not this value is able to be reset (ex. sorter/algorithms wont be)
+	private boolean canReset = true;
 
 	/**
 	 * class to make storing data in preferences super easy. loads value on creation
@@ -78,10 +81,18 @@ public abstract class StorageValue<T> implements Closable
 		prefs.remove(fullKey);
 	}
 	
+	
 	@Override
 	public void close()
 	{
 		storeValue(CustomizationGUI.PREFS);
+	}
+	
+	//cheeky method for sorters and algorithms so their states cant be reset mid program (teleportation!)
+	public StorageValue<T> setResetable(boolean canReset)
+	{
+		this.canReset = canReset;
+		return this;
 	}
 	
 	/**
@@ -94,7 +105,7 @@ public abstract class StorageValue<T> implements Closable
 		for(StorageValue<?> sv : STORAGE_VALUES)
 		{
 			switch(action)
-			{
+			{		
 				case LOAD:
 					sv.loadValue(prefs);
 					break;
@@ -105,6 +116,17 @@ public abstract class StorageValue<T> implements Closable
 					
 				case REMOVE:
 					sv.removeValue(prefs);
+					break;
+					
+				case RESET_TO_SAVE:
+					if(!sv.canReset) break;
+					sv.loadValue(prefs);
+					break;
+					
+				case RESET_TO_DEFAULTS:
+					if(!sv.canReset) break;
+					sv.removeValue(prefs);
+					sv.loadValue(prefs);
 					break;
 			}
 		}	
