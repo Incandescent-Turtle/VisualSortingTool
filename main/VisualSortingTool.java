@@ -18,9 +18,8 @@ import main.sorters.BarHeightSorter;
 import main.sorters.ColorGradientSorter;
 import main.sorters.NumberSorter;
 import main.sorters.Sorter;
+import main.ui.BetterFrame;
 import main.ui.GUIHandler;
-import main.ui.RoryFrame;
-import main.ui.TopBarGUI;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.values.StorageValue;
@@ -92,15 +91,7 @@ public class VisualSortingTool extends JPanel
 	private void setUpFrame()
 	{
 		//overrides to improve fullscreen function
-		frame = new RoryFrame(this, "Sorting Methods Visual") {
-			
-			@Override
-			public Dimension getMinimumSize()
-			{
-				TopBarGUI topBar = guiHandler.getTopBarGUI();
-				return new Dimension(topBar.getGUIWidth(false), guiHandler.getCustomizationGUI().getMinimumSize().height + topBar.getHeight() + 50);
-			}
-		};
+		frame = new BetterFrame().createFrame(this, "Sorting Methods Visual");
 		Dimension dim = new Dimension(400, 400);
 		frame.setPreferredSize(dim);
 		//so closing event is called

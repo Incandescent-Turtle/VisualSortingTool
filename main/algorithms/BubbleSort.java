@@ -16,8 +16,8 @@ public class BubbleSort extends Algorithm
 	@Override
 	public void setDefaultValues()
 	{
-		swapColor = Color.RED;
-		compareColor = Color.GREEN;
+		swapColor = new Color(255, 105, 97); //red
+		compareColor = new Color(150, 210, 148); //greem
 	}
 
 	@Override

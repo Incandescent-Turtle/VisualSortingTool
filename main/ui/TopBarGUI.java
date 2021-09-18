@@ -77,6 +77,8 @@ public class TopBarGUI extends JPanel
         
         //step spinner
         stepSpinner.addChangeListener(e -> Algorithm.stepSize = ((int) stepSpinner.getValue()));
+        //updates
+        GUIHandler.addUpdatables(() -> stepSpinner.setValue(Algorithm.stepSize));
         //sorter combobox. when switches it resizes/reloads/shuffles the sorter as well as carrying over the delay
         sorterList.addItemListener(new ItemListener()
 		{

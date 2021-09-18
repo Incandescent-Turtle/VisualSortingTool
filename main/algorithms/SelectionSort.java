@@ -21,9 +21,9 @@ public class SelectionSort extends Algorithm
 	@Override
 	public void setDefaultValues()
 	{
-		swapColor = Color.GREEN;
-		compareColor = Color.RED;
-		startColor = new Color(50, 129, 168);
+		swapColor = new Color(150, 210, 148); //green
+		compareColor = new Color(255, 105, 97); //redd
+		startColor = new Color(50, 129, 168); //blue
 		minColor = Color.ORANGE;
 	}
 	

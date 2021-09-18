@@ -7,8 +7,8 @@ import java.util.prefs.Preferences;
 import main.interfaces.Closable;
 import main.interfaces.OnChangeAction;
 import main.interfaces.RetrieveAction;
+import main.ui.BetterFrame;
 import main.ui.GUIHandler;
-import main.ui.RoryFrame;
 import main.ui.custimization.CustomizationGUI;
 import main.util.Util;
 
@@ -34,7 +34,7 @@ public abstract class StorageValue<T> implements Closable
 	protected final String fullKey;
 
 	/**
-	 * class to make storing data in preferences super easy
+	 * class to make storing data in preferences super easy. loads value on creation
 	 * @param prefix the class prefix
 	 * @param key variable name
 	 * @param defaultValue if differing from retrieve action
@@ -47,6 +47,7 @@ public abstract class StorageValue<T> implements Closable
 		this.retrieveAction = retrieveAction;
 		this.defaultValue = defaultValue;
 		this.changeAction = changeAction;
+		loadValue(CustomizationGUI.PREFS);
 	}
 	
 	/**
@@ -120,7 +121,7 @@ public abstract class StorageValue<T> implements Closable
 		for(StorageValue<?> value : values)
 		{
 			STORAGE_VALUES.add(value);
-			RoryFrame.addClosable(value);
+			BetterFrame.addClosable(value);
 		}
 	}
 	

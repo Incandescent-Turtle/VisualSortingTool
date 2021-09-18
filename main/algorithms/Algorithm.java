@@ -14,7 +14,6 @@ import main.sorters.Sorter;
 import main.ui.GUIHandler;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.Customizable;
-import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
 import main.ui.custimization.values.BooleanStorageValue;
 import main.ui.custimization.values.IntStorageValue;
@@ -56,21 +55,16 @@ public abstract class Algorithm implements Customizable
 
 		delay = 10;
         StorageValue.addStorageValues(new IntStorageValue(prefix, "delay", n -> delay = n, () -> delay));
-		//this line is needed because the delay spinner in TopBar will do weird stuff
-        delay = CustomizationGUI.PREFS.getInt(prefix + "delay", delay);
 
         stepSize = 1;
         StorageValue.addStorageValues(new IntStorageValue(prefix, "step", n -> stepSize = n, () -> stepSize));
-        stepSize = CustomizationGUI.PREFS.getInt(prefix + "step", stepSize);
 
-        confirmationColor = new Color(162, 255, 143);
+        confirmationColor = new Color(162, 255, 143); //green
 		//attemps to load confirmationColor, if cant its GREEN, sets up storage as well
 		StorageValue.addStorageValues(StorageValue.createColorStorageValue(prefix, "confirmationColor", c -> confirmationColor = c, () -> confirmationColor));
-	
+
 		animateConfirmation = false;
 		StorageValue.addStorageValues(new BooleanStorageValue(prefix, "animateConfirmation", b -> animateConfirmation = b, () -> animateConfirmation));
-		animateConfirmation = CustomizationGUI.PREFS.getBoolean(prefix + "animateConfirmation", animateConfirmation);
-		System.out.println("loading with " + animateConfirmation);
 	}
 	
 	public Algorithm(String name, VisualSortingTool sortingTool)

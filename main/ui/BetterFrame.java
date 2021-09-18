@@ -1,5 +1,6 @@
 package main.ui;
 
+import java.awt.Dimension;
 import java.awt.GraphicsDevice;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -16,10 +17,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import main.VisualSortingTool;
 import main.interfaces.Closable;
 
 @SuppressWarnings("serial")
-public class RoryFrame extends JFrame
+public class BetterFrame
 {
 	//for things that need code run before the program exists - called on window close
 	private static ArrayList<Closable> CLOSABLES = new ArrayList<>();
@@ -28,6 +30,7 @@ public class RoryFrame extends JFrame
 	private Rectangle nonFullScreenBounds = null;
 	//window state before fullscreening
 	private int windowState;
+	private JFrame frame;
 	
 	/**
 	 * JFrame complete with full F11 capabilities <br>
@@ -35,16 +38,36 @@ public class RoryFrame extends JFrame
 	 * @param panel the panel to connect this to for maps and repainting
 	 * @param title the title of the frame
 	 */
-	public RoryFrame(JPanel panel, String title)
+	public BetterFrame() {}
+	
+	/**
+	 * returns a frame (1 per instance) with fullscreen and keybinding capabilities
+	 * @param panel main panel for the jframe
+	 * @param title title of the frame
+	 * @return the frame to be used
+	 */
+	public JFrame createFrame(VisualSortingTool sortingTool, String title)
 	{
-		super(title);
-		nonFullScreenBounds = getBounds();
-		windowState = JFrame.NORMAL;
-		//for fullscreen capabilities
-		addListeners();	
-		//keybindings
-		setUpF11ForFullscreen(panel);
-		setUpEscForClose(panel);
+		if(frame == null)
+		{
+			frame = new JFrame(title) {
+				
+				@Override
+				public Dimension getMinimumSize()
+				{
+					GUIHandler guiHandler = sortingTool.getGUIHandler();
+					return new Dimension(guiHandler.getTopBarGUI().getGUIWidth(false), guiHandler.getCustomizationGUI().getMinimumSize().height + guiHandler.getTopBarGUI().getHeight() + 50);
+				}
+			};
+			nonFullScreenBounds = frame.getBounds();
+			windowState = JFrame.NORMAL;
+			//for fullscreen capabilities
+			addListeners();	
+			//keybindings
+			setUpF11ForFullscreen(sortingTool);
+			setUpEscForClose(sortingTool);
+		}
+		return frame;
 	}
 	
 	/**
@@ -90,13 +113,13 @@ public class RoryFrame extends JFrame
 	 */
 	private void addListeners()
 	{
-		addComponentListener(new ComponentAdapter() {
+		frame.addComponentListener(new ComponentAdapter() {
 				
 			@Override
 	        public void componentResized(ComponentEvent e) 
 			{
 				//update position when resized (used for fullscreen)
-				if(getExtendedState() != JFrame.MAXIMIZED_BOTH) 
+				if(frame.getExtendedState() != JFrame.MAXIMIZED_BOTH) 
 					nonFullScreenBounds = e.getComponent().getBounds();
 	        }
 			
@@ -104,12 +127,12 @@ public class RoryFrame extends JFrame
 			public void componentMoved(ComponentEvent e)
 			{
 				//update location when window is moved (used for fullscreen)
-				if(getExtendedState() != JFrame.MAXIMIZED_BOTH) 
+				if(frame.getExtendedState() != JFrame.MAXIMIZED_BOTH) 
 					nonFullScreenBounds = e.getComponent().getBounds();	
 			}
 		});
 		
-		addWindowListener(new WindowAdapter()
+		frame.addWindowListener(new WindowAdapter()
 		{
 			@Override
 			public void windowClosing(WindowEvent e)
@@ -124,34 +147,34 @@ public class RoryFrame extends JFrame
 	 */
 	public void toggleFullscreen()
 	{
-		dispose();
-		setVisible(false);
+		frame.dispose();
+		frame.setVisible(false);
 		//when fullscreen
-		if(getExtendedState() == JFrame.MAXIMIZED_BOTH && isUndecorated())
+		if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH && frame.isUndecorated())
 		{
 			// reverting
-			setExtendedState(windowState);
-			setBounds(nonFullScreenBounds);
+			frame.setExtendedState(windowState);
+			frame.setBounds(nonFullScreenBounds);
 			//true when the screen has been dragged to maximize
 			if(nonFullScreenBounds.y <= 0)
 			{				 
 				//current screen
-				GraphicsDevice myScreen = getGraphicsConfiguration().getDevice();
+				GraphicsDevice myScreen = frame.getGraphicsConfiguration().getDevice();
 				//sets it to default size
-				setSize(getPreferredSize());
+				frame.setSize(frame.getPreferredSize());
 				//centers it on proper screen
-				setLocationRelativeTo(new JFrame(myScreen.getDefaultConfiguration()));
+				frame.setLocationRelativeTo(new JFrame(myScreen.getDefaultConfiguration()));
 			}
-			setUndecorated(false);
+			frame.setUndecorated(false);
 		} else {
 			//maximizing
 
-			windowState = getExtendedState();
-			nonFullScreenBounds = getBounds();
-			setExtendedState(JFrame.MAXIMIZED_BOTH);
-			setUndecorated(true);
+			windowState = frame.getExtendedState();
+			nonFullScreenBounds = frame.getBounds();
+			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			frame.setUndecorated(true);
 		}
-	    setVisible(true);
+		frame.setVisible(true);
 	}
 	
 	private void closeWindow()
