@@ -74,7 +74,7 @@ public class ColorGradientSorter extends Sorter
 			}
 		};
 		//on press reverses order and if no algo running re-organizes and re-paints to show it 
-		orderButton.addActionListener(e ->  reverseOrder());
+		orderButton.addActionListener(e -> reverseOrder());
 		cp.addRow(orderButton, true);
 		
 		GUIHandler.addToggleable(button1, button2, orderButton);
@@ -131,12 +131,10 @@ public class ColorGradientSorter extends Sorter
 	 */
 	private void reverseOrder()
 	{
-		//if un-sorted, swaps the order variables and returns
-		if(!Algorithm.isSorted(sortingTool, false)) 
-		{
-			order=!order;
-			return;
-		}
+		order=!order;
+		//if un-sorted, returns after switch
+		if(!Algorithm.isSorted(sortingTool, false)) return;
+		
 		//if sorted
 		
 		//changes the value of the VCs to switch switch color is left or right
@@ -149,6 +147,7 @@ public class ColorGradientSorter extends Sorter
 			//this ends up reversing the list
 			array[newValue] = tempArray[i];
 		}
+		visualizer.resetHighlights();
 		sortingTool.repaint();
 	}
 }
