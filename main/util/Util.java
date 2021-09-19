@@ -1,6 +1,10 @@
 package main.util;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 import main.ui.custimization.CustomizationGUI;
 
@@ -42,5 +46,36 @@ public class Util
 	public static void putColor(String fullKey, Color color)
 	{
 		CustomizationGUI.PREFS.putInt(fullKey, Util.colorToInt(color));
+	}
+	
+	/**
+	 * method to get file extensions!
+	 * @param file the file whose extension you want
+	 * @return the file extension including the "." or NULL if there is no extension
+	 */
+	public static String getFileExtension(File file)
+	{
+		String fileName = file.getName().toLowerCase();
+		
+		//the last index containing "."
+		int i = fileName.lastIndexOf('.');
+		//if . exists in a valid spot it returns all text after and including "."
+		if (i > 0) return fileName.substring(i);
+		
+		return null;
+	}
+	
+	/**
+	 * to turn an image into a buffered image
+	 * @param image the image to be converted
+	 * @return bufferedimage representing input image
+	 */
+	public static BufferedImage imageToBufferedImage(Image image) 
+	{
+	     BufferedImage bi = new BufferedImage (image.getWidth(null),image.getHeight(null),BufferedImage.TYPE_INT_ARGB);
+	     Graphics bg = bi.getGraphics();
+	     bg.drawImage(image, 0, 0, null);
+	     bg.dispose();
+	     return bi;
 	}
 }

@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import javafx.application.Platform;
 import main.VisualSortingTool;
 import main.interfaces.Closable;
 
@@ -182,6 +183,7 @@ public class BetterFrame
 	{
 
 		CLOSABLES.stream().forEach(c -> c.close());
+        Platform.exit();
 		System.exit(0);
 	}
 	

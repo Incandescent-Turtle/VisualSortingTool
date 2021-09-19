@@ -11,11 +11,13 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import javafx.application.Platform;
 import main.algorithms.Algorithm;
 import main.algorithms.BubbleSort;
 import main.algorithms.SelectionSort;
 import main.sorters.BarHeightSorter;
 import main.sorters.ColorGradientSorter;
+import main.sorters.ImageSorter;
 import main.sorters.NumberSorter;
 import main.sorters.Sorter;
 import main.ui.BetterFrame;
@@ -50,7 +52,8 @@ public class VisualSortingTool extends JPanel
 		sorters = new Sorter[] {
 			   sorter = new BarHeightSorter(this), 
 						new ColorGradientSorter(this),
-						new NumberSorter(this)
+						new NumberSorter(this), 
+						new ImageSorter(this)
 		};
 		
 		algorithms = new Algorithm[] {
@@ -203,21 +206,23 @@ public class VisualSortingTool extends JPanel
 	
 	public static void main(String[] args)
 	{
-		//dope look and feel fr
-		try {
-		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-		        if ("Nimbus".equals(info.getName())) {
+		  new javafx.embed.swing.JFXPanel();
+		  Platform.setImplicitExit(false);
+		  //dope look and feel fr
+		  try {
+			  for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				  if ("Nimbus".equals(info.getName())) {
 		            UIManager.setLookAndFeel(info.getClassName());
 		            break;
-		        }
-		    }
-		} catch (Exception e) {
-			try {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			} 
-		}
-		new VisualSortingTool();
+				  }
+			  }
+		  } catch (Exception e) {
+			  try {
+				  UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			  } catch (Exception e1) {
+				  e1.printStackTrace();
+			  } 
+		  }
+		  new VisualSortingTool();
 	}
 }

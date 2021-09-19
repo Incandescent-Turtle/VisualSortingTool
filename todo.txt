@@ -3,14 +3,14 @@ sound effects #why though? seems like useless settings etc and just doesnt add m
 #not really sure about this one, but there are ways to record video etc maybe? user could just use built in
 Screenshot button
 
-#yeah this needs to get done
--file reading support (FileSorter)
--new VC for images (allow image resizing) (scaled instance so you can enlarge it)
+#image sorting
+-figure out when to promt user for folder location and how to handle nulls
+-progress bar loading
+-figure out thread stuff
+-figure out loading
+-implement different sorting methods (SORT IMAGE IS ONE OPTION AND YOU CAN CYCLE HOW YOU WANNA SORT WITH A SPINNER OR SMTHN, so customization option for hue, brightness, red, blue, etc
 -customization option for lowering quality (?) if not a thing could make own funtion with average color groups
 -preferences saved on image quality, and file location
-#genius idea at 2am lets gooooooooooooooo
--SORT IMAGE IS ONE OPTION AND YOU CAN CYCLE HOW YOU WANNA SORT WITH A SPINNER OR SMTHN
--so customization option for hue, brightness, red, blue, etc
 
 -if no VALID file selected, promt user immidienelty for file location respecting min file/element size
 -if there is a valid folder/file, load it up, and have File: as a customization option
