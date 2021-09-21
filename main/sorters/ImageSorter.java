@@ -1,16 +1,28 @@
 package main.sorters;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import javafx.stage.DirectoryChooser;
 import main.VisualSortingTool;
-import main.util.BetterFileChooser;
+import main.ui.custimization.CustomizationPanel;
+import main.ui.custimization.values.StorageValue;
+import main.ui.custimization.values.StringStorageValue;
 import main.util.SynchronousJFXDirectoryChooser;
 import main.util.Util;
 import main.vcs.ImageVisualComponent;
@@ -21,12 +33,57 @@ public class ImageSorter extends Sorter
 {
 	private final ImageLoader loader = new ImageLoader();
 	//minimum number of images
-	private int minNumber = 10;
+	private int minNumber = 2;
+	
+	private String directoryPath;
 	
 	public ImageSorter(VisualSortingTool sortingTool)
 	{
 		super(sortingTool, new ImageVisualizer(sortingTool), Sorters.IMAGE);
+        size = 0;
+        visualizer.resizeHighlights(size);
+	}
+	
+	@Override
+	public void generateValues()
+	{
+		System.out.println("generating");
+        loadFromFolder();
+        recalculateAndRepaint();
+	}
 
+	@Override
+	public void setDefaultValues()
+	{
+		directoryPath = "";
+	}
+	
+	@Override
+	public void addStorageValues()
+	{
+		StorageValue.addStorageValues(new StringStorageValue(getPrefix(), "directoryPath", str -> directoryPath = str, () -> directoryPath));
+	}
+	
+	@Override
+	public void addSorterCustomizationComponents(CustomizationPanel cp)
+	{
+		JButton chooseFolderButton = new JButton("Select Folder");
+		chooseFolderButton.addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				selectFolder();
+				loadFromFolder();
+				recalculateAndRepaint();
+			}
+		});
+		cp.addRow(chooseFolderButton, true);
+	}
+	
+	private void selectFolder()
+	{
 		//new BetterFileChooser().showOpenDialog(sortingTool);
         SynchronousJFXDirectoryChooser chooser = new SynchronousJFXDirectoryChooser(() -> {
             DirectoryChooser dc = new DirectoryChooser();
@@ -35,13 +92,8 @@ public class ImageSorter extends Sorter
         });
         File file = chooser.showDialog();
         if(file == null) System.exit(0);
-        System.out.println(file);
-
-        array = new VisualComponent[loader.loadFromFolder(file).length];
-		for(int i =0; i < array.length; i++)
-		{
-			array[i] = new ImageVisualComponent(calculateBrightness(loader.images[i]), loader.images[i]);
-		}
+        directoryPath = file.getAbsolutePath();
+        System.out.println(file.getAbsolutePath());
 		
 		/*final JSystemFileChooser fc = new JSystemFileChooser();
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -58,11 +110,37 @@ public class ImageSorter extends Sorter
         } else {
         	System.exit(0);
         }*/
-        
-        size = array.length;
+	}
+	
+	private void loadFromFolder()
+	{
+		if(directoryPath.equals("")) return;
+		//where all the images load - pass a dialog into loadFromFolder for it to display on
+		JLabel label = new JLabel("");
+		label.setFont(new Font("", 0, 30));
+		JDialog dialog = new JDialog();
+		Dimension dim = new Dimension(500, 100);
+		JPanel panel = new JPanel();
+		((FlowLayout)panel.getLayout()).setAlignment(FlowLayout.CENTER);
+		dialog.add(panel, BorderLayout.CENTER);
+		dialog.setMinimumSize(dim);
+		dialog.setPreferredSize(dim);
+		dialog.setLocationRelativeTo(null);
+		panel.add(label);
+		dialog.setVisible(true);
+		array = new VisualComponent[loader.loadFromFolder(new File(directoryPath), label).length];
+		if(array.length < minNumber) return;
+		for(int i =0; i < array.length; i++)
+		{
+			array[i] = new ImageVisualComponent(calculateBrightness(loader.images[i]), loader.images[i]);
+			label.setText("Setting up image " + (i+1) + " of " + array.length);
+		}
+		dialog.dispose();
+		
+		size = array.length;
         visualizer.resizeHighlights(size);
 	}
-
+	
 	@Override
 	protected void reloadArray()
 	{
@@ -98,7 +176,7 @@ public class ImageSorter extends Sorter
 		 * @param folder the target folder
 		 * @return returns the {@link #images} list filled with images from target folder
 		 */
-		private BufferedImage[] loadFromFolder(File folder)
+		private BufferedImage[] loadFromFolder(File folder, JLabel label)
 		{
 			FileFilter filter = new FileFilter()
 			{
@@ -118,6 +196,7 @@ public class ImageSorter extends Sorter
 			for (int i = 0; i < files.length; i++)
 			{
 				images[i] = loadImage(files[i]);
+				label.setText("Loading image " + (i+1) + " out of " + files.length);
 			}
 			return images;
 		}

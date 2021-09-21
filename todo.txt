@@ -14,7 +14,8 @@ Screenshot button
 
 -if no VALID file selected, promt user immidienelty for file location respecting min file/element size
 -if there is a valid folder/file, load it up, and have File: as a customization option
-
+-choose multiple folders
+-add storage for folders
 
 
 #bruh this the whole point

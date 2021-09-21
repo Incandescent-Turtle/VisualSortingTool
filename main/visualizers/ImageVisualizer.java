@@ -45,7 +45,6 @@ public class ImageVisualizer extends FixedSizeVisualizer
 		//index = array.length - 1 - index;
 		resize();
 		componentGap = 1;
-		System.out.println(array[index] == null);
 		BufferedImage image = ((ImageVisualComponent)array[index]).scale(componentSize);
 		int width = image.getWidth();
 		int height = image.getHeight();

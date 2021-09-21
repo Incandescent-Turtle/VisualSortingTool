@@ -44,6 +44,9 @@ public class VisualSortingTool extends JPanel
 	//all the algorithms in the program
 	private Algorithm[] algorithms;
 	
+	//whether the program is ready to start (after everything has been set up)
+	private boolean initialized = false;
+	
 	public VisualSortingTool()
 	{
 		//to allow for UI to be in top bar
@@ -89,6 +92,24 @@ public class VisualSortingTool extends JPanel
 		frame.validate();
 		frame.setMinimumSize(new Dimension(guiHandler.getTopBarGUI().getGUIWidth(false), 400));
 		frame.setVisible(true);
+		new Thread(new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				try
+				{
+					Thread.sleep(1000);
+				} catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				initialized = true;
+				sorter.recalculateAndRepaint();
+			}
+		}).start();
 	}
 	
 	private void setUpFrame()
@@ -204,18 +225,25 @@ public class VisualSortingTool extends JPanel
 		return cls.getSimpleName().toLowerCase() + "_";
 	}
 	
+	public boolean isInitialized()
+	{
+		return initialized;
+	}
+	
 	public static void main(String[] args)
 	{
-		  new javafx.embed.swing.JFXPanel();
-		  Platform.setImplicitExit(false);
-		  //dope look and feel fr
-		  try {
-			  for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-				  if ("Nimbus".equals(info.getName())) {
-		            UIManager.setLookAndFeel(info.getClassName());
-		            break;
-				  }
-			  }
+		new javafx.embed.swing.JFXPanel();
+		Platform.setImplicitExit(false);
+		//dope look and feel fr
+		try {
+			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) 
+			{
+				if ("Nimbus".equals(info.getName())) 
+				{
+					UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
 		  } catch (Exception e) {
 			  try {
 				  UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -223,6 +251,6 @@ public class VisualSortingTool extends JPanel
 				  e1.printStackTrace();
 			  } 
 		  }
-		  new VisualSortingTool();
+		new VisualSortingTool();
 	}
 }

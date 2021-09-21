@@ -62,7 +62,7 @@ public class Util
 		//if . exists in a valid spot it returns all text after and including "."
 		if (i > 0) return fileName.substring(i);
 		
-		return null;
+		return "";
 	}
 	
 	/**

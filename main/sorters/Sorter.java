@@ -177,7 +177,8 @@ public abstract class Sorter implements Customizable
 	 */
 	public void recalculateAndRepaint()
 	{
-		if(algorithm == null)
+		//whether everything is set up to go and if sorting isnt happening
+		if(sortingTool.isInitialized() && algorithm == null)
 		{
 			tryResizeArray();
 			tryReloadArray();

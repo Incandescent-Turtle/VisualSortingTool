@@ -24,7 +24,7 @@ public class ImageVisualComponent extends VisualComponent
 	 * @return the new scaled instance of this image
 	 */
 	public BufferedImage scale(int size)
-	{
+	{ 
 		if(this.size == size) return scaledImage;
 		//if it is tall, shortens height to specified size
 		if(originalImage.getHeight() > originalImage.getWidth())

@@ -9,19 +9,16 @@ import javafx.stage.DirectoryChooser;
 
 public class SynchronousJFXDirectoryChooser
 {
-    private final Supplier<DirectoryChooser> directoryChooserFactory;
+    private final Supplier<DirectoryChooser> directoryChooserSupplier;
     
-    public SynchronousJFXDirectoryChooser(Supplier<DirectoryChooser> directoryChooserFactory)
+    public SynchronousJFXDirectoryChooser(Supplier<DirectoryChooser> directoryChooserSupplier)
 	{
-    	this.directoryChooserFactory = directoryChooserFactory;
+    	this.directoryChooserSupplier = directoryChooserSupplier;
 	}
     
     public File showDialog()
     {
-    	Callable<File> task = () -> {
-            return directoryChooserFactory.get().showDialog(null);
-        };
-        SynchronousJFXCaller<File> caller = new SynchronousJFXCaller<>(task);
+        SynchronousJFXCaller<File> caller = new SynchronousJFXCaller<>(() -> directoryChooserSupplier.get().showDialog(null));
         try {
             return caller.call(1, TimeUnit.SECONDS);
         } catch (RuntimeException | Error ex) {
