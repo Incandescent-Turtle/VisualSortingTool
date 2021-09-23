@@ -2,14 +2,20 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Arrays;
+import java.util.Enumeration;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.plaf.FontUIResource;
+
+import com.sun.javafx.application.PlatformImpl;
 
 import javafx.application.Platform;
 import main.algorithms.Algorithm;
@@ -55,8 +61,8 @@ public class VisualSortingTool extends JPanel
 		sorters = new Sorter[] {
 			   sorter = new BarHeightSorter(this), 
 						new ColorGradientSorter(this),
-						new NumberSorter(this), 
-						new ImageSorter(this)
+						new NumberSorter(this) 
+						//new ImageSorter(this)
 		};
 		
 		algorithms = new Algorithm[] {
@@ -232,8 +238,6 @@ public class VisualSortingTool extends JPanel
 	
 	public static void main(String[] args)
 	{
-		new javafx.embed.swing.JFXPanel();
-		Platform.setImplicitExit(false);
 		//dope look and feel fr
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) 
@@ -244,13 +248,17 @@ public class VisualSortingTool extends JPanel
 					break;
 				}
 			}
-		  } catch (Exception e) {
-			  try {
-				  UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			  } catch (Exception e1) {
-				  e1.printStackTrace();
-			  } 
-		  }
+		} catch (Exception e) {
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			} 
+		}
+		PlatformImpl.startup(()->{});
+		Platform.setImplicitExit(false);
+		Font font = (Font) UIManager.getLookAndFeelDefaults().get("defaultFont");
+		UIManager.getLookAndFeelDefaults().put("defaultFont", new FontUIResource(font.deriveFont(20f)));
 		new VisualSortingTool();
 	}
 }

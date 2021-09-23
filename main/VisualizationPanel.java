@@ -33,7 +33,7 @@ public class VisualizationPanel extends JPanel
 		Graphics2D g = (Graphics2D) graphics;
 	    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-	    if(getWidth() > 0)sortingTool.getSorter().getVisualizer().drawArray(g);
+	    if(getWidth() > 0) sortingTool.getSorter().getVisualizer().drawArray(g);
 		g.dispose();
 	}
 }
