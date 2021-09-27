@@ -6,24 +6,18 @@ import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Arrays;
-import java.util.Enumeration;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.FontUIResource;
 
-import com.sun.javafx.application.PlatformImpl;
-
-import javafx.application.Platform;
 import main.algorithms.Algorithm;
 import main.algorithms.BubbleSort;
 import main.algorithms.SelectionSort;
 import main.sorters.BarHeightSorter;
 import main.sorters.ColorGradientSorter;
-import main.sorters.ImageSorter;
 import main.sorters.NumberSorter;
 import main.sorters.Sorter;
 import main.ui.BetterFrame;
@@ -255,8 +249,8 @@ public class VisualSortingTool extends JPanel
 				e1.printStackTrace();
 			} 
 		}
-		PlatformImpl.startup(()->{});
-		Platform.setImplicitExit(false);
+		//PlatformImpl.startup(()->{});
+		//Platform.setImplicitExit(false);
 		Font font = (Font) UIManager.getLookAndFeelDefaults().get("defaultFont");
 		UIManager.getLookAndFeelDefaults().put("defaultFont", new FontUIResource(font.deriveFont(20f)));
 		new VisualSortingTool();

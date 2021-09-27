@@ -18,12 +18,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import javafx.stage.DirectoryChooser;
 import main.VisualSortingTool;
 import main.ui.custimization.CustomizationPanel;
 import main.ui.custimization.values.StorageValue;
 import main.ui.custimization.values.StringStorageValue;
-import main.util.SynchronousJFXDirectoryChooser;
 import main.util.Util;
 import main.vcs.ImageVisualComponent;
 import main.vcs.VisualComponent;
@@ -85,12 +83,12 @@ public class ImageSorter extends Sorter
 	private void selectFolder()
 	{
 		//new BetterFileChooser().showOpenDialog(sortingTool);
-        SynchronousJFXDirectoryChooser chooser = new SynchronousJFXDirectoryChooser(() -> {
+       /* SynchronousJFXDirectoryChooser chooser = new SynchronousJFXDirectoryChooser(() -> {
             DirectoryChooser dc = new DirectoryChooser();
             dc.setTitle("Open any file you wish");
             return dc;
-        });
-        File file = chooser.showDialog();
+        });*/
+        File file = null;
         if(file == null) System.exit(0);
         directoryPath = file.getAbsolutePath();
         System.out.println(file.getAbsolutePath());
