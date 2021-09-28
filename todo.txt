@@ -4,10 +4,9 @@ sound effects #why though? seems like useless settings etc and just doesnt add m
 Screenshot button
 
 #image sorting
--figure out when to promt user for folder location and how to handle nulls
+-figure out how to handle nulls
 -progress bar loading
--figure out thread stuff
--figure out loading
+-figure out thread stuff - background loading (disable UI while loading?)
 -implement different sorting methods (SORT IMAGE IS ONE OPTION AND YOU CAN CYCLE HOW YOU WANNA SORT WITH A SPINNER OR SMTHN, so customization option for hue, brightness, red, blue, etc
 -customization option for lowering quality (?) if not a thing could make own funtion with average color groups
 -preferences saved on image quality, and file location
@@ -20,5 +19,88 @@ Screenshot button
 
 #bruh this the whole point
 add more algorithms
+
+Refactor dumbassery that is the constructor for VisualSortingGroup cause every time you implement smthn new you gotta jump through mf hoops to get it all mf sorted
+
+Add sounds
+
+Weird confirmation color glitch thing
+
+Repeat button? 👀👀 blue gradient on 0 delay actually looks kinda sick
+
+Vital: info on the sort!
+-total loops
+-total
+
+Supplier interface instead of retrieve
+Consumer instead of onAction
+
+Search sub folders
+Max amount of photos (cut off at 200 or smthn)
+
+For image sorting reset highlights with NULL values
+
+~~FOR FITTING MAX IMAGES ON ONE LINE~~
+ImageVisualizer:
+
+drawArray {
+
+//includes gaps and margins
+int currentRowX;
+int rowNum;
+
+drawImage(img, currentRowX, rowNum)
+currentRowX += gap + img.width
+if(x+gap+componentSize is out of bounds)
+rowNum++;
+currentRow.clear();
+}
+(Different row sizes)
+
+Knock full size resolution down to preserve memory
+
+Don’t change order when switching image sorting methods
+
+new Visualizer to sort coloured squares (fixed size)
+
+Resizing progress bar
+
+Group loading images and creating VCs into one action (looping twice)
+
+Resizing etc in a separate thread ? Window going full screen is weird
+
+JDialog doesn’t appear when you select a new folder
+
+Running on separate thread (?), checking mouse position, when hovering over a component displays the description text.
+
+class Descriptions {
+Map<JComponent, String> map;
+
+onMouseMove() {
+
+for(every component) {
+if(mouse.intersects(component.getBounds()) {
+display(map.get(component));
+}
+}
+
+}
+
+display(String are) {
+//uses multi-line parsing from Util to display the descriptions, fitting to the allowed size
+}
+
+public static addComponent(JComponent c, File file) {
+map.add(c, loadDesc(file);
+}
+
+String loadDesc(File file) {
+//loads the text from file and returns it
+}
+}
+
+JButtom shuffle = new JButton(“Shuffle”);
+Descriptions.addComponent(shuffle, new File(“/desc/shuffle-button.txt”);
+uses bounding box to display description
 
 HOME STRETCH BABEYYY
