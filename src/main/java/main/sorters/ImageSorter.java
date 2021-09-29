@@ -1,22 +1,22 @@
 package main.sorters;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import javafx.stage.DirectoryChooser;
 import main.VisualSortingTool;
@@ -35,13 +35,24 @@ public class ImageSorter extends Sorter
 	//minimum number of images
 	private int minNumber = 2;
 	
-	private String directoryPath;
+	private File directoryPath;
 	
 	public ImageSorter(VisualSortingTool sortingTool)
 	{
 		super(sortingTool, new ImageVisualizer(sortingTool), Sorters.IMAGE);
         size = 0;
         visualizer.resizeHighlights(size);
+	}
+	
+	public void resizeImages(int componentSize)
+	{
+		long start = System.currentTimeMillis();
+		for (int i = 0; i < array.length; i++)
+		{
+			((ImageVisualComponent)array[i]).scale(componentSize);
+		}
+		double val = (System.currentTimeMillis() - start)/1000f;
+		if(val > 0) System.out.println("Resized in : " + val + "s");
 	}
 	
 	@Override
@@ -55,13 +66,13 @@ public class ImageSorter extends Sorter
 	@Override
 	public void setDefaultValues()
 	{
-		directoryPath = "";
+		directoryPath = new File("");
 	}
 	
 	@Override
 	public void addStorageValues()
 	{
-		StorageValue.addStorageValues(new StringStorageValue(getPrefix(), "directoryPath", str -> directoryPath = str, () -> directoryPath));
+		StorageValue.addStorageValues(new StringStorageValue(getPrefix(), "directoryPath", str -> directoryPath = new File(str), () -> directoryPath.getAbsolutePath()));
 	}
 	
 	@Override
@@ -84,7 +95,6 @@ public class ImageSorter extends Sorter
 	
 	private void selectFolder()
 	{
-		//new BetterFileChooser().showOpenDialog(sortingTool);
         SynchronousJFXDirectoryChooser chooser = new SynchronousJFXDirectoryChooser(() -> {
             DirectoryChooser dc = new DirectoryChooser();
             dc.setTitle("Open any file you wish");
@@ -92,21 +102,16 @@ public class ImageSorter extends Sorter
         });
         File file = chooser.showDialog();
         if(file == null) System.exit(0);
-        directoryPath = file.getAbsolutePath();
+        directoryPath = file;
         System.out.println(file.getAbsolutePath());
 		
-		/*final JSystemFileChooser fc = new JSystemFileChooser();
+		/*final JFileChooser fc = new BetterFileChooser();
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int returnVal = fc.showOpenDialog(sortingTool);
         
         if (returnVal == JFileChooser.APPROVE_OPTION) 
         {
-        	System.err.println(fc.getSelectedFile().getName());
-        	array = new VisualComponent[loader.loadFromFolder(fc.getSelectedFile()).length];
-    		for(int i =0; i < array.length; i++)
-    		{
-    			array[i] = new ImageVisualComponent(i, loader.images[i]);
-    		}
+			directoryPath = file;
         } else {
         	System.exit(0);
         }*/
@@ -114,45 +119,18 @@ public class ImageSorter extends Sorter
 	
 	private void loadFromFolder()
 	{
-		if(directoryPath.equals("")) return;
-		//where all the images load - pass a dialog into loadFromFolder for it to display on
-		JLabel label = new JLabel("");
-		label.setFont(new Font("", 0, 30));
-		label.setForeground(Color.BLACK);
-		JDialog dialog = new JDialog();
-		Dimension dim = new Dimension(500, 100);
-		JPanel panel = new JPanel();
-		((FlowLayout)panel.getLayout()).setAlignment(FlowLayout.CENTER);
-		dialog.add(panel, BorderLayout.CENTER);
-		dialog.setMinimumSize(dim);
-		dialog.setPreferredSize(dim);
-		dialog.setLocationRelativeTo(null);
-		panel.add(label);
-		dialog.setVisible(true);
-		dialog.pack();
-		array = new VisualComponent[loader.loadFromFolder(new File(directoryPath), label).length];
-		if(array.length < minNumber) return;
-		for(int i =0; i < array.length; i++)
-		{
-			array[i] = new ImageVisualComponent(calculateBrightness(loader.images[i]), loader.images[i]);
-			label.setText("Setting up image " + (i+1) + " of " + array.length);
-		}
-		dialog.dispose();
+		if(directoryPath.equals(new File(""))) return;
+		//for logging time
+		long start = System.currentTimeMillis();
+		
+		//loading values into array 
+		array = loader.loadFromFolder(directoryPath);
+		
+		//for logging time
+		System.out.println("Loaded in " + (System.currentTimeMillis() - start)/1000f + "s");
 		
 		size = array.length;
         visualizer.resizeHighlights(size);
-	}
-	
-	@Override
-	protected void reloadArray()
-	{
-		
-	}
-	
-	@Override
-	protected void resizeArray()
-	{
-		
 	}
 	
 	private int calculateBrightness(BufferedImage img)
@@ -169,40 +147,100 @@ public class ImageSorter extends Sorter
 		return (int) (luminance*1000) *-1;
 	}
 	
+	@Override
+	protected void reloadArray(){}
+	
+	@Override
+	protected void resizeArray(){}
+	
 	private final class ImageLoader
 	{
-		private BufferedImage[] images;
-		
 		/**
-		 * sets {@link #images} to the images in the specified folder
+		 * populates the sorter's array with image VCs built from the images in the directory
 		 * @param folder the target folder
-		 * @return returns the {@link #images} list filled with images from target folder
+		 * @returns new {@link VisualComponent} array
 		 */
-		private BufferedImage[] loadFromFolder(File folder, JLabel label)
+		private VisualComponent[] loadFromFolder(File folder, int f)
 		{
-			FileFilter filter = new FileFilter()
-			{
-				@Override
-				public boolean accept(File file)
-				{
-				  if (Util.getFileExtension(file).equals(".png") || Util.getFileExtension(file).equals(".jpg")) 
-				  {
-		                return true;
-				  }
-		             return false;
-				}
-			};
+			//only jpg and png
+			FileFilter filter = file -> Util.getFileExtension(file).equals(".png") || Util.getFileExtension(file).equals(".jpg");
+			
+			//all png and jpg files in the directory
 			File[] files = folder.listFiles(filter);
+			//prints all the file names
 			Stream.of(files).forEach(System.out::println);
-			images = new BufferedImage[files.length];
+			
+			ImageVisualComponent[] array = new ImageVisualComponent[files.length];
 			for (int i = 0; i < files.length; i++)
 			{
-				images[i] = loadImage(files[i]);
-				label.setText("Loading image " + (i+1) + " out of " + files.length);
+				BufferedImage img = loadImage(files[i]);
+				array[i] = new ImageVisualComponent(calculateBrightness(img), img);
 			}
-			return images;
+			//	ExecutorService ex = Executors.newFixedThreadPool(10);
+			return array;
 		}
-				
+		
+		private VisualComponent[] loadFromFolder(File folder)
+		{
+			//only jpg and png
+			FileFilter filter = file -> Util.getFileExtension(file).equals(".png") || Util.getFileExtension(file).equals(".jpg");
+			
+			//all png and jpg files in the directory
+			File[] files = folder.listFiles(filter);
+			//prints all the file names
+			Stream.of(files).forEach(System.out::println);
+			
+			 ExecutorService executor = Executors.newFixedThreadPool(100);
+			 final int wantedSize = 10;
+		     final int portions = wantedSize <= files.length ? wantedSize : files.length;
+		    
+		     Worker[] workers = new Worker[portions];
+		     
+		     for (int i = 0; i < portions; i++)
+		     {
+		    	 int portionSize = files.length/portions;
+		    	 int startAt = i * portionSize;
+		    	 int endAt = startAt + portionSize;
+		    	 if(i == portions-1) endAt = files.length;
+		    	 workers[i] = new Worker(startAt, endAt, files);
+		    	 System.out.println("start " + startAt + " end " + endAt);
+		     }
+			ImageVisualComponent[] array = new ImageVisualComponent[files.length];
+			try {
+		            List<Future<ImageVisualComponent[]>> results = executor.invokeAll(Arrays.asList(workers));
+		            int index = 0;
+		            for (Future<ImageVisualComponent[]> result : results) 
+		            {System.out.println(index);
+		            	ImageVisualComponent[] arr = result.get();
+		            	for(int i = 0; i < arr.length; i++)
+						{
+							array[index + i] = arr[i];
+						}
+		            	index+=arr.length;
+		            }
+		        } catch (InterruptedException | ExecutionException ex) {
+		            ex.printStackTrace();
+		        }
+		        
+			/*for (int i = 0; i < files.length; i++)
+			{
+				BufferedImage img = loadImage(files[i]);
+				array[i] = new ImageVisualComponent(calculateBrightness(img), img);
+			}*/
+			//	ExecutorService ex = Executors.newFixedThreadPool(10);
+			for (ImageVisualComponent imageVisualComponent : array)
+			{
+				System.out.println((imageVisualComponent != null ? "not " : "") + "null");
+			}
+			executor.shutdown();
+			return array;
+		}
+	
+		/**
+		 * loads a single image from file
+		 * @param file the path to the image file
+		 * @return the image as an object
+		 */
 		private BufferedImage loadImage(File file)
 		{
 			try {
@@ -212,5 +250,33 @@ public class ImageSorter extends Sorter
 			}
 			return null;
 		}
+		
+		 private class Worker implements Callable<ImageVisualComponent[]> 
+		 {
+
+		        private int startAt;
+		        private int endAt;
+		        private File[] files;
+
+		        public Worker(int startAt, int endAt, File[] files) 
+		        {
+		            this.startAt = startAt;
+		            this.endAt = endAt;
+		            this.files = files;
+		        }
+
+		        @Override
+		        public ImageVisualComponent[] call() throws Exception 
+		        {
+		        	ImageVisualComponent[] portion = new ImageVisualComponent[endAt-startAt];
+		        	for (int i = 0; i < portion.length; i++)
+					{
+		        		BufferedImage img = loadImage(files[i+startAt]);
+		        		ImageVisualComponent vc = new ImageVisualComponent(calculateBrightness(img), img);
+						portion[i] = vc;
+					}
+		        	return portion;
+		        }
+		 }
 	}
 }

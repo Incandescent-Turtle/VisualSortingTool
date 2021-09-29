@@ -83,7 +83,7 @@ public abstract class FixedSizeVisualizer extends Visualizer
 	/**
 	 * sets componentSize to be as big as possible to fill up all the window space
 	 */
-	public final void resize()
+	public void resize()
 	{
 		int arraySize = sortingTool.getSorter().getArraySize();
 		int baseY = componentGap;
