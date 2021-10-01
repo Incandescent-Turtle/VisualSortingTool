@@ -11,8 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import com.sun.javafx.application.PlatformImpl;
-
 import javafx.application.Platform;
 import main.algorithms.Algorithm;
 import main.algorithms.BubbleSort;
@@ -251,7 +249,7 @@ public class VisualSortingTool extends JPanel
 				e1.printStackTrace();
 			} 
 		}
-		PlatformImpl.startup(()->{});
+		Platform.startup(()->{});
 		Platform.setImplicitExit(false);
 		//Font font = (Font) UIManager.getLookAndFeelDefaults().get("defaultFont");
 		//UIManager.getLookAndFeelDefaults().put("defaultFont", new FontUIResource(font.deriveFont(20f)));

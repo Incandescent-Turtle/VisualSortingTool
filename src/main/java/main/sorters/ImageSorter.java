@@ -34,6 +34,7 @@ public class ImageSorter extends Sorter
 	private final ImageLoader loader = new ImageLoader();
 	//minimum number of images
 	private int minNumber = 2;
+	private volatile boolean resizing = false;
 	
 	private File directoryPath;
 	
@@ -46,13 +47,79 @@ public class ImageSorter extends Sorter
 	
 	public void resizeImages(int componentSize)
 	{
-		long start = System.currentTimeMillis();
-		for (int i = 0; i < array.length; i++)
-		{
-			((ImageVisualComponent)array[i]).scale(componentSize);
-		}
-		double val = (System.currentTimeMillis() - start)/1000f;
-		if(val > 0) System.out.println("Resized in : " + val + "s");
+		if(((ImageVisualComponent)array[0]).getScaledSize() == componentSize || resizing) return;
+		resizing = true;
+		new Thread(() -> {
+			long start = System.currentTimeMillis();
+			final int wantedSize = array.length;
+			final int portions = wantedSize <= array.length ? wantedSize : array.length;
+			ExecutorService ex = Executors.newFixedThreadPool(40);
+			System.out.println("created threads in: " + (System.currentTimeMillis() - start)/1000f + "s");
+			Worker2[] workers = new Worker2[portions];
+		     
+			for (int i = 0; i < portions; i++)
+			{
+		    	 int portionSize = array.length/portions;
+		    	 int startAt = i * portionSize;
+		    	 int endAt = startAt + portionSize;
+		    	 if(i == portions-1) endAt = array.length;
+		    	 workers[i] = new Worker2(startAt, endAt, componentSize);
+		    	// System.out.println("start " + startAt + " end " + endAt);
+		     }
+			try
+			{
+				double total = 0;
+				double max = Double.NEGATIVE_INFINITY;
+				double min = Double.POSITIVE_INFINITY;
+				List<Future<Double>> list = ex.invokeAll(Arrays.asList(workers));
+		    	 for (Future<Double> result : list) 
+		    	 {
+		    		 double num = result.get();
+		    		 total += num;
+		    		 if(max < num) max = num;
+		    		 if(min > num) min = num;
+		    	 }
+		    	 System.out.println("Average resize in: " + total/list.size() + "s");
+		    	 System.out.println("Min resize in: " + min + "s");
+		    	 System.out.println("Mxaxresize in: " + max + "s");
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			double val = (System.currentTimeMillis() - start)/1000f;
+			if(val > 0.01) System.out.println("Resized in : " + val + "s");
+			ex.shutdown();
+			resizing = false;
+			recalculateAndRepaint();
+			
+		}).start();
+	}
+	
+	class Worker2 implements Callable<Double>
+	{
+
+        private int startAt;
+        private int endAt;
+        private int size;
+
+        public Worker2(int startAt, int endAt, int size) 
+        {
+            this.startAt = startAt;
+            this.endAt = endAt;
+            this.size = size;
+        }
+
+        @Override
+        public Double call() throws Exception 
+        {
+        	long start = System.currentTimeMillis();
+        	ImageVisualComponent[] portion = new ImageVisualComponent[endAt-startAt];
+        	for (int i = 0; i < portion.length; i++)
+			{        		
+        		((ImageVisualComponent) array[i + startAt]).scale(size);
+			}
+        	return (System.currentTimeMillis() - start)/1000d;
+        }		
 	}
 	
 	@Override
@@ -205,22 +272,22 @@ public class ImageSorter extends Sorter
 		    	 workers[i] = new Worker(startAt, endAt, files);
 		    	 System.out.println("start " + startAt + " end " + endAt);
 		     }
-			ImageVisualComponent[] array = new ImageVisualComponent[files.length];
-			try {
-		            List<Future<ImageVisualComponent[]>> results = executor.invokeAll(Arrays.asList(workers));
-		            int index = 0;
-		            for (Future<ImageVisualComponent[]> result : results) 
-		            {System.out.println(index);
-		            	ImageVisualComponent[] arr = result.get();
-		            	for(int i = 0; i < arr.length; i++)
-						{
-							array[index + i] = arr[i];
-						}
-		            	index+=arr.length;
-		            }
-		        } catch (InterruptedException | ExecutionException ex) {
-		            ex.printStackTrace();
-		        }
+		     ImageVisualComponent[] array = new ImageVisualComponent[files.length];
+		     try {
+		    	 List<Future<ImageVisualComponent[]>> results = executor.invokeAll(Arrays.asList(workers));
+		    	 int index = 0;
+		    	 for (Future<ImageVisualComponent[]> result : results) 
+		    	 {System.out.println(index);
+		    	 ImageVisualComponent[] arr = result.get();
+		    	 for(int i = 0; i < arr.length; i++)
+		    	 {
+		    		 array[index + i] = arr[i];
+		    	 }
+		    	 index+=arr.length;
+		    	 }
+		     } catch (InterruptedException | ExecutionException ex) {
+		    	 ex.printStackTrace();
+		     }
 		        
 			/*for (int i = 0; i < files.length; i++)
 			{
@@ -253,7 +320,6 @@ public class ImageSorter extends Sorter
 		
 		 private class Worker implements Callable<ImageVisualComponent[]> 
 		 {
-
 		        private int startAt;
 		        private int endAt;
 		        private File[] files;
