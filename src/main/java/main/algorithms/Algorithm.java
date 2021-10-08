@@ -2,10 +2,6 @@ package main.algorithms;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.stream.Stream;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -244,7 +240,7 @@ public abstract class Algorithm implements Customizable
 	/*
 	 * debugger for the arrays. prints the sorted list to a textfile
 	 */
-	private static void printArray(VisualSortingTool sortingTool)
+	/*private static void printArray(VisualSortingTool sortingTool)
 	{
 		try
 		{
@@ -265,6 +261,7 @@ public abstract class Algorithm implements Customizable
 			e.printStackTrace();
 		}
 	}
+	*/
 	
 	@Override
 	public String toString()

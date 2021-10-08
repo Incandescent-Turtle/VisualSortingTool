@@ -5,36 +5,39 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileFilter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.stream.Stream;
 
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 
 import javafx.stage.DirectoryChooser;
 import main.VisualSortingTool;
+import main.image.ImageLoader;
+import main.image.threading.ImageResizeWorker;
 import main.ui.custimization.CustomizationPanel;
 import main.ui.custimization.values.StorageValue;
 import main.ui.custimization.values.StringStorageValue;
 import main.util.SynchronousJFXDirectoryChooser;
-import main.util.Util;
 import main.vcs.ImageVisualComponent;
-import main.vcs.VisualComponent;
 import main.visualizers.ImageVisualizer;
 
 public class ImageSorter extends Sorter
 {
-	private final ImageLoader loader = new ImageLoader();
+	private final ImageLoader loader;
+	
 	//minimum number of images
 	private int minNumber = 2;
 	private volatile boolean resizing = false;
+		
+	private ImageSortingMethod sortingMethod;
+
+	enum ImageSortingMethod
+	{
+		BRIGHTNESS;
+	}
 	
 	private File directoryPath;
 	
@@ -43,85 +46,65 @@ public class ImageSorter extends Sorter
 		super(sortingTool, new ImageVisualizer(sortingTool), Sorters.IMAGE);
         size = 0;
         visualizer.resizeHighlights(size);
+        sortingMethod = ImageSortingMethod.BRIGHTNESS;
+        loader = new ImageLoader(this);
 	}
 	
 	public void resizeImages(int componentSize)
 	{
 		if(((ImageVisualComponent)array[0]).getScaledSize() == componentSize || resizing) return;
 		resizing = true;
-		new Thread(() -> {
-			long start = System.currentTimeMillis();
-			final int wantedSize = array.length;
-			final int portions = wantedSize <= array.length ? wantedSize : array.length;
-			ExecutorService ex = Executors.newFixedThreadPool(40);
-			System.out.println("created threads in: " + (System.currentTimeMillis() - start)/1000f + "s");
-			Worker2[] workers = new Worker2[portions];
-		     
-			for (int i = 0; i < portions; i++)
-			{
-		    	 int portionSize = array.length/portions;
-		    	 int startAt = i * portionSize;
-		    	 int endAt = startAt + portionSize;
-		    	 if(i == portions-1) endAt = array.length;
-		    	 workers[i] = new Worker2(startAt, endAt, componentSize);
-		    	// System.out.println("start " + startAt + " end " + endAt);
-		     }
-			try
-			{
-				double total = 0;
-				double max = Double.NEGATIVE_INFINITY;
-				double min = Double.POSITIVE_INFINITY;
-				List<Future<Double>> list = ex.invokeAll(Arrays.asList(workers));
-		    	 for (Future<Double> result : list) 
-		    	 {
-		    		 double num = result.get();
-		    		 total += num;
-		    		 if(max < num) max = num;
-		    		 if(min > num) min = num;
-		    	 }
-		    	 System.out.println("Average resize in: " + total/list.size() + "s");
-		    	 System.out.println("Min resize in: " + min + "s");
-		    	 System.out.println("Mxaxresize in: " + max + "s");
-			} catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			double val = (System.currentTimeMillis() - start)/1000f;
-			if(val > 0.01) System.out.println("Resized in : " + val + "s");
-			ex.shutdown();
-			resizing = false;
-			recalculateAndRepaint();
+		Runnable resize = new Runnable() {
 			
-		}).start();
-	}
-	
-	class Worker2 implements Callable<Double>
-	{
+			@Override
+			public void run()
+			{
+				long start = System.currentTimeMillis();
+				final int wantedSize = array.length;
+				final int portions = wantedSize <= array.length ? wantedSize : array.length;
 
-        private int startAt;
-        private int endAt;
-        private int size;
-
-        public Worker2(int startAt, int endAt, int size) 
-        {
-            this.startAt = startAt;
-            this.endAt = endAt;
-            this.size = size;
-        }
-
-        @Override
-        public Double call() throws Exception 
-        {
-        	long start = System.currentTimeMillis();
-        	ImageVisualComponent[] portion = new ImageVisualComponent[endAt-startAt];
-        	for (int i = 0; i < portion.length; i++)
-			{        		
-        		((ImageVisualComponent) array[i + startAt]).scale(size);
+				ImageResizeWorker[] workers = new ImageResizeWorker[portions];
+			     
+				for (int i = 0; i < portions; i++)
+				{
+			    	 int portionSize = array.length/portions;
+			    	 int startAt = i * portionSize;
+			    	 int endAt = startAt + portionSize;
+			    	 if(i == portions-1) endAt = array.length;
+			    	 workers[i] = new ImageResizeWorker(ImageSorter.this, startAt, endAt, componentSize);
+			    	// System.out.println("start " + startAt + " end " + endAt);
+			     }
+				try
+				{
+					double total = 0;
+					double max = Double.NEGATIVE_INFINITY;
+					double min = Double.POSITIVE_INFINITY;
+					ExecutorService ex = Executors.newFixedThreadPool(10);
+					List<Future<Double>> list = ex.invokeAll(Arrays.asList(workers));
+			    	 for (Future<Double> result : list) 
+			    	 {
+			    		 double num = result.get();
+			    		 total += num;
+			    		 if(max < num) max = num;
+			    		 if(min > num) min = num;
+			    	 }
+			    	 System.out.println("Average resize in: " + total/list.size() + "s");
+			    	 System.out.println("Min resize in: " + min + "s");
+			    	 System.out.println("Mxaxresize in: " + max + "s");
+			    	 ex.shutdown();
+				} catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+				double val = (System.currentTimeMillis() - start)/1000f;
+				if(val > 0.01) System.out.println("Resized in : " + val + "s");
+				resizing = false;
+				recalculateAndRepaint();
 			}
-        	return (System.currentTimeMillis() - start)/1000d;
-        }		
+		};
+		new Thread(resize).start();
 	}
-	
+		
 	@Override
 	public void generateValues()
 	{
@@ -200,6 +183,23 @@ public class ImageSorter extends Sorter
         visualizer.resizeHighlights(size);
 	}
 	
+	/**
+	 * for generating the VC values based on image and current sorting method
+	 * @param img image of VC 
+	 * @return the int value t be used to sort
+	 */
+	public int getValueOf(BufferedImage img)
+	{
+		return
+			switch(sortingMethod)
+			{
+				case BRIGHTNESS -> calculateBrightness(img);
+			
+				default -> calculateBrightness(img);
+			
+			};
+	}
+	
 	private int calculateBrightness(BufferedImage img)
 	{
 		float luminance = 0;
@@ -219,130 +219,4 @@ public class ImageSorter extends Sorter
 	
 	@Override
 	protected void resizeArray(){}
-	
-	private final class ImageLoader
-	{
-		/**
-		 * populates the sorter's array with image VCs built from the images in the directory
-		 * @param folder the target folder
-		 * @returns new {@link VisualComponent} array
-		 */
-		private VisualComponent[] loadFromFolder(File folder, int f)
-		{
-			//only jpg and png
-			FileFilter filter = file -> Util.getFileExtension(file).equals(".png") || Util.getFileExtension(file).equals(".jpg");
-			
-			//all png and jpg files in the directory
-			File[] files = folder.listFiles(filter);
-			//prints all the file names
-			Stream.of(files).forEach(System.out::println);
-			
-			ImageVisualComponent[] array = new ImageVisualComponent[files.length];
-			for (int i = 0; i < files.length; i++)
-			{
-				BufferedImage img = loadImage(files[i]);
-				array[i] = new ImageVisualComponent(calculateBrightness(img), img);
-			}
-			//	ExecutorService ex = Executors.newFixedThreadPool(10);
-			return array;
-		}
-		
-		private VisualComponent[] loadFromFolder(File folder)
-		{
-			//only jpg and png
-			FileFilter filter = file -> Util.getFileExtension(file).equals(".png") || Util.getFileExtension(file).equals(".jpg");
-			
-			//all png and jpg files in the directory
-			File[] files = folder.listFiles(filter);
-			//prints all the file names
-			Stream.of(files).forEach(System.out::println);
-			
-			 ExecutorService executor = Executors.newFixedThreadPool(100);
-			 final int wantedSize = 10;
-		     final int portions = wantedSize <= files.length ? wantedSize : files.length;
-		    
-		     Worker[] workers = new Worker[portions];
-		     
-		     for (int i = 0; i < portions; i++)
-		     {
-		    	 int portionSize = files.length/portions;
-		    	 int startAt = i * portionSize;
-		    	 int endAt = startAt + portionSize;
-		    	 if(i == portions-1) endAt = files.length;
-		    	 workers[i] = new Worker(startAt, endAt, files);
-		    	 System.out.println("start " + startAt + " end " + endAt);
-		     }
-		     ImageVisualComponent[] array = new ImageVisualComponent[files.length];
-		     try {
-		    	 List<Future<ImageVisualComponent[]>> results = executor.invokeAll(Arrays.asList(workers));
-		    	 int index = 0;
-		    	 for (Future<ImageVisualComponent[]> result : results) 
-		    	 {System.out.println(index);
-		    	 ImageVisualComponent[] arr = result.get();
-		    	 for(int i = 0; i < arr.length; i++)
-		    	 {
-		    		 array[index + i] = arr[i];
-		    	 }
-		    	 index+=arr.length;
-		    	 }
-		     } catch (InterruptedException | ExecutionException ex) {
-		    	 ex.printStackTrace();
-		     }
-		        
-			/*for (int i = 0; i < files.length; i++)
-			{
-				BufferedImage img = loadImage(files[i]);
-				array[i] = new ImageVisualComponent(calculateBrightness(img), img);
-			}*/
-			//	ExecutorService ex = Executors.newFixedThreadPool(10);
-			for (ImageVisualComponent imageVisualComponent : array)
-			{
-				System.out.println((imageVisualComponent != null ? "not " : "") + "null");
-			}
-			executor.shutdown();
-			return array;
-		}
-	
-		/**
-		 * loads a single image from file
-		 * @param file the path to the image file
-		 * @return the image as an object
-		 */
-		private BufferedImage loadImage(File file)
-		{
-			try {
-				return ImageIO.read(file);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-		
-		 private class Worker implements Callable<ImageVisualComponent[]> 
-		 {
-		        private int startAt;
-		        private int endAt;
-		        private File[] files;
-
-		        public Worker(int startAt, int endAt, File[] files) 
-		        {
-		            this.startAt = startAt;
-		            this.endAt = endAt;
-		            this.files = files;
-		        }
-
-		        @Override
-		        public ImageVisualComponent[] call() throws Exception 
-		        {
-		        	ImageVisualComponent[] portion = new ImageVisualComponent[endAt-startAt];
-		        	for (int i = 0; i < portion.length; i++)
-					{
-		        		BufferedImage img = loadImage(files[i+startAt]);
-		        		ImageVisualComponent vc = new ImageVisualComponent(calculateBrightness(img), img);
-						portion[i] = vc;
-					}
-		        	return portion;
-		        }
-		 }
-	}
 }

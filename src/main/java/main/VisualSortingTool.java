@@ -1,7 +1,6 @@
 package main;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Arrays;
@@ -90,11 +89,9 @@ public class VisualSortingTool extends JPanel
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.requestFocus();
 		frame.validate();
-		frame.setMinimumSize(new Dimension(guiHandler.getTopBarGUI().getGUIWidth(false), 400));
 		frame.setVisible(true);
 		new Thread(new Runnable()
 		{
-			
 			@Override
 			public void run()
 			{
@@ -116,8 +113,8 @@ public class VisualSortingTool extends JPanel
 	{
 		//overrides to improve fullscreen function
 		frame = new BetterFrame().createFrame(this, "Sorting Methods Visual");
-		Dimension dim = new Dimension(400, 400);
-		frame.setPreferredSize(dim);
+		frame.setPreferredSize(getMinimumSize());
+		frame.setMinimumSize(getMinimumSize());
 		//so closing event is called
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setResizable(true);
@@ -251,8 +248,6 @@ public class VisualSortingTool extends JPanel
 		}
 		Platform.startup(()->{});
 		Platform.setImplicitExit(false);
-		//Font font = (Font) UIManager.getLookAndFeelDefaults().get("defaultFont");
-		//UIManager.getLookAndFeelDefaults().put("defaultFont", new FontUIResource(font.deriveFont(20f)));
 		new VisualSortingTool();
 	}
 }
