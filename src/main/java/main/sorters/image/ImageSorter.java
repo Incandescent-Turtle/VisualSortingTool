@@ -1,4 +1,4 @@
-package main.sorters;
+package main.sorters.image;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -15,8 +15,8 @@ import javax.swing.JButton;
 
 import javafx.stage.DirectoryChooser;
 import main.VisualSortingTool;
-import main.image.ImageLoader;
-import main.image.threading.ImageResizeWorker;
+import main.sorters.Sorter;
+import main.sorters.image.threading.ImageResizeWorker;
 import main.ui.custimization.CustomizationPanel;
 import main.ui.custimization.values.StorageValue;
 import main.ui.custimization.values.StringStorageValue;

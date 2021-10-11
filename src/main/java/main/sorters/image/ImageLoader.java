@@ -1,4 +1,4 @@
-package main.image;
+package main.sorters.image;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,8 +13,7 @@ import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
-import main.image.threading.ImageLoadWorker;
-import main.sorters.ImageSorter;
+import main.sorters.image.threading.ImageLoadWorker;
 import main.util.Util;
 import main.vcs.ImageVisualComponent;
 import main.vcs.VisualComponent;

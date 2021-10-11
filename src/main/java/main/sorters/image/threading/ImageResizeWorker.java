@@ -1,8 +1,8 @@
-package main.image.threading;
+package main.sorters.image.threading;
 
 import java.util.concurrent.Callable;
 
-import main.sorters.ImageSorter;
+import main.sorters.image.ImageSorter;
 import main.vcs.ImageVisualComponent;
 
 public class ImageResizeWorker implements Callable<Double>

@@ -1,10 +1,10 @@
-package main.image.threading;
+package main.sorters.image.threading;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-import main.image.ImageLoader;
-import main.sorters.ImageSorter;
+import main.sorters.image.ImageLoader;
+import main.sorters.image.ImageSorter;
 import main.vcs.ImageVisualComponent;
 
 public class ImageLoadWorker extends ArrayWorker<ImageVisualComponent[]>

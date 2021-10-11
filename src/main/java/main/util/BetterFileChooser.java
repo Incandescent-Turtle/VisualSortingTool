@@ -1,6 +1,6 @@
 package main.util;
 
-import java.awt.Color;
+import java.awt.Color; 
 import java.awt.Component;
 import java.awt.Container;
 
@@ -9,15 +9,14 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import sun.swing.FilePane;
+//import sun.swing.FilePane;
 
-@SuppressWarnings("serial")
 /**
  * 
  * @author Riquochet
  * https://stackoverflow.com/questions/2282211/windows-look-and-feel-for-jfilechooser
  */
-public class BetterFileChooser extends JFileChooser
+/*public class BetterFileChooser extends JFileChooser
 {
 	@Override
 	public void updateUI()
@@ -67,4 +66,4 @@ public class BetterFileChooser extends JFileChooser
 	   }
       return null;
    }
-}
+}*/

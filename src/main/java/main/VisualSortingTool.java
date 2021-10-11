@@ -16,15 +16,16 @@ import main.algorithms.BubbleSort;
 import main.algorithms.SelectionSort;
 import main.sorters.BarHeightSorter;
 import main.sorters.ColorGradientSorter;
-import main.sorters.ImageSorter;
 import main.sorters.NumberSorter;
 import main.sorters.Sorter;
+import main.sorters.image.ImageSorter;
 import main.ui.BetterFrame;
 import main.ui.GUIHandler;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.values.StorageValue;
 import main.ui.custimization.values.StorageValue.StorageAction;
+
 
 @SuppressWarnings("serial")
 /**
@@ -42,7 +43,7 @@ public class VisualSortingTool extends JPanel
 	private Sorter[] sorters;
 	//all the algorithms in the program
 	private Algorithm[] algorithms;
-	
+
 	//whether the program is ready to start (after everything has been set up)
 	private boolean initialized = false;
 	
@@ -57,12 +58,11 @@ public class VisualSortingTool extends JPanel
 						new NumberSorter(this),
 						new ImageSorter(this)
 		};
-		
+
 		algorithms = new Algorithm[] {
 				new BubbleSort(this),
 				new SelectionSort(this)
 		};
-		
 		guiHandler = new GUIHandler();
 		guiHandler.init(this);
 		setUpFrame();
@@ -73,7 +73,7 @@ public class VisualSortingTool extends JPanel
 		addComponentListener(new ComponentAdapter() {
 				
 			@Override
-	        public void componentResized(ComponentEvent e) 
+	        public void componentResized(ComponentEvent e)
 			{
 				//only resizes when algorithm isnt running
 				guiHandler.getTopBarGUI().resizeGUI();
@@ -100,7 +100,6 @@ public class VisualSortingTool extends JPanel
 					Thread.sleep(1000);
 				} catch (InterruptedException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				initialized = true;
