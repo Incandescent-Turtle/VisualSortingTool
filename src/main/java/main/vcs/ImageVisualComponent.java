@@ -42,7 +42,9 @@ public class ImageVisualComponent extends VisualComponent
 	{
 		return scaledImage;
 	}
-	
+
+	public BufferedImage getOriginalImage() { return originalImage; }
+
 	public int getScaledSize()
 	{
 		return size;

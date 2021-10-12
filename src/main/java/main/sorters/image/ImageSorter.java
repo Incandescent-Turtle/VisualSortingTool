@@ -90,7 +90,7 @@ public class ImageSorter extends Sorter
 			    	 }
 			    	 System.out.println("Average resize in: " + total/list.size() + "s");
 			    	 System.out.println("Min resize in: " + min + "s");
-			    	 System.out.println("Mxaxresize in: " + max + "s");
+			    	 System.out.println("Maxresize in: " + max + "s");
 			    	 ex.shutdown();
 				} catch (Exception e)
 				{

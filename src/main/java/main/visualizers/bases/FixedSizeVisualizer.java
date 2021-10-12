@@ -22,6 +22,11 @@ public abstract class FixedSizeVisualizer extends Visualizer
 	public FixedSizeVisualizer(VisualSortingTool sortingTool, Sorters identifier)
 	{
 		super(sortingTool, identifier);
+	}
+
+	@Override
+	public void setDefaultValues()
+	{
 		minMargin = 5;
 		componentGap = 10;
 		componentSize = 10;

@@ -16,12 +16,13 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author Riquochet
  * https://stackoverflow.com/questions/2282211/windows-look-and-feel-for-jfilechooser
  */
-/*public class BetterFileChooser extends JFileChooser
+public class BetterFileChooser extends JFileChooser
 {
 	@Override
 	public void updateUI()
 	{
 		LookAndFeel old = UIManager.getLookAndFeel();
+
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Throwable ex) {
@@ -31,11 +32,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 		super.updateUI();
 	
 		if(old != null)
-		{
-			FilePane filePane = findFilePane(this);
-			filePane.setViewType(FilePane.VIEWTYPE_DETAILS);
-			filePane.setViewType(FilePane.VIEWTYPE_LIST);
-	
+        {
 			Color background = UIManager.getColor("Label.background");
 			setBackground(background);
 			setOpaque(true);
@@ -44,26 +41,4 @@ import javax.swing.UnsupportedLookAndFeelException;
 			} catch (UnsupportedLookAndFeelException ignored) {} // shouldn't get here
 		}
    }
-
-
-
-   private static FilePane findFilePane(Container parent)
-   {
-	   for(Component comp: parent.getComponents())
-	   {
-		   if(FilePane.class.isInstance(comp)){
-			   return (FilePane)comp;
-		   }
-         
-		   if(comp instanceof Container)
-		   {
-			   Container cont = (Container)comp;
-			   if(cont.getComponentCount() > 0){
-				   FilePane found = findFilePane(cont);
-				   if (found != null) return found;
-            }
-         }
-	   }
-      return null;
-   }
-}*/
+}
