@@ -1,8 +1,8 @@
 package main.sorters.image;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileFilter;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -12,6 +12,8 @@ import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 
 import main.sorters.image.threading.ImageLoadWorker;
 import main.util.Util;
@@ -32,7 +34,7 @@ public class ImageLoader
 	 * @param folder the target folder
 	 * @returns new {@link VisualComponent} array
 	 */
-	private VisualComponent[] loadFromFolder(File folder, int f)
+	public VisualComponent[] loadFromFolder(File folder)
 	{
 		//only jpg and png
 		FileFilter filter = file -> Util.getFileExtension(file).equals(".png") || Util.getFileExtension(file).equals(".jpg");
@@ -52,7 +54,7 @@ public class ImageLoader
 		return array;
 	}
 	
-	public VisualComponent[] loadFromFolder(File folder)
+	public VisualComponent[] loadFomFolder(File folder)
 	{
 		//only jpg and png
 		FileFilter filter = file -> Util.getFileExtension(file).equals(".png") || Util.getFileExtension(file).equals(".jpg");
@@ -62,7 +64,7 @@ public class ImageLoader
 		//prints all the file names
 		Stream.of(files).forEach(System.out::println);
 		
-		 ExecutorService executor = Executors.newFixedThreadPool(100);
+		 ExecutorService executor = Executors.newFixedThreadPool(10);
 		 final int wantedSize = 10;
 	     final int portions = wantedSize <= files.length ? wantedSize : files.length;
 	    
@@ -117,7 +119,10 @@ public class ImageLoader
 	public BufferedImage loadImage(File file)
 	{
 		try {
-			return ImageIO.read(file);
+//			ImageIcon icon = new ImageIcon(file.getAbsolutePath());
+//			return Util.imageToBufferedImage(icon.getImage());
+			return Util.imageToBufferedImage(Toolkit.getDefaultToolkit().getImage(file.getAbsolutePath()));
+			//return ImageIO.read(file);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

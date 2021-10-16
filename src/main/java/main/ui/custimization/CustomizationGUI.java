@@ -29,7 +29,6 @@ import main.ui.custimization.values.StorageValue;
 import main.ui.custimization.values.StorageValue.StorageAction;
 import main.visualizers.bases.Visualizer;
 
-@SuppressWarnings("serial")
 public class CustomizationGUI extends JPanel
 {
 	//the only preferences instance to be used

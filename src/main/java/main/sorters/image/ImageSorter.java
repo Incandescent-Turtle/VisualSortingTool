@@ -17,6 +17,7 @@ import javafx.stage.DirectoryChooser;
 import main.VisualSortingTool;
 import main.sorters.Sorter;
 import main.sorters.image.threading.ImageResizeWorker;
+import main.ui.GUIHandler;
 import main.ui.custimization.CustomizationPanel;
 import main.ui.custimization.values.StorageValue;
 import main.ui.custimization.values.StringStorageValue;
@@ -141,6 +142,7 @@ public class ImageSorter extends Sorter
 			}
 		});
 		cp.addRow(chooseFolderButton, true);
+		GUIHandler.addToggleable(chooseFolderButton);
 	}
 	
 	private void selectFolder()

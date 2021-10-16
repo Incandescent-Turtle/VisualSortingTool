@@ -1,7 +1,6 @@
 package main.visualizers;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import main.VisualSortingTool;
@@ -69,8 +68,8 @@ public class ImageVisualizer extends FixedSizeVisualizer
 		}
 		x += (componentSize - width)/2;
 		y += (componentSize - height)/2;
-
 		g.drawImage(image, x, y, x + width, y + height, 0, 0, image.getWidth(), image.getHeight(), null);
+
 		Color c = highlights[index];
 		g.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), 150));
 		if(!c.equals(defaultColor))
@@ -81,6 +80,6 @@ public class ImageVisualizer extends FixedSizeVisualizer
 	public void resize()
 	{
 		super.resize();
-		((ImageSorter)sortingTool.getSorter()).resizeImages(componentSize);
+		//((ImageSorter)sortingTool.getSorter()).resizeImages(componentSize);
 	}
 }

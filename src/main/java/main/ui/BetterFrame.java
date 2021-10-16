@@ -25,7 +25,7 @@ import main.interfaces.Closable;
 public class BetterFrame
 {
 	//for things that need code run before the program exists - called on window close
-	private static ArrayList<Closable> CLOSABLES = new ArrayList<>();
+	private static final ArrayList<Closable> CLOSABLES = new ArrayList<>();
 	
 	//the size/location before fullscreen (used for resizing
 	private Rectangle nonFullScreenBounds = null;
@@ -36,14 +36,12 @@ public class BetterFrame
 	/**
 	 * JFrame complete with full F11 capabilities <br>
 	 * also has quick exit using ESCAPE key
-	 * @param panel the panel to connect this to for maps and repainting
-	 * @param title the title of the frame
 	 */
 	public BetterFrame() {}
 	
 	/**
 	 * returns a frame (1 per instance) with fullscreen and keybinding capabilities
-	 * @param panel main panel for the jframe
+	 * @param sortingTool main panel for the jframe
 	 * @param title title of the frame
 	 * @return the frame to be used
 	 */
@@ -120,6 +118,7 @@ public class BetterFrame
 			@Override
 	        public void componentResized(ComponentEvent e) 
 			{
+				System.out.println(frame.getWidth() + " " + frame.getMinimumSize().getWidth());
 				//update position when resized (used for fullscreen)
 				if(frame.getExtendedState() != JFrame.MAXIMIZED_BOTH) 
 					nonFullScreenBounds = e.getComponent().getBounds();

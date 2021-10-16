@@ -9,7 +9,9 @@ import main.VisualSortingTool;
 import main.algorithms.Algorithm;
 import main.ui.GUIHandler;
 import main.ui.custimization.ColorButton;
+import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
+import main.ui.custimization.Updatable;
 import main.ui.custimization.values.BooleanStorageValue;
 import main.ui.custimization.values.StorageValue;
 import main.vcs.ColorVisualComponent;
@@ -19,7 +21,7 @@ import main.visualizers.ColorGradientVisualizer;
 public class ColorGradientSorter extends Sorter
 {
 	//the two colors represented in the gradient
-	private Color color1, color2;
+	private Color leftColor, rightColor;
 	//clicking this reverses the order. doesnt really matter which value means what though?
 	private boolean order;
 	
@@ -35,8 +37,8 @@ public class ColorGradientSorter extends Sorter
 	@Override
 	public void setDefaultValues()
 	{
-		color1 = Color.CYAN;
-		color2 = Color.BLUE;
+		leftColor = Color.CYAN;
+		rightColor = Color.BLUE;
 		order = false;
 	}
 	
@@ -54,11 +56,13 @@ public class ColorGradientSorter extends Sorter
 		//color buttons that cannot be hit mid run
 		
 		//button to change color1
-		ColorButton button1 = new ColorButton(sortingTool, c -> {color1 = c; recalculateAndRepaint();}, () -> color1, "First Color");
+		ColorButton button1 = new ColorButton(sortingTool, c -> {
+			leftColor = c; recalculateAndRepaint();}, () -> leftColor, "Left Color");
 		cp.addRow(button1, true);
 		
 		//button to change color2
-		ColorButton button2 = new ColorButton(sortingTool, c -> {color2 = c; recalculateAndRepaint();}, () -> color2, "Second Color");
+		ColorButton button2 = new ColorButton(sortingTool, c -> {
+			rightColor = c; recalculateAndRepaint();}, () -> rightColor, "Right Color");
 		cp.addRow(button2, true);
 		
 		//button to change order
@@ -69,8 +73,8 @@ public class ColorGradientSorter extends Sorter
 			{
 				super.paintComponent(g);
 				//sets the button/text colors to represent the order. bg is right
-				setBackground(order ? color1 : color2);
-				setForeground(!order ? color1 : color2);
+				setBackground(order ? leftColor : rightColor);
+				setForeground(!order ? leftColor : rightColor);
 			}
 		};
 		//on press reverses order and if no algo running re-organizes and re-paints to show it 
@@ -86,8 +90,8 @@ public class ColorGradientSorter extends Sorter
 	public void addStorageValues()
 	{
 		StorageValue.addStorageValues(
-				StorageValue.createColorStorageValue(getPrefix(), "color1", c -> color1 = c, () -> color1),
-				StorageValue.createColorStorageValue(getPrefix(), "color2", c -> color2 = c, () -> color2),
+				StorageValue.createColorStorageValue(getPrefix(), "leftColor", c -> leftColor = c, () -> leftColor),
+				StorageValue.createColorStorageValue(getPrefix(), "rightColor", c -> rightColor = c, () -> rightColor),
 				new BooleanStorageValue(getPrefix(), "order", b -> order = b, () -> order)
 		);
 	}
@@ -115,9 +119,9 @@ public class ColorGradientSorter extends Sorter
 		for(int i = 0; i < size; i++)
 		{
 	    	float ratio =  i / (float) size;
-	        int red = (int) (color2.getRed() * ratio + color1.getRed() * (1 - ratio));
-	        int green = (int) (color2.getGreen() * ratio + color1.getGreen() * (1 - ratio));
-	        int blue = (int) (color2.getBlue() * ratio + color1.getBlue() * (1 - ratio));
+	        int red = (int) (rightColor.getRed() * ratio + leftColor.getRed() * (1 - ratio));
+	        int green = (int) (rightColor.getGreen() * ratio + leftColor.getGreen() * (1 - ratio));
+	        int blue = (int) (rightColor.getBlue() * ratio + leftColor.getBlue() * (1 - ratio));
 	        //whether it fills from the back or front
 	        int index = order ? size-1-i : i;
 	        //loads the VC with the color
@@ -132,12 +136,20 @@ public class ColorGradientSorter extends Sorter
 	private void reverseOrder()
 	{
 		order=!order;
+		//switching the colors and repainting the relevant buttons
+		Color temp = leftColor;
+		leftColor = rightColor;
+		rightColor = temp;
+		System.out.println("recoloring");
+		ColorButton.recolorButtons();
+		GUIHandler.update();
+
 		//if un-sorted, returns after switch
 		if(!Algorithm.isSorted(sortingTool, false)) return;
 		
 		//if sorted
 		
-		//changes the value of the VCs to switch switch color is left or right
+		//changes the value of the VCs to switch direction of sorting
 		VisualComponent[] tempArray = array.clone();
 		for(int i = 0; i < size; i++)
 		{

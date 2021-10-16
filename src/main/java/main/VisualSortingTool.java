@@ -89,6 +89,7 @@ public class VisualSortingTool extends JPanel
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.requestFocus();
 		frame.validate();
+		frame.setMinimumSize(frame.getMinimumSize());
 		frame.setVisible(true);
 		new Thread(new Runnable()
 		{

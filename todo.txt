@@ -103,4 +103,5 @@ JButtom shuffle = new JButton(“Shuffle”);
 Descriptions.addComponent(shuffle, new File(“/desc/shuffle-button.txt”);
 uses bounding box to display description
 
-HOME STRETCH BABEYYY
+thumnails?
+https://github.com/coobird/thumbnailator/wiki/Comparison

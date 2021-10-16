@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.nio.Buffer;
 
 import main.ui.custimization.CustomizationGUI;
 
@@ -72,6 +73,7 @@ public class Util
 	 */
 	public static BufferedImage imageToBufferedImage(Image image) 
 	{
+		if(image instanceof BufferedImage) return (BufferedImage) image;
 	     BufferedImage bi = new BufferedImage (image.getWidth(null),image.getHeight(null),BufferedImage.TYPE_INT_ARGB);
 	     Graphics bg = bi.getGraphics();
 	     bg.drawImage(image, 0, 0, null);

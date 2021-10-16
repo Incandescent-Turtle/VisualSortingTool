@@ -25,7 +25,7 @@ public class ImageLoadWorker extends ArrayWorker<ImageVisualComponent[]>
 	@Override
 	public ImageVisualComponent[] call() throws Exception
 	{
-    	ImageVisualComponent[] portion = new ImageVisualComponent[endAt-startAt];
+		ImageVisualComponent[] portion = new ImageVisualComponent[endAt-startAt];
     	for (int i = 0; i < portion.length; i++)
 		{
     		BufferedImage img = loader.loadImage(files[i+startAt]);
