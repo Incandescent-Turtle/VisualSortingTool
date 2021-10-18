@@ -2,6 +2,7 @@ package main.sorters;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Collections;
 
 import javax.swing.JButton;
 
@@ -123,9 +124,9 @@ public class ColorGradientSorter extends Sorter
 	        int green = (int) (rightColor.getGreen() * ratio + leftColor.getGreen() * (1 - ratio));
 	        int blue = (int) (rightColor.getBlue() * ratio + leftColor.getBlue() * (1 - ratio));
 	        //whether it fills from the back or front
-	        int index = order ? size-1-i : i;
+	        //int index = order ? size-1-i : i;
 	        //loads the VC with the color
-			array[i] = new ColorVisualComponent(index, new Color(red, green, blue));
+			array[i] = new ColorVisualComponent(i, new Color(red, green, blue));
 		}
 	}
 	
@@ -140,25 +141,11 @@ public class ColorGradientSorter extends Sorter
 		Color temp = leftColor;
 		leftColor = rightColor;
 		rightColor = temp;
-		System.out.println("recoloring");
 		ColorButton.recolorButtons();
 		GUIHandler.update();
-
+		reloadArray();
 		//if un-sorted, returns after switch
 		if(!Algorithm.isSorted(sortingTool, false)) return;
-		
-		//if sorted
-		
-		//changes the value of the VCs to switch direction of sorting
-		VisualComponent[] tempArray = array.clone();
-		for(int i = 0; i < size; i++)
-		{
-			//the new value/index for it to take once reversed
-			int newValue = (size-1) - tempArray[i].getValue();
-			tempArray[i].setValue(newValue);
-			//this ends up reversing the list
-			array[newValue] = tempArray[i];
-		}
 		visualizer.resetHighlights();
 		sortingTool.repaint();
 	}

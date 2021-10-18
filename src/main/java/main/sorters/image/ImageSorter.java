@@ -32,7 +32,9 @@ public class ImageSorter extends Sorter
 	//minimum number of images
 	private int minNumber = 2;
 	private volatile boolean resizing = false;
-		
+
+	private File directoryPath;
+
 	private ImageSortingMethod sortingMethod;
 
 	enum ImageSortingMethod
@@ -40,8 +42,7 @@ public class ImageSorter extends Sorter
 		BRIGHTNESS;
 	}
 	
-	private File directoryPath;
-	
+
 	public ImageSorter(VisualSortingTool sortingTool)
 	{
 		super(sortingTool, new ImageVisualizer(sortingTool), Sorters.IMAGE);
@@ -110,8 +111,11 @@ public class ImageSorter extends Sorter
 	public void generateValues()
 	{
 		System.out.println("generating");
-        loadFromFolder();
-        recalculateAndRepaint();
+		new Thread(() ->
+		{
+			loadFromFolder();
+			recalculateAndRepaint();
+		}).start();
 	}
 
 	@Override
@@ -136,16 +140,24 @@ public class ImageSorter extends Sorter
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				selectFolder();
-				loadFromFolder();
-				recalculateAndRepaint();
+				//if a folder was chosen
+				if(selectFolder())
+				{
+					new Thread(() -> {
+						generateValues();
+					}).start();
+				}
 			}
 		});
 		cp.addRow(chooseFolderButton, true);
 		GUIHandler.addToggleable(chooseFolderButton);
 	}
-	
-	private void selectFolder()
+
+	/**
+	 * file dialog to choose a folder, sets the {@link #directoryPath} to selected folder
+	 * @return if a folder was picked
+	 */
+	private boolean selectFolder()
 	{
         SynchronousJFXDirectoryChooser chooser = new SynchronousJFXDirectoryChooser(() -> {
             DirectoryChooser dc = new DirectoryChooser();
@@ -153,7 +165,11 @@ public class ImageSorter extends Sorter
             return dc;
         });
         File file = chooser.showDialog();
-        if(file == null) System.exit(0);
+        if(file == null)
+		{
+			System.out.println("No folder chosen.");
+			return false;
+		}
         directoryPath = file;
         System.out.println(file.getAbsolutePath());
 		
@@ -167,10 +183,12 @@ public class ImageSorter extends Sorter
         } else {
         	System.exit(0);
         }*/
+		return true;
 	}
 	
 	private void loadFromFolder()
 	{
+		GUIHandler.setEnabled(false);
 		if(directoryPath.equals(new File(""))) return;
 		//for logging time
 		long start = System.currentTimeMillis();
@@ -183,6 +201,7 @@ public class ImageSorter extends Sorter
 		
 		size = array.length;
         visualizer.resizeHighlights(size);
+		GUIHandler.setEnabled(true);
 	}
 	
 	/**
@@ -217,8 +236,8 @@ public class ImageSorter extends Sorter
 	}
 	
 	@Override
-	protected void reloadArray(){}
+	protected void reloadArray() {}
 	
 	@Override
-	protected void resizeArray(){}
+	protected void resizeArray() {}
 }

@@ -118,7 +118,6 @@ public class BetterFrame
 			@Override
 	        public void componentResized(ComponentEvent e) 
 			{
-				System.out.println(frame.getWidth() + " " + frame.getMinimumSize().getWidth());
 				//update position when resized (used for fullscreen)
 				if(frame.getExtendedState() != JFrame.MAXIMIZED_BOTH) 
 					nonFullScreenBounds = e.getComponent().getBounds();

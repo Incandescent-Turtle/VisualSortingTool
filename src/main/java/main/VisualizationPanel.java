@@ -1,9 +1,6 @@
 package main;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
 
 import javax.swing.JPanel;
 
@@ -35,5 +32,8 @@ public class VisualizationPanel extends JPanel
 	    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 	    if(getWidth() > 0) sortingTool.getSorter().getVisualizer().drawArray(g);
 		g.dispose();
+//		Window[] windows = Window.getWindows();
+//		for (Window window : windows)
+//			System.out.println(window.getName() + ": " + window.getClass());
 	}
 }

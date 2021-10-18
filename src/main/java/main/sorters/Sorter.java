@@ -194,13 +194,16 @@ public abstract class Sorter implements Customizable
 	{
 		for(int i = 0; i < size; i++)
 		{
-			Random rand = new Random();
-			int first, second;
-			first = rand.nextInt(size);
-			second = rand.nextInt(size);
-			VisualComponent temp = array[first];
-			array[first] = array[second];
-			array[second] = temp;
+			for(int j = 0; j < 10; j++)
+			{
+				Random rand = new Random();
+				int first, second;
+				first = rand.nextInt(size);
+				second = rand.nextInt(size);
+				VisualComponent temp = array[first];
+				array[first] = array[second];
+				array[second] = temp;
+			}
 		}
 	}
 	

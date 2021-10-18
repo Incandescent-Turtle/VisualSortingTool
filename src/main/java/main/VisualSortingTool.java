@@ -216,7 +216,12 @@ public class VisualSortingTool extends JPanel
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * used throughout the program for getting prefixes to differentiate values when stored etc
+	 * @param cls the class its in
+	 * @return returns a unique identifier for any class thats passed in
+	 */
 	public static String getPrefix(Class<?> cls)
 	{
 		return cls.getSimpleName().toLowerCase() + "_";

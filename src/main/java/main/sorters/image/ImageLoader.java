@@ -2,7 +2,9 @@ package main.sorters.image;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
 import java.io.*;
+import java.nio.Buffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -34,7 +36,7 @@ public class ImageLoader
 	 * @param folder the target folder
 	 * @returns new {@link VisualComponent} array
 	 */
-	public VisualComponent[] loadFromFolder(File folder)
+	public VisualComponent[] loadFomFolder(File folder)
 	{
 		//only jpg and png
 		FileFilter filter = file -> Util.getFileExtension(file).equals(".png") || Util.getFileExtension(file).equals(".jpg");
@@ -54,7 +56,7 @@ public class ImageLoader
 		return array;
 	}
 	
-	public VisualComponent[] loadFomFolder(File folder)
+	public VisualComponent[] loadFromFolder(File folder)
 	{
 		//only jpg and png
 		FileFilter filter = file -> Util.getFileExtension(file).equals(".png") || Util.getFileExtension(file).equals(".jpg");
@@ -63,8 +65,10 @@ public class ImageLoader
 		File[] files = folder.listFiles(filter);
 		//prints all the file names
 		Stream.of(files).forEach(System.out::println);
-		
-		 ExecutorService executor = Executors.newFixedThreadPool(10);
+
+		ProgressWindow pw = new ProgressWindow(files.length);
+
+		ExecutorService executor = Executors.newFixedThreadPool(10);
 		 final int wantedSize = 10;
 	     final int portions = wantedSize <= files.length ? wantedSize : files.length;
 	    
@@ -76,7 +80,7 @@ public class ImageLoader
 	    	 int startAt = i * portionSize;
 	    	 int endAt = startAt + portionSize;
 	    	 if(i == portions-1) endAt = files.length;
-	    	 workers[i] = new ImageLoadWorker(sorter, this, startAt, endAt, files);
+	    	 workers[i] = new ImageLoadWorker(sorter, this, pw, startAt, endAt, files);
 	    	 System.out.println("start " + startAt + " end " + endAt);
 	     }
 	     ImageVisualComponent[] array = new ImageVisualComponent[files.length];
@@ -107,6 +111,8 @@ public class ImageLoader
 		{
 			System.out.println((imageVisualComponent != null ? "not " : "") + "null");
 		}
+		//ensures the bar gets hidden
+		pw.setProgress(1000);
 		executor.shutdown();
 		return array;
 	}
@@ -118,12 +124,23 @@ public class ImageLoader
 	 */
 	public BufferedImage loadImage(File file)
 	{
-		try {
-//			ImageIcon icon = new ImageIcon(file.getAbsolutePath());
-//			return Util.imageToBufferedImage(icon.getImage());
-			return Util.imageToBufferedImage(Toolkit.getDefaultToolkit().getImage(file.getAbsolutePath()));
-			//return ImageIO.read(file);
-		} catch (Exception e) {
+		try
+		{
+//			BufferedImage img = Util.shrinkImage(ImageIO.read(file), 500, 500);
+//			BufferedImage img = (ImageIO.read(file));
+
+			ImageIcon icon = new ImageIcon(file.getAbsolutePath());
+			BufferedImage img = Util.shrinkImage(icon.getImage(), 400, 400);
+//			BufferedImage img = Util.imageToBufferedImage(icon.getImage());
+
+			//amount of kb the image takes up
+//			DataBuffer buff = img.getRaster().getDataBuffer();
+//			int bytes = buff.getSize() * DataBuffer.getDataTypeSize(buff.getDataType()) / 8;
+//			System.out.println(bytes/1000 + "kb");
+
+			return img;
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 		return null;

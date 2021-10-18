@@ -1,32 +1,4 @@
-sound effects #why though? seems like useless settings etc and just doesnt add much?
-
-#not really sure about this one, but there are ways to record video etc maybe? user could just use built in
-Screenshot button
-
-#image sorting
--figure out how to handle nulls
--progress bar loading
--figure out thread stuff - background loading (disable UI while loading?)
--implement different sorting methods (SORT IMAGE IS ONE OPTION AND YOU CAN CYCLE HOW YOU WANNA SORT WITH A SPINNER OR SMTHN, so customization option for hue, brightness, red, blue, etc
--customization option for lowering quality (?) if not a thing could make own funtion with average color groups
--preferences saved on image quality, and file location
-
--if no VALID file selected, promt user immidienelty for file location respecting min file/element size
--if there is a valid folder/file, load it up, and have File: as a customization option
--choose multiple folders
--add storage for folders
-
-
-#bruh this the whole point
-add more algorithms
-
-Refactor dumbassery that is the constructor for VisualSortingGroup cause every time you implement smthn new you gotta jump through mf hoops to get it all mf sorted
-
-Add sounds
-
 Weird confirmation color glitch thing
-
-Repeat button? 👀👀 blue gradient on 0 delay actually looks kinda sick
 
 Vital: info on the sort!
 -total loops
@@ -34,11 +6,6 @@ Vital: info on the sort!
 
 Supplier interface instead of retrieve
 Consumer instead of onAction
-
-Search sub folders
-Max amount of photos (cut off at 200 or smthn)
-
-For image sorting reset highlights with NULL values
 
 ~~FOR FITTING MAX IMAGES ON ONE LINE~~
 ImageVisualizer:
@@ -57,21 +24,9 @@ currentRow.clear();
 }
 (Different row sizes)
 
-Knock full size resolution down to preserve memory
-
 Don’t change order when switching image sorting methods
 
 new Visualizer to sort coloured squares (fixed size)
-
-Resizing progress bar
-
-Group loading images and creating VCs into one action (looping twice)
-
-Resizing etc in a separate thread ? Window going full screen is weird
-
-JDialog doesn’t appear when you select a new folder
-
-Running on separate thread (?), checking mouse position, when hovering over a component displays the description text.
 
 class Descriptions {
 Map<JComponent, String> map;
@@ -103,5 +58,6 @@ JButtom shuffle = new JButton(“Shuffle”);
 Descriptions.addComponent(shuffle, new File(“/desc/shuffle-button.txt”);
 uses bounding box to display description
 
-thumnails?
-https://github.com/coobird/thumbnailator/wiki/Comparison
+#image sorting
+-implement different sorting methods (SORT IMAGE IS ONE OPTION AND YOU CAN CYCLE HOW YOU WANNA SORT WITH A SPINNER OR SMTHN, so customization option for hue, brightness, red, blue, etc
+-choose multiple folders
