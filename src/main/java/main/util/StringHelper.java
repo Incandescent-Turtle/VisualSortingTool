@@ -7,7 +7,7 @@ import java.awt.Rectangle;
 
 public class StringHelper
 {
-	private StringHelper() {};
+	private StringHelper() {}
 	
 	/**
 	 * gets a string's width given the current font and such
@@ -69,7 +69,7 @@ public class StringHelper
 	/**
 	 * the given coords will be the ~~dead center of the string
 	 * @param message message to be placed
-	 * @param y the center x value of the message
+	 * @param x the center x value of the message
 	 * @param y the center y value of the message
 	 * @param g current graphics object
 	 */

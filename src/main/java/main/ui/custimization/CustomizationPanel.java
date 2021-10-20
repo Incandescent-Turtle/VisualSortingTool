@@ -15,21 +15,19 @@ import javax.swing.SwingConstants;
 import main.VisualSortingTool;
 import main.ui.GUIHandler;
 
-@SuppressWarnings("serial")
 public class CustomizationPanel extends JPanel
 {
 	protected VisualSortingTool sortingTool;
 
 	protected GridBagConstraints c = new GridBagConstraints();
-	protected CustomizationGUI customizer;
 
 	//the current row this panel is on
 	protected int row = 0;
 	
 	/**
 	 * 
-	 * @param sortingTool
-	 * @param customizable
+	 * @param sortingTool the sorting tool
+	 * @param customizable the customizable thing that adds components to this panel
 	 */
 	public CustomizationPanel(VisualSortingTool sortingTool, Customizable customizable)
 	{
@@ -46,7 +44,7 @@ public class CustomizationPanel extends JPanel
 	 * @param text the title to display
 	 * @param hasVertGap whether this should be spaced out from whatever is above it
 	 */
-	public void addTitleSeperator(String text, boolean hasVertGap)
+	public void addTitleSeparator(String text, boolean hasVertGap)
 	{
 		if(hasVertGap)
 		{
@@ -85,7 +83,7 @@ public class CustomizationPanel extends JPanel
 	
 	/**
 	 * creates a new row and adds a singular component to it
-	 * @param component probably a button - something self explanatory
+	 * @param component probably a button - something self-explanatory
 	 * @param center whether it should be centered or right aligned
 	 */
 	public void addRow(Component component, boolean center)
@@ -105,7 +103,7 @@ public class CustomizationPanel extends JPanel
 	}
 	
 	/**
-	 * creates a new row and adds a right-aligned componenet with a label to its left
+	 * creates a new row and adds a right-aligned component with a label to its left
 	 * @param labelText the text to be on the label
 	 * @param right whatever the label is describing
 	 */
@@ -122,15 +120,14 @@ public class CustomizationPanel extends JPanel
         c.anchor = GridBagConstraints.NORTHEAST;
         c.fill = GridBagConstraints.VERTICAL;
         add(new JLabel(labelText), c);
-        //placing right-aligned componenet
-        c.fill = GridBagConstraints.NONE;
+        //placing right-aligned component
         c.weightx = 0;
         c.gridx = 1;
         c.gridy = row;
         c.fill = GridBagConstraints.NONE;
         c.anchor =  GridBagConstraints.NORTHEAST;
         add(right, c);
-        //so it can be disabled when an algoroithm is running
+        //so it can be disabled when an algorithm is running
         GUIHandler.addToggleable(right);
         row++;
 	}

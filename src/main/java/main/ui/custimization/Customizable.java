@@ -11,7 +11,7 @@ import main.sorters.Sorter;
 public interface Customizable
 {
 	/**
-	 * to add components to the side bar to change values
+	 * to add components to the sidebar to change values
 	 * @param cp the customization Panel
 	 */
 	void addCustomizationComponents(CustomizationPanel cp);

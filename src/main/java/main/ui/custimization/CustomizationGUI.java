@@ -34,11 +34,11 @@ public class CustomizationGUI extends JPanel
 	//the only preferences instance to be used
 	public static final Preferences PREFS = Preferences.userRoot().node(VisualSortingTool.class.getSimpleName());
 	
-	//these panels stack on top of eachother, each showing the respective sorter/algorithm
+	//these panels stack on top of each other, each showing the respective sorter/algorithm
 	private JPanel sorterPanels, algorithmPanels;
 	
-	private CardLayout sorterLayout = new CardLayout();
-	private CardLayout algorithmLayout = new CardLayout();
+	private final CardLayout sorterLayout = new CardLayout();
+	private final CardLayout algorithmLayout = new CardLayout();
 	
 	/**
 	 * the right side bar that contains all the customization settings 
@@ -78,7 +78,7 @@ public class CustomizationGUI extends JPanel
 		//vertical box layout
 		generalAlgorithmPanel.setLayout(new BoxLayout(generalAlgorithmPanel, BoxLayout.Y_AXIS));
 		//adds the components
-		Algorithm.addGeneralAlgorithmCustimizationComponents(sortingTool, generalAlgorithmPanel);
+		Algorithm.addGeneralAlgorithmCustomizationComponents(sortingTool, generalAlgorithmPanel);
 		//adds the panel after the sorter card panel
 		addSectionTitle("All Algorithms");
 		add(generalAlgorithmPanel);
@@ -138,11 +138,11 @@ public class CustomizationGUI extends JPanel
 	
 	/**
 	 * an underlined centered piece of text to denote category
-	 * @param title
+	 * @param title the title of the section
 	 */
 	public void addSectionTitle(String title)
 	{
-		JLabel label = new JLabel("All Algorithns");
+		JLabel label = new JLabel(title);
 		label.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 		add(label);
 		//adds space/underline below
@@ -171,8 +171,8 @@ public class CustomizationGUI extends JPanel
 	/**
 	 * Helper method to easily create spinners to modify int values
 	 * @param changeAction this will be called with the new value passed in on a change
-	 * @param onUpdate returns the value that when {@link #update()} is called will replace the spinners value
-	 * @return
+	 * @param onUpdate returns the value that the spinner will fetch when updated
+	 * @return returns the new JSpinner
 	 */
 	public static JSpinner createJSpinner(VisualSortingTool sortingTool, SpinnerNumberModel nm, OnChangeAction<Integer> changeAction, RetrieveAction<Integer> onUpdate)
 	{

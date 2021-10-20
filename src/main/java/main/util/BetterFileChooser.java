@@ -1,15 +1,11 @@
 package main.util;
 
-import java.awt.Color; 
-import java.awt.Component;
-import java.awt.Container;
+import java.awt.Color;
 
 import javax.swing.JFileChooser;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
-//import sun.swing.FilePane;
 
 /**
  * 

@@ -1,7 +1,6 @@
 package main.visualizers;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 
 import javax.swing.SpinnerNumberModel;
 
@@ -73,13 +72,14 @@ public class BarHeightVisualizer extends Visualizer
 	 * draws bars of different heights using the values as the height input
 	 */
 	@Override
-	public void drawArray(Graphics g, VisualComponent[] array, int size)
+	public void drawArray(Graphics2D g, VisualComponent[] array, int size)
 	{			
 		for(int i = 0; i < size; i++)
 		{
 			//highlights in specified color
 			g.setColor(confirmed ? Algorithm.confirmationColor : highlights[i]);
-			g.fillRect(getRealHMargins(size) + i*(componentWidth+componentGap), sortingTool.getVisualizerHeight()-array[i].getValue(), componentWidth, array[i].getValue());
+			g.fill(new Rectangle.Float(getRealHMargins(size) + i*(componentWidth+componentGap), sortingTool.getVisualizerHeight()-array[i].getValue(), componentWidth, array[i].getValue()));
+
 		}
 	}
 }

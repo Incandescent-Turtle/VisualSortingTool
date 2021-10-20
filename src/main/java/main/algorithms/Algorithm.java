@@ -32,19 +32,19 @@ public abstract class Algorithm implements Customizable
 {
 	//all algorithms have the same color for ending/confirming an algorithm run
 	public static Color confirmationColor;
-	//whether a there should be a animation for the confirmation (all bars slowly turning green)
+	//whether there should be an animation for the confirmation (all bars slowly turning green)
 	private static boolean animateConfirmation;
 	
 	//delay is ms
 	public static int delay;
-	//whether it renders/delays for every every, every other, etc
+	//whether it renders/delays for every run, every other, etc
 	public static int stepSize;
 
-	private String name;
+	private final String name;
 	protected VisualSortingTool sortingTool;
 	
 	protected Color swapColor, compareColor;
-	//whether this is the first (0), second (1) etc step to check if delay and render is needed
+	//whether this is the first (0), second (1) etc. step to check if delay and render is needed
 	protected int currentStep = 0;
 	
 	//for setting up static values for all algorithms
@@ -60,7 +60,7 @@ public abstract class Algorithm implements Customizable
         StorageValue.addStorageValues(new IntStorageValue(prefix, "step", n -> stepSize = n, () -> stepSize));
 
         confirmationColor = new Color(162, 255, 143); //green
-		//attemps to load confirmationColor, if cant its GREEN, sets up storage as well
+		//attempts to load confirmationColor, if can't its GREEN, sets up storage as well
 		StorageValue.addStorageValues(StorageValue.createColorStorageValue(prefix, "confirmationColor", c -> confirmationColor = c, () -> confirmationColor));
 
 		animateConfirmation = false;
@@ -81,13 +81,13 @@ public abstract class Algorithm implements Customizable
 	 * from {@link Customizable}, populates its own {@link CustomizationPanel} with a title using
 	 * the {@link Algorithm#name} variable and
 	 * {@link ColorButton}s to change {@link Algorithm#swapColor} and {@link Algorithm#compareColor}
-	 * @param cp this Algorithms own {@link CustomizationPanel} <br>
+	 * @param cp this Algorithm's own {@link CustomizationPanel} <br>
 	 * <font color="red"> must call super() </font>
 	 */
 	@Override
 	public void addCustomizationComponents(CustomizationPanel cp)
 	{		
-		cp.addTitleSeperator(name, true);			
+		cp.addTitleSeparator(name, true);
 		cp.addRow(new ColorButton(sortingTool, c -> swapColor = c, () -> swapColor, "Swap Color"), true);
 		cp.addRow(new ColorButton(sortingTool, c -> compareColor = c, () -> compareColor, "Compare Color"), true);
 	}
@@ -118,7 +118,7 @@ public abstract class Algorithm implements Customizable
 	
 	/**
 	 * This gets called when this is the selected algorithm and the run button is hit <br>
-	 * gets run on a seperate thread. 
+	 * gets run on a separate thread.
 	 */
 	public final void run()
 	{
@@ -136,17 +136,12 @@ public abstract class Algorithm implements Customizable
 	/**
 	 * called at the end of the run() method to close some things
 	 */
-	private final void finishRun()
+	private void finishRun()
 	{
 		System.out.println("Done " + name);
 		isSorted(sortingTool, true);
 		sortingTool.getSorter().setAlgorithm(null);
 		GUIHandler.setEnabled(true);
-		//VisualSortingTool.delay(250);
-		//sortingTool.getSorter().recalculateAndRepaint();
-		//sortingTool.getSorter().setAlgorithm(this);
-		//VisualSortingTool.delay(0);
-		//run();
 	}
 	
 	protected final void paintWithDelayAndStep()
@@ -154,7 +149,7 @@ public abstract class Algorithm implements Customizable
 		currentStep++;
 		if(currentStep >= stepSize)
 		{
-			delay(sortingTool.getSorter());
+			delay();
 			sortingTool.repaint();
 			currentStep = 0;
 		}
@@ -163,27 +158,19 @@ public abstract class Algorithm implements Customizable
 	/**
 	 * Delays sort based on the spinner delay
 	 */
-	protected final static void delay(Sorter sorter)
+	protected static void delay()
 	{
 		VisualSortingTool.delay(delay);
 	}
-	
+
 	/**
 	 * adds customization for all the static values shared by algorithms, such as {@link #confirmationColor}
-	 * @param cp this {@link CustomizationPanel} belongs to a sorter
+	 * @param sortingTool the sorting tool
+	 * @param panel panel to add components to
 	 */
-	public static void addGeneralAlgorithmCustimizationComponents(VisualSortingTool sortingTool, JPanel panel)
+	public static void addGeneralAlgorithmCustomizationComponents(VisualSortingTool sortingTool, JPanel panel)
 	{
-		//title placed with a little spacing under the sorter customization components
-		//cp.addTitleSeperator("All Algorithms", true);
-		RetrieveAction<Color> retrieveAction = new RetrieveAction<Color>() {
-			
-			@Override
-			public Color retrieve()
-			{
-				return confirmationColor; 
-			}
-		};
+		RetrieveAction<Color> retrieveAction = () -> confirmationColor;
 		JButton button = new ColorButton(sortingTool, c -> confirmationColor = c, retrieveAction, "Confirmation Color");
 		button.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		panel.add(button);
@@ -191,7 +178,7 @@ public abstract class Algorithm implements Customizable
 		JCheckBox cb = new JCheckBox(" Animate Confirmation");
 		cb.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		cb.setHorizontalTextPosition(SwingConstants.LEFT);
-		cb.setFont(new Font(Font.SANS_SERIF,0,12));
+		cb.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,12));
 		cb.setSelected(animateConfirmation);
 		cb.addChangeListener(e -> animateConfirmation = cb.isSelected());
 		panel.add(cb);
@@ -238,7 +225,7 @@ public abstract class Algorithm implements Customizable
 	}
 	
 	/*
-	 * debugger for the arrays. prints the sorted list to a textfile
+	 * debugger for the arrays. prints the sorted list to a text file
 	 */
 	/*private static void printArray(VisualSortingTool sortingTool)
 	{

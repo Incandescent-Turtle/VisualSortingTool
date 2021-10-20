@@ -1,10 +1,7 @@
 package main.sorters.image;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
 import java.io.*;
-import java.nio.Buffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -13,9 +10,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.filechooser.FileSystemView;
 
 import main.sorters.image.threading.ImageLoadWorker;
 import main.util.Util;
@@ -24,38 +19,21 @@ import main.vcs.VisualComponent;
 
 public class ImageLoader
 {
-	private ImageSorter sorter;
-	
-	
+	private final ImageSorter sorter;
+	/**
+	 * class to load images for image vcs
+	 * @param sorter the image sorter
+	 */
 	public ImageLoader(ImageSorter sorter)
 	{
 		this.sorter = sorter;
 	}
+
 	/**
-	 * populates the sorter's array with image VCs built from the images in the directory
-	 * @param folder the target folder
-	 * @returns new {@link VisualComponent} array
+	 * uses threads to load any png or jpg images from the specified folder
+	 * @param folder the folder to load files from
+	 * @return VCs built from all images in said folder
 	 */
-	public VisualComponent[] loadFomFolder(File folder)
-	{
-		//only jpg and png
-		FileFilter filter = file -> Util.getFileExtension(file).equals(".png") || Util.getFileExtension(file).equals(".jpg");
-		
-		//all png and jpg files in the directory
-		File[] files = folder.listFiles(filter);
-		//prints all the file names
-		Stream.of(files).forEach(System.out::println);
-		
-		ImageVisualComponent[] array = new ImageVisualComponent[files.length];
-		for (int i = 0; i < files.length; i++)
-		{
-			BufferedImage img = loadImage(files[i]);
-			array[i] = new ImageVisualComponent(sorter.getValueOf(img), img);
-		}
-		//	ExecutorService ex = Executors.newFixedThreadPool(10);
-		return array;
-	}
-	
 	public VisualComponent[] loadFromFolder(File folder)
 	{
 		//only jpg and png
@@ -66,53 +44,54 @@ public class ImageLoader
 		//prints all the file names
 		Stream.of(files).forEach(System.out::println);
 
+		//the progress window to display to the user, informing of progress
 		ProgressWindow pw = new ProgressWindow(files.length);
 
+		//thread pool to load images
 		ExecutorService executor = Executors.newFixedThreadPool(10);
-		 final int wantedSize = 10;
-	     final int portions = wantedSize <= files.length ? wantedSize : files.length;
-	    
-	     ImageLoadWorker[] workers = new ImageLoadWorker[portions];
+		//amount of portions the work is divided into
+		final int wantedSize = 10;
+		final int portions = Math.min(wantedSize, files.length);
+
+		ImageLoadWorker[] workers = new ImageLoadWorker[portions];
 	     
-	     for (int i = 0; i < portions; i++)
-	     {
-	    	 int portionSize = files.length/portions;
-	    	 int startAt = i * portionSize;
-	    	 int endAt = startAt + portionSize;
-	    	 if(i == portions-1) endAt = files.length;
-	    	 workers[i] = new ImageLoadWorker(sorter, this, pw, startAt, endAt, files);
-	    	 System.out.println("start " + startAt + " end " + endAt);
-	     }
-	     ImageVisualComponent[] array = new ImageVisualComponent[files.length];
-	     try {
-	    	 List<Future<ImageVisualComponent[]>> results = executor.invokeAll(Arrays.asList(workers));
-	    	 int index = 0;
-	    	 for (Future<ImageVisualComponent[]> result : results) 
-	    	 {
-	    		 System.out.println(index);
-		    	 ImageVisualComponent[] arr = result.get();
-		    	 for(int i = 0; i < arr.length; i++)
-		    	 {
-		    		 array[index + i] = arr[i];
-		    	 }
-		    	 index+=arr.length;
-	    	 }
-	     } catch (InterruptedException | ExecutionException ex) {
-	    	 ex.printStackTrace();
-	     }
-	        
-		/*for (int i = 0; i < files.length; i++)
+		for (int i = 0; i < portions; i++)
 		{
-			BufferedImage img = loadImage(files[i]);
-			array[i] = new ImageVisualComponent(calculateBrightness(img), img);
-		}*/
-		//	ExecutorService ex = Executors.newFixedThreadPool(10);
-		for (ImageVisualComponent imageVisualComponent : array)
-		{
-			System.out.println((imageVisualComponent != null ? "not " : "") + "null");
+			//number of images in this portion
+			int portionSize = files.length/portions;
+			//starting index based on main array
+			int startAt = i * portionSize;
+			//ending index based on main array
+			int endAt = startAt + portionSize;
+			//makes the last portion as big as possible to account for slack
+			if(i == portions-1) endAt = files.length;
+			//adds a new worker
+			workers[i] = new ImageLoadWorker(sorter, this, pw, startAt, endAt, files);
+		}
+
+		//the new array that will be filled
+		ImageVisualComponent[] array = new ImageVisualComponent[files.length];
+		try {
+			//running all the workers and collecting their VC lists
+			List<Future<ImageVisualComponent[]>> results = executor.invokeAll(Arrays.asList(workers));
+			int index = 0;
+			//looping through the VC lists to append them to the main list
+			for (Future<ImageVisualComponent[]> result : results)
+			{
+				ImageVisualComponent[] arr = result.get();
+				for(int i = 0; i < arr.length; i++)
+				{
+					//adding in proper index
+					array[index + i] = arr[i];
+				}
+				index+=arr.length;
+			}
+		} catch (InterruptedException | ExecutionException ex) {
+			ex.printStackTrace();
 		}
 		//ensures the bar gets hidden
 		pw.setProgress(1000);
+		//closes thread pool
 		executor.shutdown();
 		return array;
 	}
@@ -126,14 +105,14 @@ public class ImageLoader
 	{
 		try
 		{
-//			BufferedImage img = Util.shrinkImage(ImageIO.read(file), 500, 500);
-//			BufferedImage img = (ImageIO.read(file));
-
+			//using icon to load images cause it fast
 			ImageIcon icon = new ImageIcon(file.getAbsolutePath());
+			//limiting size to conserve memory.
+			//TODO make this dependant on how many images there are and the display size (make bigger/smaller to improve quality/reduce ram usage)
 			BufferedImage img = Util.shrinkImage(icon.getImage(), 400, 400);
-//			BufferedImage img = Util.imageToBufferedImage(icon.getImage());
 
 			//amount of kb the image takes up
+
 //			DataBuffer buff = img.getRaster().getDataBuffer();
 //			int bytes = buff.getSize() * DataBuffer.getDataTypeSize(buff.getDataType()) / 8;
 //			System.out.println(bytes/1000 + "kb");

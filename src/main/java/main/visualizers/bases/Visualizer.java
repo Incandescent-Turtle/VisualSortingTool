@@ -1,7 +1,7 @@
 package main.visualizers.bases;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
+import java.util.Arrays;
 
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
@@ -52,7 +52,7 @@ public abstract class Visualizer implements Customizable
 	/**
 	 * This draws the Sorters array to the screen
 	 */
-	public final void drawArray(Graphics g)
+	public final void drawArray(Graphics2D g)
 	{
 		Sorter sorter = sortingTool.getSorter();
 		if(sorter.getArraySize() > 0 && highlights != null)
@@ -63,17 +63,14 @@ public abstract class Visualizer implements Customizable
 	}
 	
 	//just a little helper method
-	protected abstract void drawArray(Graphics g, VisualComponent[] array, int size);
+	protected abstract void drawArray(Graphics2D g, VisualComponent[] array, int size);
 
 	/**
 	 * resets all indices to the default colour
 	 */
 	public void resetHighlights()
 	{
-		for(int i = 0; i < highlights.length; i++)
-		{
-			highlights[i] = defaultColor;
-		}
+		Arrays.fill(highlights, defaultColor);
 	}
 	
 	/**

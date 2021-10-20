@@ -1,6 +1,6 @@
 package main;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Arrays;
@@ -25,9 +25,8 @@ import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.values.StorageValue;
 import main.ui.custimization.values.StorageValue.StorageAction;
+import main.util.Util;
 
-
-@SuppressWarnings("serial")
 /**
  *	the window/panel for display
  */

@@ -115,7 +115,7 @@ public class SynchronousJFXFileChooser {
      */
     public File showOpenDialog() {
     	
-        return this.<File>showDialog(chooser -> chooser.showOpenDialog(null));
+        return this.showDialog(chooser -> chooser.showOpenDialog(null));
     }
 
     /**

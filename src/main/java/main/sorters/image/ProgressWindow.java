@@ -1,7 +1,6 @@
 package main.sorters.image;
 
-import main.util.StringHelper;
-import main.util.Util;
+import main.VisualSortingTool;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,31 +8,40 @@ import java.awt.*;
 public class ProgressWindow extends JPanel
 {
 	//progress out of 100
-	private JProgressBar progressBar;
-	private Color barColor = Color.GREEN;
-	private JDialog dg;
+	private final JProgressBar progressBar;
+	private final JDialog dg;
 
+	/**
+	 * a borderless JDialog that displays a progress bar
+	 * @param max
+	 */
 	public ProgressWindow(int max)
 	{
+		//setting up dialog
 		dg = new JDialog();
 		Dimension dim = new Dimension(600, 100);
 		dg.setPreferredSize(dim);
 		dg.setMinimumSize(dim);
 
 		dg.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		dg.setLocationRelativeTo(null);
+		dg.setLocationRelativeTo(Window.getWindows()[0]);
 
 		progressBar = new JProgressBar(0, max) {
 
-			@Override public String getString()
+			@Override
+			public String getString()
 			{
+				//custom string (super is just the % loaded)
 				return "Loading Images: " + super.getString() + " complete";
 			}
 		};
+		//increase font size
 		progressBar.setFont(UIManager.getDefaults().getFont("defaultFont").deriveFont(20f));
+		//loading cursor
 		dg.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		progressBar.setStringPainted(true);
 
+		//so progress bar fills whole screen
 		setLayout(new GridLayout(1, 1));
 
 		dg.setUndecorated(true);
@@ -43,25 +51,6 @@ public class ProgressWindow extends JPanel
 		dg.add(this);
 		dg.setVisible(true);
 		dg.repaint();
-	}
-
-	@Override
-	public void paintComponent(Graphics g)
-	{
-		super.paintComponents(g);
-//		int updateY = 10;
-////		String updateStr = "Loading: " + progress + "%";
-////		StringHelper.drawXCenteredString(updateStr, dg.getWidth()/2, 10, g);
-//
-//		int yOffset = updateY + 2;
-//		int length = 200;
-//		int height = 50;
-//		int xMargin = (getWidth() - length)/2;
-//
-//		g.setColor(Color.BLACK);
-//		g.drawRect(xMargin, yOffset, length, height);
-//		g.setColor(Color.GREEN);
-//		g.fillRect(xMargin+1, 1+yOffset, (int) ((progress)/100f * length - 1), height-1);
 	}
 
 	public void incrementProgressBy(int increment)

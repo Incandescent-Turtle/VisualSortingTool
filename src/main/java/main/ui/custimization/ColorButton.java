@@ -15,25 +15,20 @@ import main.interfaces.RetrieveAction;
 import main.sorters.Sorter;
 import main.visualizers.bases.Visualizer;
 
-@SuppressWarnings("serial")
-
-/**
- * 
- */
 public class ColorButton extends JButton implements ActionListener
 {
 	//used for recoloring/enabling/disabling color buttons
 	private final static ArrayList<ColorButton> COLOR_BUTTONS = new ArrayList<>();
 	
-	private VisualSortingTool sortingTool;
-	private OnChangeAction<Color> okAction;
-	private RetrieveAction<Color> retrieveAction;
-	private String text;
+	private final VisualSortingTool sortingTool;
+	private final OnChangeAction<Color> okAction;
+	private final RetrieveAction<Color> retrieveAction;
+	private final String text;
 	
 	/**
 	 * A JButton fitted with a color chooser and custom ActionListener implementation
 	 * for ease of use <br>
-	 * all ColorButtons are automatically added to {@link COLOR_BUTTONS} <br>
+	 * all ColorButtons are automatically added to {@link #COLOR_BUTTONS} <br>
 	 * these take on the color of their {@link ColorButton#retrieveAction}
 	 *
 	 * @param okAction the action to be completed when the ok button is hit
@@ -131,14 +126,14 @@ public class ColorButton extends JButton implements ActionListener
 	
 	/**
 	 * Helper to create a ColorButton that changes the default color of the {@link Visualizer}
-	 * @param sortingTool
+	 * @param sortingTool the sorting tool
 	 * @param sorter the sorter which the {@link Visualizer} is attached to
 	 * @return new ColorButton which changes the default color of its {@link Visualizer}
 	 */
 	public static ColorButton createDefaultColorPickingButton(VisualSortingTool sortingTool, Sorter sorter)
 	{
 		Visualizer visualizer = sorter.getVisualizer();
-		OnChangeAction<Color> okAction = new OnChangeAction<Color>() {
+		OnChangeAction<Color> okAction = new OnChangeAction<>() {
 			
 			@Override
 			public void doStuff(Color color)
@@ -159,7 +154,7 @@ public class ColorButton extends JButton implements ActionListener
 	 */
 	public static ColorButton createBackgroundColorPickingButton(VisualSortingTool sortingTool)
 	{
-		OnChangeAction<Color> okAction = new OnChangeAction<Color>() {
+		OnChangeAction<Color> okAction = new OnChangeAction<>() {
 			
 			@Override
 			public void doStuff(Color color)

@@ -1,8 +1,6 @@
 package main.visualizers;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
@@ -44,10 +42,10 @@ public class NumberFixedVisualizer extends FixedSizeVisualizer
 	}
 	
 	@Override
-	protected void drawComponent(Graphics g , VisualComponent[] array, int i, int arraySize, int x, int y)
+	protected void drawComponent(Graphics2D g , VisualComponent[] array, int i, int arraySize, int x, int y)
 	{
 		g.setColor(confirmed ? Algorithm.confirmationColor : highlights[i]);
-		g.setFont(new Font("", 0, componentSize/2));
+		g.setFont(new Font("", Font.PLAIN, componentSize/2));
 		String value = "" + array[i].getValue();
 		//draws number centered around the passed in coors
 		StringHelper.drawCenteredString(value, x+componentSize/2, y+componentSize/2, g);

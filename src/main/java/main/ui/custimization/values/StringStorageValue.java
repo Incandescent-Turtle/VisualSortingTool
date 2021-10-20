@@ -8,7 +8,7 @@ import main.interfaces.RetrieveAction;
 public class StringStorageValue extends StorageValue<String>
 {
 	/**
-	 * setting up Strings in preferences. sets default to retireve action on construction
+	 * setting up Strings in preferences. sets default to retrieve action on construction
 	 * @param prefix class prefix
 	 * @param key variable name
 	 * @param changeAction should look like str -> myVar = str || functional interface to set variable

@@ -2,7 +2,6 @@ package main.sorters;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Collections;
 
 import javax.swing.JButton;
 
@@ -10,20 +9,17 @@ import main.VisualSortingTool;
 import main.algorithms.Algorithm;
 import main.ui.GUIHandler;
 import main.ui.custimization.ColorButton;
-import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
-import main.ui.custimization.Updatable;
 import main.ui.custimization.values.BooleanStorageValue;
 import main.ui.custimization.values.StorageValue;
 import main.vcs.ColorVisualComponent;
-import main.vcs.VisualComponent;
 import main.visualizers.ColorGradientVisualizer;
 
 public class ColorGradientSorter extends Sorter
 {
 	//the two colors represented in the gradient
 	private Color leftColor, rightColor;
-	//clicking this reverses the order. doesnt really matter which value means what though?
+	//clicking this reverses the order. doesn't really matter which value means what though?
 	private boolean order;
 	
 	/**
@@ -43,14 +39,13 @@ public class ColorGradientSorter extends Sorter
 		order = false;
 	}
 	
-	//we calling this function to place these buttons after the other sorter customization options
-	@SuppressWarnings("serial")
+	//calling this function to place these buttons after the other sorter customization options
 	@Override
 	public void addCustomizationComponents(CustomizationPanel cp)
 	{
 		/*
-		 * calls super cause this isnt the proper method to add sorter components
-		 * places all these componenets after all other necesary components
+		 * calls super cause this isn't the proper method to add sorter components
+		 * places all these components after all other necessary components
 		 */
 		super.addCustomizationComponents(cp);
 		
@@ -83,8 +78,8 @@ public class ColorGradientSorter extends Sorter
 		cp.addRow(orderButton, true);
 		
 		GUIHandler.addToggleable(button1, button2, orderButton);
-		//for when its set to default etc recolours it
-		GUIHandler.addUpdatables(() -> orderButton.repaint());
+		//for when it's set to default etc. recolours it
+		GUIHandler.addUpdatables(orderButton::repaint);
 	}
 	
 	@Override

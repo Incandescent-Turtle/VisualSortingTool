@@ -15,9 +15,9 @@ import main.util.Util;
 public abstract class StorageValue<T> implements Closable
 {	
 	//enum to identify storage action in certain methods
-	public static enum StorageAction
+	public enum StorageAction
 	{
-		LOAD, STORE, REMOVE, RESET_TO_SAVE, RESET_TO_DEFAULTS;
+		LOAD, STORE, REMOVE, RESET_TO_SAVE, RESET_TO_DEFAULTS
 	}
 	
 	//list that holds all storable objects for automatic loading/saving/deletion
@@ -33,7 +33,7 @@ public abstract class StorageValue<T> implements Closable
 	//prefix + key
 	protected final String fullKey;
 	
-	//whether or not this value is able to be reset (ex. sorter/algorithms wont be)
+	//whether or not this value is able to be reset (ex. sorter/algorithms won't be)
 	private boolean canReset = true;
 
 	/**
@@ -54,7 +54,7 @@ public abstract class StorageValue<T> implements Closable
 	}
 	
 	/**
-	 * class to make storing data in preferences super easy. sets default value to current retrive
+	 * class to make storing data in preferences super easy. sets default value to current retrieve
 	 * @param prefix the class prefix
 	 * @param key variable name
 	 * @param changeAction the interface to help set a variable while passing in its stored value
@@ -67,12 +67,12 @@ public abstract class StorageValue<T> implements Closable
 	
 	/**
 	 * called automatically to load this value to its variable
-	 * @param prefs
+	 * @param prefs the preferences object to use
 	 */
 	public abstract void loadValue(Preferences prefs);
 	/**
 	 * called automatically to store this value using its specified method
-	 * @param prefs
+	 * @param prefs the preferences object to use
 	 */
 	public abstract void storeValue(Preferences prefs);
 	
@@ -88,7 +88,7 @@ public abstract class StorageValue<T> implements Closable
 		storeValue(CustomizationGUI.PREFS);
 	}
 	
-	//cheeky method for sorters and algorithms so their states cant be reset mid program (teleportation!)
+	//cheeky method for sorters and algorithms so their states can't be reset mid-program (teleportation!)
 	public StorageValue<T> setResetable(boolean canReset)
 	{
 		this.canReset = canReset;
@@ -96,38 +96,31 @@ public abstract class StorageValue<T> implements Closable
 	}
 	
 	/**
-	 * loads, stores, or removes preferences based on the actin thats passed in
-	 * @param prefs
+	 * loads, stores, or removes preferences based on the action that's passed in
+	 * @param prefs the preferences object to use
 	 * @param action corresponding action
 	 */
 	public static void performStorageAction(Preferences prefs, StorageAction action)
 	{
 		for(StorageValue<?> sv : STORAGE_VALUES)
 		{
-			switch(action)
-			{		
-				case LOAD:
+			switch (action)
+			{
+				case LOAD -> sv.loadValue(prefs);
+				case STORE -> sv.storeValue(prefs);
+				case REMOVE -> sv.removeValue(prefs);
+
+				case RESET_TO_SAVE -> {
+					if (!sv.canReset)
+						break;
 					sv.loadValue(prefs);
-					break;
-					
-				case STORE:
-					sv.storeValue(prefs);
-					break;
-					
-				case REMOVE:
-					sv.removeValue(prefs);
-					break;
-					
-				case RESET_TO_SAVE:
-					if(!sv.canReset) break;
-					sv.loadValue(prefs);
-					break;
-					
-				case RESET_TO_DEFAULTS:
-					if(!sv.canReset) break;
+				}
+				case RESET_TO_DEFAULTS -> {
+					if (!sv.canReset)
+						break;
 					sv.removeValue(prefs);
 					sv.loadValue(prefs);
-					break;
+				}
 			}
 		}	
 		//updates spinners etc
@@ -135,7 +128,7 @@ public abstract class StorageValue<T> implements Closable
 	}
 	
 	/**
-	 * this adds it to a list to automitically load and store values
+	 * this adds it to a list to automatically load and store values
 	 * @param values storables to add
 	 */
 	public static void addStorageValues(StorageValue<?>... values)
@@ -151,10 +144,9 @@ public abstract class StorageValue<T> implements Closable
 	 * helper method to store colors. technically stores them as {@link IntStorageValue}s
 	 * @param prefix the class prefix
 	 * @param key the name of the color variable
-	 * @param defaultColor the default color this should be
 	 * @param changeAction the loaded color is passed into this param, c -> myColor = c is what it should look like
 	 * @param retrieveAction this is used to fetch the current state of this color variable to store it
-	 * @return the storagevalue equipped to load/save the color
+	 * @return the {@link StorageValue} equipped to load/save the color
 	 */
 	public static IntStorageValue createColorStorageValue(String prefix, String key, OnChangeAction<Color> changeAction, RetrieveAction<Color> retrieveAction)
 	{

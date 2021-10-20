@@ -21,7 +21,6 @@ import javafx.application.Platform;
 import main.VisualSortingTool;
 import main.interfaces.Closable;
 
-@SuppressWarnings("serial")
 public class BetterFrame
 {
 	//for things that need code run before the program exists - called on window close
@@ -29,7 +28,7 @@ public class BetterFrame
 	
 	//the size/location before fullscreen (used for resizing
 	private Rectangle nonFullScreenBounds = null;
-	//window state before fullscreening
+	//window state before fullscreen
 	private int windowState;
 	private JFrame frame;
 	
@@ -41,7 +40,7 @@ public class BetterFrame
 	
 	/**
 	 * returns a frame (1 per instance) with fullscreen and keybinding capabilities
-	 * @param sortingTool main panel for the jframe
+	 * @param sortingTool main panel for the Jframe
 	 * @param title title of the frame
 	 * @return the frame to be used
 	 */
@@ -180,7 +179,7 @@ public class BetterFrame
 	private void closeWindow()
 	{
 
-		CLOSABLES.stream().forEach(c -> c.close());
+		CLOSABLES.forEach(Closable::close);
         Platform.exit();
 		System.exit(0);
 	}

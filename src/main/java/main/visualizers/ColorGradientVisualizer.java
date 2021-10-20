@@ -1,6 +1,6 @@
 package main.visualizers;
 
-import java.awt.Graphics;
+import java.awt.*;
 
 import javax.swing.SpinnerNumberModel;
 
@@ -61,7 +61,7 @@ public class ColorGradientVisualizer extends Visualizer
 	}
 	
 	@Override
-	public void drawArray(Graphics g, VisualComponent[] array, int size)
+	public void drawArray(Graphics2D g, VisualComponent[] array, int size)
 	{
 		for(int i = 0; i < size; i++)
 		{

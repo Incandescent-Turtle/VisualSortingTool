@@ -21,7 +21,7 @@ public class NumberSorter extends Sorter
 	}
 	
 	/**
-	 * adds customization spinner for the amount of numbersdisplayed
+	 * adds customization spinner for the amount of numbers displayed
 	 */
 	@Override
 	public void addSorterCustomizationComponents(CustomizationPanel cp)

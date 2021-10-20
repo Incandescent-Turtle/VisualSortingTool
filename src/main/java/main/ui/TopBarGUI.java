@@ -23,36 +23,35 @@ import main.ui.custimization.ColorButton;
 import main.ui.custimization.values.StorageValue;
 import main.ui.custimization.values.StringStorageValue;
 
-@SuppressWarnings("serial")
 public class TopBarGUI extends JPanel
 {
-	private FlowLayout layout = new FlowLayout(FlowLayout.CENTER, 5, 5);
+	private final FlowLayout layout = new FlowLayout(FlowLayout.CENTER, 5, 5);
 	
 	//the button that shuffles the sorters array
-	private JButton shuffleButton = new JButton("Shuffle");
+	private final JButton shuffleButton = new JButton("Shuffle");
 	
-	private JLabel algorithmLabel = new JLabel("Algorithm:");
+	private final JLabel algorithmLabel = new JLabel("Algorithm:");
 	//drop down list of algorithms
-	private JComboBox<Algorithm> algorithmList = new JComboBox<>();
+	private final JComboBox<Algorithm> algorithmList = new JComboBox<>();
 	//runs the current algorithm
-    private JButton runAlgorithmButton = new JButton("Run Selected");
+    private final JButton runAlgorithmButton = new JButton("Run Selected");
     
-	private JLabel delayLabel = new JLabel("Delay(ms):");
+	private final JLabel delayLabel = new JLabel("Delay(ms):");
 	//updates the sorters delay
-    private JSpinner delaySpinner = new JSpinner(new SpinnerNumberModel(Algorithm.delay, 0, 10000, 1));
+    private final JSpinner delaySpinner = new JSpinner(new SpinnerNumberModel(Algorithm.delay, 0, 10000, 1));
     
     //for adjusting the algorithm "step" size (how many runs are skipped)
-	private JLabel stepLabel = new JLabel("Step:");
-    private JSpinner stepSpinner = new JSpinner(new SpinnerNumberModel(Algorithm.stepSize, 1, 500, 1));
+	private final JLabel stepLabel = new JLabel("Step:");
+    private final JSpinner stepSpinner = new JSpinner(new SpinnerNumberModel(Algorithm.stepSize, 1, 500, 1));
 
-	private JLabel sorterLabel = new JLabel("Visualization:");
+	private final JLabel sorterLabel = new JLabel("Visualization:");
 	//drop down list of sorters to pick visualization methods
-    private JComboBox<Sorter> sorterList = new JComboBox<Sorter>();
+    private final JComboBox<Sorter> sorterList = new JComboBox<>();
     
-    private ArrayList<JLabel> labels = new ArrayList<>();
-    private ArrayList<Component> components = new ArrayList<>();
+    private final ArrayList<JLabel> labels = new ArrayList<>();
+    private final ArrayList<Component> components = new ArrayList<>();
 
-    private VisualSortingTool sortingTool;
+    private final VisualSortingTool sortingTool;
     
     private final String prefix = VisualSortingTool.getPrefix(getClass());
     
@@ -69,9 +68,7 @@ public class TopBarGUI extends JPanel
 	{
 		sortingTool.add(this, BorderLayout.PAGE_START); //top of the screen
 		//Shuffle button
-		shuffleButton.addActionListener(e -> {
-			sortingTool.getSorter().recalculateAndRepaint();
-		});
+		shuffleButton.addActionListener(e -> sortingTool.getSorter().recalculateAndRepaint());
 		
 		//Delay Spinner
         delaySpinner.addChangeListener(e -> Algorithm.delay = ((int) delaySpinner.getValue()));
@@ -101,7 +98,7 @@ public class TopBarGUI extends JPanel
         
         //changes algorithm panel on algorithm change
         algorithmList.addItemListener(e -> sortingTool.getGUIHandler().getCustomizationGUI().changeAlgorithmPanel((Algorithm)e.getItem()));
-        //sets up preferences for the algorithn open on program close. on reset nothing happens
+        //sets up preferences for the algorithm open on program close. on reset nothing happens
         //a little hacky...uses toString on the algorithm to save/load it
         StorageValue.addStorageValues(new StringStorageValue(prefix, "algorithm", sortingTool.getAlgorithms()[0].toString(), name -> algorithmList.setSelectedItem(sortingTool.getAlgorithm(name)), () -> algorithmList.getSelectedItem().toString()).setResetable(false));
                         
@@ -152,8 +149,8 @@ public class TopBarGUI extends JPanel
 	}
 	
 	/**
-	 * auto-adds all non-JButton componenets to {@link GUIHandler}'s toggleable array
-	 * @param component
+	 * auto-adds all non-JButton components to {@link GUIHandler}'s toggleable array
+	 * @param component the component to add
 	 */
 	private void addToGUI(Component component)
 	{

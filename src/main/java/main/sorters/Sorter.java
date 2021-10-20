@@ -45,7 +45,7 @@ public abstract class Sorter implements Customizable
 	
 	/**
 	 * components added to this sorters personal {@link CustomizationPanel} <br>
-	 * adds title "Customization", adds componenets for the subclass, visualizer, and general
+	 * adds title "Customization", adds components for the subclass, visualizer, and general
 	 * {@link Algorithm} components <br>
 	 * 
 	 */
@@ -57,7 +57,7 @@ public abstract class Sorter implements Customizable
 	}
 	
 	/**
-	 * to be overriden if the sorter needs customization 
+	 * to be overridden if the sorter needs customization
 	 * @param cp the sorters {@link CustomizationPanel}
 	 */
 	public void addSorterCustomizationComponents(CustomizationPanel cp) {}
@@ -71,11 +71,11 @@ public abstract class Sorter implements Customizable
 	@Override
 	public void setDefaultValues() {}
 	
-	@Override
 	/**
 	 * Only needs to be overridden if this sorter has customization settings to be stored <br>
 	 * called from constructor
 	 */
+	@Override
 	public void addStorageValues() {}
 	
 	/**
@@ -93,7 +93,7 @@ public abstract class Sorter implements Customizable
 	/**
 	 * Called on start up to populate array <br>
 	 * default imp just calls reloadArray() <br>
-	 * override if there is some special initial loading (and probably if this isnt resizeable)
+	 * override if there is some special initial loading (and probably if this isn't resizeable)
 	 */
 	public void generateValues()
 	{
@@ -123,7 +123,7 @@ public abstract class Sorter implements Customizable
 	}
 	
 	/**
-	 * used to resize the array if applicable. never to be called outside of tryResizeArray()
+	 * used to resize the array if applicable. never to be called outside tryResizeArray()
 	 * changes array lengths based on size variable
 	 */
 	protected void resizeArray()
@@ -152,7 +152,7 @@ public abstract class Sorter implements Customizable
 	}
 	
 	/**
-	 * Only nesscesary to override if the array is resizeable and non-random
+	 * Only necessary to override if the array is resizeable and non-random
 	 * re-populates array with values
 	 */
 	protected void reloadArray() {}
@@ -177,7 +177,7 @@ public abstract class Sorter implements Customizable
 	 */
 	public void recalculateAndRepaint()
 	{
-		//whether everything is set up to go and if sorting isnt happening
+		//whether everything is set up to go and if sorting isn't happening
 		if(sortingTool.isInitialized() && algorithm == null)
 		{
 			tryResizeArray();
@@ -248,7 +248,7 @@ public abstract class Sorter implements Customizable
 	}
 	
 	/**
-	 * Enum for identifying sorters (used for finding in getSorter(Sorters identfier) method is VisualSortingTool
+	 * Enum for identifying sorters (used for finding in getSorter(Sorters identifier) method is VisualSortingTool
 	 * an object should exist for each sorter
 	 */
 	public enum Sorters
@@ -260,7 +260,7 @@ public abstract class Sorter implements Customizable
 		
 		private final String name;
 		
-		private Sorters(String name)
+		Sorters(String name)
 		{
 			this.name = name;
 		}

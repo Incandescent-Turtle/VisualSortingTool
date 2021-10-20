@@ -27,6 +27,7 @@ currentRow.clear();
 Don’t change order when switching image sorting methods
 
 new Visualizer to sort coloured squares (fixed size)
+new visualizer for cool dots
 
 class Descriptions {
 Map<JComponent, String> map;
@@ -59,5 +60,9 @@ Descriptions.addComponent(shuffle, new File(“/desc/shuffle-button.txt”);
 uses bounding box to display description
 
 #image sorting
--implement different sorting methods (SORT IMAGE IS ONE OPTION AND YOU CAN CYCLE HOW YOU WANNA SORT WITH A SPINNER OR SMTHN, so customization option for hue, brightness, red, blue, etc
 -choose multiple folders
+-width based on biggest image, not height? so sahir images are better
+-reverse button for image sorting, multiply values by negative 1
+
+-add support to pick any color for image sort matching, color picker appear when chosen
+-add comments, remove comments

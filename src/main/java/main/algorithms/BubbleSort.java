@@ -17,7 +17,7 @@ public class BubbleSort extends Algorithm
 	public void setDefaultValues()
 	{
 		swapColor = new Color(255, 105, 97); //red
-		compareColor = new Color(150, 210, 148); //greem
+		compareColor = new Color(150, 210, 148); //green
 	}
 
 	@Override
@@ -27,16 +27,16 @@ public class BubbleSort extends Algorithm
 		final VisualComponent[] array = sorter.getArray();
 		final int size = array.length;
 		
-		//loops through array (final element is always gonna be sorted by the end)
+		//loops through array (final element is always going to be sorted by the end)
 		for(int i = 0; i < size-1; i++)
 		{
-			//loops through what hasnt already been sorted
+			//loops through what hasn't already been sorted
 			for(int j = 0; j < size-1-i; j++)
 			{
 				sorter.getVisualizer().resetHighlights();
 				sorter.highlight(j, compareColor);
 				sorter.highlight(j+1, compareColor);
-				//comparing adjecent components
+				//comparing adjacent components
 				if(array[j].getValue() > array[j+1].getValue())
 				{
 					sorter.swap(j, j+1);

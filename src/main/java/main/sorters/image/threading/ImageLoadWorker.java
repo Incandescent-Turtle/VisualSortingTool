@@ -10,11 +10,20 @@ import main.vcs.ImageVisualComponent;
 
 public class ImageLoadWorker extends ArrayWorker<ImageVisualComponent[]>
 {
-	private File[] files;
-    private ImageSorter sorter;
-    private ProgressWindow progress;
-    private ImageLoader loader;
+	private final File[] files;
+    private final ImageSorter sorter;
+    private final ProgressWindow progress;
+    private final ImageLoader loader;
 
+	/**
+	 *
+	 * @param sorter the image sorter
+	 * @param loader the image loader
+	 * @param progress the progress window to update
+	 * @param startAt index to start at in the array
+	 * @param endAt which index to end at
+	 * @param files the list of files
+	 */
 	public ImageLoadWorker(ImageSorter sorter, ImageLoader loader, ProgressWindow progress, int startAt, int endAt, File[] files)
 	{
 		super(startAt, endAt);
@@ -25,16 +34,21 @@ public class ImageLoadWorker extends ArrayWorker<ImageVisualComponent[]>
 	}
 
 	@Override
-	public ImageVisualComponent[] call() throws Exception
+	public ImageVisualComponent[] call()
 	{
+		//the portion of VCs this worker needs to load
 		ImageVisualComponent[] portion = new ImageVisualComponent[endAt-startAt];
     	for (int i = 0; i < portion.length; i++)
 		{
+			//loading img
     		BufferedImage img = loader.loadImage(files[i+startAt]);
+			//creating VC with image
     		ImageVisualComponent vc = new ImageVisualComponent(sorter.getValueOf(img), img);
 			portion[i] = vc;
+			//incrementing progress bar
 			progress.incrementProgressBy(1);
 		}
+		//returns the VCs loaded
     	return portion;
     
 	}

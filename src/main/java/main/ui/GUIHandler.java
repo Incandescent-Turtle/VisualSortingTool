@@ -2,7 +2,7 @@ package main.ui;
 
 import java.awt.Component;
 import java.util.ArrayList;
-import java.util.stream.Stream;
+import java.util.Arrays;
 
 import main.VisualSortingTool;
 import main.ui.custimization.CustomizationGUI;
@@ -61,10 +61,7 @@ public class GUIHandler
 	 */
 	public static void addToggleable(Component... components)
 	{
-		for(Component c : components)
-		{
-			TOGGLEABLE.add(c);
-		}
+		TOGGLEABLE.addAll(Arrays.asList(components));
 	}
 	
 	/**
@@ -72,11 +69,11 @@ public class GUIHandler
 	 */
 	public static void update()
 	{
-		UPDATABLES.stream().forEach(u -> u.update());
+		UPDATABLES.forEach(Updatable::update);
 	}
 	
 	public static void addUpdatables(Updatable... updatables)
 	{
-		Stream.of(updatables).forEach(u -> UPDATABLES.add(u));
+		UPDATABLES.addAll(Arrays.asList(updatables));
 	}
 }

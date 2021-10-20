@@ -70,7 +70,7 @@ public class SynchronousJFXCaller<T>
         modalBlocker.setOpacity(0.0f);
         modalBlocker.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         final CountDownLatch modalityLatch = new CountDownLatch(1);
-        final FutureTask<T> task = new FutureTask<T>(() -> {
+        final FutureTask<T> task = new FutureTask<>(() -> {
             synchronized (taskStarted) {
                 if (taskCancelled.get()) {
                     return null;
@@ -103,10 +103,8 @@ public class SynchronousJFXCaller<T>
         }
         // a trick to notify the task AFTER we have been blocked
         // in setVisible()
-        SwingUtilities.invokeLater(() -> {
-            // notify that we are ready to get the result:
-            modalityLatch.countDown();
-        });
+        // notify that we are ready to get the result:
+        SwingUtilities.invokeLater(modalityLatch::countDown);
         modalBlocker.setVisible(true); // blocks
         modalBlocker.dispose(); // release resources
         try {
