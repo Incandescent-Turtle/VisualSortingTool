@@ -1,23 +1,68 @@
-sound effects #why though? seems like useless settings etc and just doesnt add much?
+Weird confirmation color glitch thing
 
-#not really sure about this one, but there are ways to record video etc maybe? user could just use built in
-Screenshot button
+Vital: info on the sort!
+-total loops
+-total
 
-#yeah this needs to get done
--file reading support (FileSorter)
--new VC for images (allow image resizing) (scaled instance so you can enlarge it)
--customization option for lowering quality (?) if not a thing could make own funtion with average color groups
--preferences saved on image quality, and file location
-#genius idea at 2am lets gooooooooooooooo
--SORT IMAGE IS ONE OPTION AND YOU CAN CYCLE HOW YOU WANNA SORT WITH A SPINNER OR SMTHN
--so customization option for hue, brightness, red, blue, etc
+Supplier interface instead of retrieve
+Consumer instead of onAction
 
--if no VALID file selected, promt user immidienelty for file location respecting min file/element size
--if there is a valid folder/file, load it up, and have File: as a customization option
+~~FOR FITTING MAX IMAGES ON ONE LINE~~
+ImageVisualizer:
 
+drawArray {
 
+//includes gaps and margins
+int currentRowX;
+int rowNum;
 
-#bruh this the whole point
-add more algorithms
+drawImage(img, currentRowX, rowNum)
+currentRowX += gap + img.width
+if(x+gap+componentSize is out of bounds)
+rowNum++;
+currentRow.clear();
+}
+(Different row sizes)
 
-HOME STRETCH BABEYYY
+Don’t change order when switching image sorting methods
+
+new Visualizer to sort coloured squares (fixed size)
+new visualizer for cool dots
+
+class Descriptions {
+Map<JComponent, String> map;
+
+onMouseMove() {
+
+for(every component) {
+if(mouse.intersects(component.getBounds()) {
+display(map.get(component));
+}
+}
+
+}
+
+display(String are) {
+//uses multi-line parsing from Util to display the descriptions, fitting to the allowed size
+}
+
+public static addComponent(JComponent c, File file) {
+map.add(c, loadDesc(file);
+}
+
+String loadDesc(File file) {
+//loads the text from file and returns it
+}
+}
+
+JButtom shuffle = new JButton(“Shuffle”);
+Descriptions.addComponent(shuffle, new File(“/desc/shuffle-button.txt”);
+uses bounding box to display description
+
+#image sorting
+-choose multiple folders
+-width based on biggest image, not height? so sahir images are better
+-reverse button for image sorting, multiply values by negative 1
+
+-add support to pick any color for image sort matching, color picker appear when chosen
+-add comments, remove comments
