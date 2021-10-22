@@ -1,8 +1,5 @@
 package main.sorters;
 
-import java.awt.Color;
-import java.util.Random;
-
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
 import main.ui.TopBarGUI;
@@ -10,6 +7,9 @@ import main.ui.custimization.Customizable;
 import main.ui.custimization.CustomizationPanel;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.Visualizer;
+
+import java.awt.*;
+import java.util.Random;
 
 public abstract class Sorter implements Customizable
 {
@@ -206,6 +206,11 @@ public abstract class Sorter implements Customizable
 			}
 		}
 	}
+
+	/**
+	 * when this sorter has been switched to via the gui
+	 */
+	public void switchedTo(){}
 	
 	public Visualizer getVisualizer()
 	{

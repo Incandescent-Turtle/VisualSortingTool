@@ -1,10 +1,5 @@
 package main.sorters;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
-import javax.swing.JButton;
-
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
 import main.ui.GUIHandler;
@@ -14,6 +9,9 @@ import main.ui.custimization.values.BooleanStorageValue;
 import main.ui.custimization.values.StorageValue;
 import main.vcs.ColorVisualComponent;
 import main.visualizers.ColorGradientVisualizer;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class ColorGradientSorter extends Sorter
 {
@@ -76,7 +74,9 @@ public class ColorGradientSorter extends Sorter
 		//on press reverses order and if no algo running re-organizes and re-paints to show it 
 		orderButton.addActionListener(e -> reverseOrder());
 		cp.addRow(orderButton, true);
-		
+
+		cp.addRow(ColorButton.createBackgroundColorPickingButton(sortingTool), true);
+
 		GUIHandler.addToggleable(button1, button2, orderButton);
 		//for when it's set to default etc. recolours it
 		GUIHandler.addUpdatables(orderButton::repaint);
@@ -137,7 +137,6 @@ public class ColorGradientSorter extends Sorter
 		leftColor = rightColor;
 		rightColor = temp;
 		ColorButton.recolorButtons();
-		GUIHandler.update();
 		reloadArray();
 		//if un-sorted, returns after switch
 		if(!Algorithm.isSorted(sortingTool, false)) return;

@@ -1,16 +1,17 @@
 package main.visualizers.bases;
 
-import java.awt.*;
-import java.util.Arrays;
-
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
 import main.sorters.Sorter;
 import main.sorters.Sorter.Sorters;
 import main.ui.custimization.Customizable;
+import main.ui.custimization.CustomizationPanel;
 import main.ui.custimization.values.IntStorageValue;
 import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
+
+import java.awt.*;
+import java.util.Arrays;
 
 /**
  *  Base class
@@ -50,9 +51,10 @@ public abstract class Visualizer implements Customizable
 	}
 
 	/**
-	 * This draws the Sorters array to the screen
+	 * This draws the Sorters array to the screen <br>
+	 * <font color="red">you probably do not want to override this</font>
 	 */
-	public final void drawArray(Graphics2D g)
+	public void drawArray(Graphics2D g)
 	{
 		Sorter sorter = sortingTool.getSorter();
 		if(sorter.getArraySize() > 0 && highlights != null)
@@ -72,7 +74,10 @@ public abstract class Visualizer implements Customizable
 	{
 		Arrays.fill(highlights, defaultColor);
 	}
-	
+
+	@Override public void addCustomizationComponents(CustomizationPanel cp) {}
+	@Override public void addStorageValues() {}
+
 	/**
 	 * This method takes in a value and spits out the width of that # of VCs including margins and 
 	 * @param size # of VCs 

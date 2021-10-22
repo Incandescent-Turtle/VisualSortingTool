@@ -1,11 +1,11 @@
 package main.visualizers.bases;
 
-import java.awt.*;
-
 import main.VisualSortingTool;
 import main.sorters.Sorter;
 import main.sorters.Sorter.Sorters;
 import main.vcs.VisualComponent;
+
+import java.awt.*;
 
 public abstract class FixedSizeVisualizer extends Visualizer
 {
@@ -88,23 +88,24 @@ public abstract class FixedSizeVisualizer extends Visualizer
 	public void resize()
 	{
 		int arraySize = sortingTool.getSorter().getArraySize();
-		int baseY = componentGap;
-		int numOfRows = 1;
-		int limit;
+
 		componentSize = 1;
-		//finds biggest possible size
-		//bottom of the last row < the bottom of the screen
-		while((baseY + numOfRows*(componentSize+componentGap)-componentGap) < (sortingTool.getVisualizerHeight() - componentGap))
+		while(true)
 		{
+			//total length if all components were lined up horizontally
+			int totalWidth = arraySize * (componentSize+componentGap) - componentGap;
+
+			//how many visualizer widths can you fit into the total length? round up!
+			double rows = Math.ceil((float)totalWidth/(sortingTool.getVisualizerWidth()-minMargin*2));
+
+			//amount of rows, checking to see if this component would be out of bounds. exits and reverts to prev
+			if(rows*(componentSize+componentGap)+componentSize-componentGap > sortingTool.getVisualizerHeight())
+			{
+				componentSize--;
+				break;
+			}
 			componentSize++;
-			//gap is a fraction of size
-			//componentGap = (int) Math.ceil(componentSize/10f);
-			//at current size how many VCs can fit in a single row
-			limit = (sortingTool.getVisualizerWidth()-minMargin*2+componentGap)/((componentSize+componentGap));
-			//with current size how many rows are needed
-			numOfRows = arraySize/limit + 1;
 		}
-		componentSize-=1;
 	}
 	
 	@Override

@@ -1,15 +1,16 @@
 package main.visualizers;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.Arrays;
-
 import main.VisualSortingTool;
 import main.sorters.Sorter.Sorters;
-import main.ui.custimization.CustomizationPanel;
+import main.util.StringHelper;
+import main.util.Util;
 import main.vcs.ImageVisualComponent;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.FixedSizeVisualizer;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 public class ImageVisualizer extends FixedSizeVisualizer
 {
@@ -21,78 +22,23 @@ public class ImageVisualizer extends FixedSizeVisualizer
 	}
 
 	@Override
-	public void addCustomizationComponents(CustomizationPanel cp)
-	{
-		
-	}
-
-	@Override
-	public void addStorageValues()
-	{
-
-	}
-
-	@Override
 	public void setDefaultValues()
 	{
-		super.setDefaultValues();
 		componentGap = 0;
 		minMargin = 30;
-	}
-
-	@Override
-	protected void drawArray(Graphics2D g, VisualComponent[] array, int arraySize)
-	{
-		super.drawArray(g, array, arraySize);
-		if(true) return;
-		resize();
-		int x = minMargin;
-		int row = 0;
-		for (int i = 0; i < arraySize; i++)
-		{
-			BufferedImage image = ((ImageVisualComponent)array[i]).getOriginalImage();
-			int width = image.getWidth();
-			int height = image.getHeight();
-			if(width > height)
-			{
-				height = (int) (height / ((float)width/componentSize));
-				width = componentSize;
-
-			} else {
-				width = (int) (width / ((float)height/componentSize));
-				height = componentSize;
-			}
-			if(x+width+2 > sortingTool.getVisualizerWidth())
-			{
-				row++;
-				x = minMargin;
-			}
-
-			int y = row*componentSize + (componentSize - height)/2;
-			g.drawImage(image, x, y, x + width, y + height, 0, 0, image.getWidth(), image.getHeight(), null);
-			x += width+2;
-		}
 	}
 
 	@Override
 	protected void drawComponent(Graphics2D g, VisualComponent[] array, int index, int arraySize, int x, int y)
 	{
 		componentGap = 0;
-		//custom resizing....kinda crappy
-//		resize();
-//		BufferedImage image = ((ImageVisualComponent)array[index]).getScaledImage();
-//		int width = image.getWidth();
-//		int height = image.getHeight();
-//		x += (componentSize - width)/2;
-//		y += (componentSize - height)/2;
-//
-//
-//		g.drawImage(image, x, y, null);
-
 		resize();
+		//"full size" image
 		BufferedImage image = ((ImageVisualComponent)array[index]).getOriginalImage();
 		int width = image.getWidth();
 		int height = image.getHeight();
+
+		//preserving aspect ratio
 		if(width > height)
 		{
 			height = (int) (height / ((float)width/componentSize));
@@ -102,12 +48,14 @@ public class ImageVisualizer extends FixedSizeVisualizer
 			width = (int) (width / ((float)height/componentSize));
 			height = componentSize;
 		}
+
 		//adding margins
 		x += (componentSize - width)/2;
 		y += (componentSize - height)/2;
+
 		//draws auto-scaled image
 		g.drawImage(image, x, y, x + width, y + height, 0, 0, image.getWidth(), image.getHeight(), null);
-	//	g.drawImage(Util.shrinkImage(image, componentSize, componentSize), x, y, null);
+
 		//dont color in this case
 		if(highlights[index] == null) return;
 
@@ -117,70 +65,38 @@ public class ImageVisualizer extends FixedSizeVisualizer
 		if(!c.equals(defaultColor))
 			g.fillRect(x, y, width, height);
 	}
-	
+
 	@Override
-	public void resize()
+	public void drawArray(Graphics2D g)
 	{
-		super.resize();
-//		int x = minMargin;
-//		componentSize = 10;
-//
-//		if(true) return;
-//		VisualComponent[] array = sortingTool.getSorter().getArray();
-
-		//doesnt work for images, but should for fixed-size, as total width is easier
-//		while(true)
-//		{
-//			int totalWidth = 0;
-//			for (int i = 0; i < array.length; i++)
-//			{
-//				BufferedImage img = ((ImageVisualComponent)array[i]).getOriginalImage();
-//				totalWidth += Util.shrink(img.getWidth(),img.getHeight(), componentSize, componentSize).getWidth();
-//			}
-//			double rows = Math.ceil(totalWidth/sortingTool.getWidth());
-//			totalWidth += componentSize*rows*2;
-//			rows = Math.ceil(totalWidth/sortingTool.getWidth());
-//
-//			System.out.println("resized rows " + rows);
-//			if((rows+1)*componentSize+componentSize > sortingTool.getHeight())
-//			{
-//				componentSize--;
-//				break;
-//			}
-//			componentSize++;
-//		}
-
-		//works exactly as planned, but it induces seizures
-//		while(true)
-//		{
-//			int row = 0;
-//			for (int i = 0; i < array.length; i++)
-//			{
-//				BufferedImage img = ((ImageVisualComponent)array[i]).getOriginalImage();
-//
-//				Dimension dim = Util.shrink(img.getWidth(),img.getHeight(), componentSize, componentSize);
-//				int width = (int) dim.getWidth();
-//				int height = (int) dim.getHeight();
-//
-//				if(x+width+componentGap > sortingTool.getVisualizerWidth())
-//				{
-//					row++;
-//					x = minMargin;
-//				}
-//
-//				int y = row*componentSize;
-//
-//				if(y+height >= sortingTool.getVisualizerHeight())
-//				{
-//					componentSize -= 1;
-//					System.out.println(componentSize);
-//					System.out.println("rows" + row);
-//					return;
-//				}
-//				x += width+componentGap;
-//			}
-//			componentSize++;
-//		}
+		VisualComponent[] array = sortingTool.getSorter().getArray();
+		//for printing error messahe
+		if(array == null || array.length == 0)
+		{
+			//the message to display on the screen
+			String message = "Please pick a valid folder containing .png or .jpg images";
+			float i = 1;
+			//finding the largest possible font
+			while(true)
+			{
+				g.setFont(g.getFont().deriveFont(i));
+				int width = StringHelper.getStringWidth(message, g) + 20;
+				System.out.println(width + " " + sortingTool.getVisualizerWidth());
+				if(width > sortingTool.getVisualizerWidth())
+				{
+					i--;
+					break;
+				}
+				i++;
+			}
+			g.setFont(g.getFont().deriveFont(i));
+			//sets the color so its always visible no matter the background
+			g.setColor(Util.calculateLuminosity(sortingTool.getVisualizationPanel().getBackground()) >= 0.5 ? Color.BLACK : Color.WHITE);
+			//draws message in the center of the panel
+			StringHelper.drawCenteredString(message, sortingTool.getVisualizerWidth()/2, sortingTool.getVisualizerHeight()/2, g);
+		} else {
+			super.drawArray(g);
+		}
 	}
 
 	@Override

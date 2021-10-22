@@ -1,7 +1,14 @@
 package main.sorters.image;
 
+import main.sorters.image.threading.ImageLoadWorker;
+import main.util.Util;
+import main.vcs.ImageVisualComponent;
+import main.vcs.VisualComponent;
+
+import javax.swing.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.FileFilter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -9,13 +16,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Stream;
-
-import javax.swing.*;
-
-import main.sorters.image.threading.ImageLoadWorker;
-import main.util.Util;
-import main.vcs.ImageVisualComponent;
-import main.vcs.VisualComponent;
 
 public class ImageLoader
 {
@@ -109,7 +109,7 @@ public class ImageLoader
 			ImageIcon icon = new ImageIcon(file.getAbsolutePath());
 			//limiting size to conserve memory.
 			//TODO make this dependant on how many images there are and the display size (make bigger/smaller to improve quality/reduce ram usage)
-			BufferedImage img = Util.shrinkImage(icon.getImage(), 400, 400);
+			BufferedImage img = Util.restrainImageSize(icon.getImage(), 400, 400);
 
 			//amount of kb the image takes up
 

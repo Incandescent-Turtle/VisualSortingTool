@@ -1,19 +1,13 @@
 package main.sorters.image;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.swing.*;
-
 import javafx.stage.DirectoryChooser;
 import main.VisualSortingTool;
+import main.algorithms.Algorithm;
 import main.sorters.Sorter;
 import main.ui.GUIHandler;
+import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationPanel;
+import main.ui.custimization.values.BooleanStorageValue;
 import main.ui.custimization.values.StorageValue;
 import main.ui.custimization.values.StringStorageValue;
 import main.util.SynchronousJFXDirectoryChooser;
@@ -22,26 +16,32 @@ import main.vcs.ImageVisualComponent;
 import main.vcs.VisualComponent;
 import main.visualizers.ImageVisualizer;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class ImageSorter extends Sorter
 {
 	private final ImageLoader loader;
 
 	private File directoryPath;
 
-	private ImageSortingMethod sortingMethod;
+	//for sorting order
+	private boolean brightestFirst;
 
-	enum ImageSortingMethod
-	{
-		BRIGHTNESS,
-		RED,
-		BLUE,
-		GREEN
-	}
+	//if images need to be loaded again
+	private boolean requiresLoad = false;
 
 	public ImageSorter(VisualSortingTool sortingTool)
 	{
 		super(sortingTool, new ImageVisualizer(sortingTool), Sorters.IMAGE);
-        size = 0;
+		size = 0;
         visualizer.resizeHighlights(size);
         loader = new ImageLoader(this);
 	}
@@ -61,15 +61,39 @@ public class ImageSorter extends Sorter
 	public void setDefaultValues()
 	{
 		directoryPath = new File("");
-		sortingMethod = ImageSortingMethod.GREEN;
+		brightestFirst = true;
 	}
 	
 	@Override
 	public void addStorageValues()
 	{
-		StorageValue.addStorageValues(new StringStorageValue(getPrefix(), "directoryPath", str -> directoryPath = new File(str), () -> directoryPath.getAbsolutePath()));
+		StorageValue.addStorageValues(
+				new StringStorageValue(getPrefix(), "directoryPath", str -> directoryPath = new File(str), () -> directoryPath.getAbsolutePath()).setDefaultResetable(false),
+				new BooleanStorageValue(getPrefix(), "brightestFirst", b -> brightestFirst = b, () -> brightestFirst)
+		);
+		GUIHandler.addUpdatables(() -> {
+			if(sortingTool.getSorter() == ImageSorter.this)
+			{
+				generateValues();
+			} else {
+				requiresLoad = true;
+			}
+		});
 	}
-	
+
+	/**
+	 * re-generates if needed
+	 */
+	@Override
+	public void switchedTo()
+	{
+		if(requiresLoad)
+		{
+			generateValues();
+			requiresLoad = false;
+		}
+	}
+
 	@Override
 	public void addSorterCustomizationComponents(CustomizationPanel cp)
 	{
@@ -87,20 +111,54 @@ public class ImageSorter extends Sorter
 				}
 			}
 		});
-		cp.addRow(chooseFolderButton, true);
 
-		JComboBox<ImageSortingMethod> cb = new JComboBox<>();
-		for (ImageSortingMethod method : ImageSortingMethod.values())
-		{
-			cb.addItem(method);
-		}
-		cb.setSelectedItem(ImageSortingMethod.GREEN);
-		cb.addItemListener(e -> {
-			sortingMethod = (ImageSortingMethod) e.getItem();
+		//button to toggle sorting order. changes color/text based on which goes first
+		JButton toggle = new JButton() {
+
+			@Override
+			public String getText()
+			{
+				return brightestFirst ? "Light to Dark" : "Dark to Light";
+			}
+
+			@Override
+			public Color getBackground()
+			{
+				return brightestFirst ? Color.WHITE : Color.BLACK;
+			}
+
+			@Override
+			public Color getForeground()
+			{
+				return brightestFirst ? Color.BLACK : Color.WHITE;
+			}
+		};
+		//when clicked, switches the order, reloads the images with their new values,
+		// and reverses the current array so it looks sorted with the new method. repaints
+		toggle.addActionListener(e -> {
+			brightestFirst = !brightestFirst;
 			reloadValues();
+			//only if sorted
+			if(Algorithm.isSorted(sortingTool, false))
+			{
+				List<VisualComponent> list = Arrays.asList(array);
+				Collections.reverse(list);
+				array = list.toArray(new VisualComponent[0]);
+				sortingTool.repaint();
+			}
 		});
-		cp.add(cb);
-		GUIHandler.addToggleable(chooseFolderButton, cb);
+
+		JButton reload = new JButton("Reload");
+		reload.addActionListener(e -> generateValues());
+
+		cp.addRow(chooseFolderButton, true);
+		//cp.addRow(cb, true);
+		cp.addRow(toggle, true);
+		cp.addRow(reload, true);
+		cp.addRow(ColorButton.createBackgroundColorPickingButton(sortingTool), true);
+		GUIHandler.addToggleable(chooseFolderButton, toggle, reload);
+		//reloads values on update
+		GUIHandler.addUpdatables(this::reloadValues);
 	}
 
 	/**
@@ -132,26 +190,27 @@ public class ImageSorter extends Sorter
         {
 			directoryPath = file;
         } else {
+        	//prolly dont wanna exit lol
         	System.exit(0);
         }*/
 		return true;
 	}
 
 	/**
-	 * initiates the loading process, handling progress bar and everything
+	 * initiates the loading process
 	 */
 	private void loadFromFolder()
 	{
+		if(!directoryPath.exists())
+		{
+			System.out.println("Folder Location Not Found");
+			return;
+		}
 		GUIHandler.setEnabled(false);
 		if(directoryPath.equals(new File(""))) return;
-		//for logging time
-//		long start = System.currentTimeMillis();
 		
-		//loading values into array 
+		//loading values into array
 		array = loader.loadFromFolder(directoryPath);
-		
-		//for logging time
-//		System.out.println("Loaded in " + (System.currentTimeMillis() - start)/1000f + "s");
 		
 		size = array.length;
         visualizer.resizeHighlights(size);
@@ -161,56 +220,25 @@ public class ImageSorter extends Sorter
 	/**
 	 * for generating the VC values based on image and current sorting method
 	 * @param img image of VC 
-	 * @return the int value t be used to sort
+	 * @return the float value to be used to sort
 	 */
 	public float getValueOf(BufferedImage img)
 	{
 		Color color = Util.getAverageColor(img);
-		return
-			switch(sortingMethod)
-			{
-				case BRIGHTNESS -> -Util.calculateBrightness(color)*1000;
-				case RED -> Util.compareColors(color, Color.RED);
-				case BLUE -> Util.compareColors(color, Color.BLUE);
-				case GREEN -> Util.compareColors(color, Color.GREEN);
-				default -> -(color.getGreen()+color.getRed()+color.getBlue())/color.getGreen();
-			};
+		return (brightestFirst ? -1 : 1) * Util.calculateLuminosity(color)*1000;
 	}
-	
-//	private int calculateBrightness(BufferedImage img)
-//	{
-//		float luminance = 0;
-//		long r = 0;
-//		long g = 0;
-//		long b = 0;
-//		for(int i = 0; i < img.getWidth(); i++)
-//		{
-//			for(int j = 0; j < img.getHeight(); j++)
-//			{
-//				Color color = new Color(img.getRGB(i, j));
-//				r+=color.getRed();
-//				g+=color.getGreen();
-//				b+=color.getBlue();
-//			}
-//		}
-//		int pixels = img.getWidth()*img.getHeight();
-//		Color color = new Color((int) (r/pixels),(int) (g/pixels), (int) (b/pixels));
-//		luminance += (color.getRed() * 0.2126f + color.getGreen() * 0.7152f + color.getBlue() * 0.0722f) / 255;
-//
-//		return (int) (luminance*1000) *-1;
-//	}
 
 	/**
 	 * reloads the values of all the image VCs with the current sorting method type
 	 */
 	private void reloadValues()
 	{
+		if(array == null) return;
 		for (VisualComponent vc : array)
 		{
 			vc.setValue(getValueOf(((ImageVisualComponent)vc).getOriginalImage()));
 		}
 	}
-
 
 	@Override
 	protected void reloadArray() {}

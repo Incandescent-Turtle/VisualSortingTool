@@ -1,27 +1,19 @@
 package main.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.ArrayList;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
 import main.sorters.Sorter;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.values.StorageValue;
 import main.ui.custimization.values.StringStorageValue;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
 
 public class TopBarGUI extends JPanel
 {
@@ -86,6 +78,8 @@ public class TopBarGUI extends JPanel
 			{
 	    		ColorButton.recolorButtons();
 	        	sortingTool.setSorter((Sorter) e.getItem());
+				//tells the sorter its been switched to
+				sortingTool.getSorter().switchedTo();
 	        	Sorter sorter = sortingTool.getSorter();
 	        	sortingTool.getGUIHandler().getCustomizationGUI().changeSorterPanel(sorter);
 	        	Algorithm.delay = ((int) delaySpinner.getValue());
@@ -134,6 +128,11 @@ public class TopBarGUI extends JPanel
 		    	//if there isn't an algorithm active and it isnt sorted
 		    	if(sorter.getAlgorithm() == null)
 		    	{
+					if(sorter.getArray() == null)
+					{
+						System.out.println("Can't run because the array is null");
+						return;
+					}
 		    		sorter.tryShuffleArray();
 					System.out.println(algorithmList.getSelectedItem().toString() + " has been pushed");
 					sorter.setAlgorithm((Algorithm)algorithmList.getSelectedItem());

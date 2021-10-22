@@ -1,9 +1,5 @@
 package main.ui.custimization.values;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.prefs.Preferences;
-
 import main.interfaces.Closable;
 import main.interfaces.OnChangeAction;
 import main.interfaces.RetrieveAction;
@@ -11,6 +7,10 @@ import main.ui.BetterFrame;
 import main.ui.GUIHandler;
 import main.ui.custimization.CustomizationGUI;
 import main.util.Util;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.prefs.Preferences;
 
 public abstract class StorageValue<T> implements Closable
 {	
@@ -32,9 +32,9 @@ public abstract class StorageValue<T> implements Closable
 	protected final T defaultValue;
 	//prefix + key
 	protected final String fullKey;
-	
-	//whether or not this value is able to be reset (ex. sorter/algorithms won't be)
-	private boolean canReset = true;
+
+	private boolean canDefaultReset = true;
+	private boolean canSaveReset = true;
 
 	/**
 	 * class to make storing data in preferences super easy. loads value on creation
@@ -87,11 +87,38 @@ public abstract class StorageValue<T> implements Closable
 	{
 		storeValue(CustomizationGUI.PREFS);
 	}
-	
-	//cheeky method for sorters and algorithms so their states can't be reset mid-program (teleportation!)
+
+	/**
+	 * if this value will be reset when either reset button is pressed
+	 * @param canReset whether it can be reset
+	 * @return this instance
+	 */
 	public StorageValue<T> setResetable(boolean canReset)
 	{
-		this.canReset = canReset;
+		canDefaultReset = canReset;
+		canSaveReset = canReset;
+		return this;
+	}
+
+	/**
+	 * if this value will be reset when the reset to save button is pressed
+	 * @param canSaveReset whether it can be reset to save
+	 * @return this instance
+	 */
+	public StorageValue<T> setSaveResetable(boolean canSaveReset)
+	{
+		this.canSaveReset = canSaveReset;
+		return this;
+	}
+
+	/**
+	 * if this value will be reset when the default button is pressed
+	 * @param canDefaultReset whether it can be reset to default
+	 * @return this instance
+	 */
+	public StorageValue<T> setDefaultResetable(boolean canDefaultReset)
+	{
+		this.canDefaultReset = canDefaultReset;
 		return this;
 	}
 	
@@ -111,12 +138,12 @@ public abstract class StorageValue<T> implements Closable
 				case REMOVE -> sv.removeValue(prefs);
 
 				case RESET_TO_SAVE -> {
-					if (!sv.canReset)
+					if (!sv.canSaveReset)
 						break;
 					sv.loadValue(prefs);
 				}
 				case RESET_TO_DEFAULTS -> {
-					if (!sv.canReset)
+					if (!sv.canDefaultReset)
 						break;
 					sv.removeValue(prefs);
 					sv.loadValue(prefs);

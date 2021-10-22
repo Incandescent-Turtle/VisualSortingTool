@@ -1,18 +1,16 @@
 package main.visualizers;
 
-import java.awt.*;
-
-import javax.swing.SpinnerNumberModel;
-
 import main.VisualSortingTool;
 import main.sorters.Sorter.Sorters;
-import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
 import main.ui.custimization.values.StorageValue;
 import main.vcs.ColorVisualComponent;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.Visualizer;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class ColorGradientVisualizer extends Visualizer
 {
@@ -44,9 +42,6 @@ public class ColorGradientVisualizer extends Visualizer
 		//spinner to change left/right margin
 		nm = new SpinnerNumberModel(minMargin, 0, 100, 1);
 		cp.addRow("Margin:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> minMargin = n, () -> minMargin));	
-		
-		//change background button
-		cp.addRow(ColorButton.createBackgroundColorPickingButton(sortingTool), true);
 	}
 	
 	@Override
