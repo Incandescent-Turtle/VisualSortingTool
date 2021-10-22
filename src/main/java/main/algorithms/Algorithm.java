@@ -1,15 +1,6 @@
 package main.algorithms;
 
-import java.awt.Color;
-import java.awt.Font;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-
 import main.VisualSortingTool;
-import main.interfaces.RetrieveAction;
 import main.sorters.Sorter;
 import main.ui.GUIHandler;
 import main.ui.custimization.ColorButton;
@@ -19,6 +10,10 @@ import main.ui.custimization.values.BooleanStorageValue;
 import main.ui.custimization.values.IntStorageValue;
 import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.function.Supplier;
 
 /**
  * @author rorsm
@@ -170,7 +165,7 @@ public abstract class Algorithm implements Customizable
 	 */
 	public static void addGeneralAlgorithmCustomizationComponents(VisualSortingTool sortingTool, JPanel panel)
 	{
-		RetrieveAction<Color> retrieveAction = () -> confirmationColor;
+		Supplier<Color> retrieveAction = () -> confirmationColor;
 		JButton button = new ColorButton(sortingTool, c -> confirmationColor = c, retrieveAction, "Confirmation Color");
 		button.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		panel.add(button);

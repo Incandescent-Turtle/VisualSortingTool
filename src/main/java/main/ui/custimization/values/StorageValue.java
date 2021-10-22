@@ -1,8 +1,6 @@
 package main.ui.custimization.values;
 
 import main.interfaces.Closable;
-import main.interfaces.OnChangeAction;
-import main.interfaces.RetrieveAction;
 import main.ui.BetterFrame;
 import main.ui.GUIHandler;
 import main.ui.custimization.CustomizationGUI;
@@ -10,6 +8,8 @@ import main.util.Util;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 
 public abstract class StorageValue<T> implements Closable
@@ -24,10 +24,10 @@ public abstract class StorageValue<T> implements Closable
 	private static final ArrayList<StorageValue<?>> STORAGE_VALUES = new ArrayList<>();
 	
 	//the interface to help set a variable while passing in its stored value
-	protected final OnChangeAction<T> changeAction;
+	protected final Consumer<T> changeAction;
 	
 	//the interface to get the current value to store
-	protected final RetrieveAction<T> retrieveAction;
+	protected final Supplier<T> retrieveAction;
 
 	protected final T defaultValue;
 	//prefix + key
@@ -42,12 +42,12 @@ public abstract class StorageValue<T> implements Closable
 	 * @param key variable name
 	 * @param defaultValue if differing from retrieve action
 	 * @param changeAction the interface to help set a variable while passing in its stored value
-	 * @param retrieveAction the interface to get the current value to store
+	 * @param Supplier the interface to get the current value to store
 	 */
-	protected StorageValue(String prefix, String key, T defaultValue, OnChangeAction<T> changeAction, RetrieveAction<T> retrieveAction)
+	protected StorageValue(String prefix, String key, T defaultValue, Consumer<T> changeAction, Supplier<T> Supplier)
 	{
 		this.fullKey = prefix + key;
-		this.retrieveAction = retrieveAction;
+		this.retrieveAction = Supplier;
 		this.defaultValue = defaultValue;
 		this.changeAction = changeAction;
 		loadValue(CustomizationGUI.PREFS);
@@ -58,11 +58,11 @@ public abstract class StorageValue<T> implements Closable
 	 * @param prefix the class prefix
 	 * @param key variable name
 	 * @param changeAction the interface to help set a variable while passing in its stored value
-	 * @param retrieveAction the interface to get the current value to store
+	 * @param Supplier the interface to get the current value to store
 	 */
-	protected StorageValue(String prefix, String key, OnChangeAction<T> changeAction, RetrieveAction<T> retrieveAction)
+	protected StorageValue(String prefix, String key, Consumer<T> changeAction, Supplier<T> Supplier)
 	{
-		this(prefix, key, retrieveAction.retrieve(), changeAction, retrieveAction);
+		this(prefix, key, Supplier.get(), changeAction, Supplier);
 	}
 	
 	/**
@@ -172,11 +172,11 @@ public abstract class StorageValue<T> implements Closable
 	 * @param prefix the class prefix
 	 * @param key the name of the color variable
 	 * @param changeAction the loaded color is passed into this param, c -> myColor = c is what it should look like
-	 * @param retrieveAction this is used to fetch the current state of this color variable to store it
+	 * @param Supplier this is used to fetch the current state of this color variable to store it
 	 * @return the {@link StorageValue} equipped to load/save the color
 	 */
-	public static IntStorageValue createColorStorageValue(String prefix, String key, OnChangeAction<Color> changeAction, RetrieveAction<Color> retrieveAction)
+	public static IntStorageValue createColorStorageValue(String prefix, String key, Consumer<Color> changeAction, Supplier<Color> Supplier)
 	{
-		return new IntStorageValue(prefix, key, num -> changeAction.doStuff(new Color(num)), () -> Util.colorToInt(retrieveAction.retrieve()));
+		return new IntStorageValue(prefix, key, num -> changeAction.accept(new Color(num)), () -> Util.colorToInt(Supplier.get()));
 	}
 }

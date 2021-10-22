@@ -1,19 +1,17 @@
 package main.ui.custimization;
 
-import java.awt.Color;
+import main.VisualSortingTool;
+import main.VisualizationPanel;
+import main.sorters.Sorter;
+import main.visualizers.bases.Visualizer;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
-import javax.swing.JButton;
-import javax.swing.JColorChooser;
-
-import main.VisualSortingTool;
-import main.VisualizationPanel;
-import main.interfaces.OnChangeAction;
-import main.interfaces.RetrieveAction;
-import main.sorters.Sorter;
-import main.visualizers.bases.Visualizer;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class ColorButton extends JButton implements ActionListener
 {
@@ -21,8 +19,8 @@ public class ColorButton extends JButton implements ActionListener
 	private final static ArrayList<ColorButton> COLOR_BUTTONS = new ArrayList<>();
 	
 	private final VisualSortingTool sortingTool;
-	private final OnChangeAction<Color> okAction;
-	private final RetrieveAction<Color> retrieveAction;
+	private final Consumer<Color> okAction;
+	private final Supplier<Color> retrieveAction;
 	private final String text;
 	
 	/**
@@ -35,7 +33,7 @@ public class ColorButton extends JButton implements ActionListener
 	 * @param retrieveAction action to get the default color
 	 * @param text the text to appear on the button and frame
 	 */
-	public ColorButton(VisualSortingTool sortingTool, OnChangeAction<Color> okAction, RetrieveAction<Color> retrieveAction, String text)
+	public ColorButton(VisualSortingTool sortingTool, Consumer<Color> okAction, Supplier<Color> retrieveAction, String text)
 	{
 		super(text);
 		//adds for recolouring etc
@@ -45,7 +43,7 @@ public class ColorButton extends JButton implements ActionListener
 		this.retrieveAction = retrieveAction;
 		this.text = text;
 		
-		setBackground(retrieveAction.retrieve());
+		setBackground(retrieveAction.get());
 		addActionListener(this);	
 	} 
 	
@@ -54,7 +52,7 @@ public class ColorButton extends JButton implements ActionListener
 	{
 		//disables all color buttons until done
 		ColorButton.enableColorButtons(false);
-	    final JColorChooser colorChooser = new JColorChooser(retrieveAction.retrieve());
+	    final JColorChooser colorChooser = new JColorChooser(retrieveAction.get());
 	    ActionListener al = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -62,7 +60,7 @@ public class ColorButton extends JButton implements ActionListener
 				//re-enables all color buttons
 				ColorButton.enableColorButtons(true);
 				//sets the color to the chosen color
-				okAction.doStuff(colorChooser.getColor());
+				okAction.accept(colorChooser.getColor());
 				//sets the new button background to represent the new color
 				setBackground(colorChooser.getColor());
 			}
@@ -120,7 +118,7 @@ public class ColorButton extends JButton implements ActionListener
 	{
 		for(ColorButton colorButton : COLOR_BUTTONS)
 		{
-			colorButton.setBackground(colorButton.retrieveAction.retrieve());
+			colorButton.setBackground(colorButton.retrieveAction.get());
 		}
 	}
 	
@@ -133,10 +131,10 @@ public class ColorButton extends JButton implements ActionListener
 	public static ColorButton createDefaultColorPickingButton(VisualSortingTool sortingTool, Sorter sorter)
 	{
 		Visualizer visualizer = sorter.getVisualizer();
-		OnChangeAction<Color> okAction = new OnChangeAction<>() {
+		Consumer<Color> okAction = new Consumer<>() {
 			
 			@Override
-			public void doStuff(Color color)
+			public void accept(Color color)
 			{
 				visualizer.setDefaultColor(color);
 				if(sorter.getAlgorithm() == null)
@@ -154,10 +152,10 @@ public class ColorButton extends JButton implements ActionListener
 	 */
 	public static ColorButton createBackgroundColorPickingButton(VisualSortingTool sortingTool)
 	{
-		OnChangeAction<Color> okAction = new OnChangeAction<>() {
+		Consumer<Color> okAction = new Consumer<>() {
 			
 			@Override
-			public void doStuff(Color color)
+			public void accept(Color color)
 			{
 				sortingTool.getVisualizationPanel().setBackground(color);
 				sortingTool.repaint();

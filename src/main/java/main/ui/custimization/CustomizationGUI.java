@@ -1,33 +1,22 @@
 package main.ui.custimization;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.prefs.Preferences;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
-import main.interfaces.OnChangeAction;
-import main.interfaces.RetrieveAction;
 import main.sorters.Sorter;
 import main.ui.GUIHandler;
 import main.ui.custimization.values.StorageValue;
 import main.ui.custimization.values.StorageValue.StorageAction;
 import main.visualizers.bases.Visualizer;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.prefs.Preferences;
 
 public class CustomizationGUI extends JPanel
 {
@@ -174,16 +163,16 @@ public class CustomizationGUI extends JPanel
 	 * @param onUpdate returns the value that the spinner will fetch when updated
 	 * @return returns the new JSpinner
 	 */
-	public static JSpinner createJSpinner(VisualSortingTool sortingTool, SpinnerNumberModel nm, OnChangeAction<Integer> changeAction, RetrieveAction<Integer> onUpdate)
+	public static JSpinner createJSpinner(VisualSortingTool sortingTool, SpinnerNumberModel nm, Consumer<Integer> changeAction, Supplier<Integer> onUpdate)
 	{
 		JSpinner spinner = new JSpinner(nm);
-		GUIHandler.addUpdatables(() -> spinner.setValue(onUpdate.retrieve()));
+		GUIHandler.addUpdatables(() -> spinner.setValue(onUpdate.get()));
 		spinner.addChangeListener(new ChangeListener()
 		{
 			@Override
 			public void stateChanged(ChangeEvent e)
 			{
-				changeAction.doStuff((int) spinner.getValue());
+				changeAction.accept((int) spinner.getValue());
 				sortingTool.getSorter().recalculateAndRepaint();
 			}
 		});

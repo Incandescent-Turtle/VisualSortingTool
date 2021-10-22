@@ -1,9 +1,8 @@
 package main.ui.custimization.values;
 
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.prefs.Preferences;
-
-import main.interfaces.OnChangeAction;
-import main.interfaces.RetrieveAction;
 
 public class IntStorageValue extends StorageValue<Integer>
 {			
@@ -15,7 +14,7 @@ public class IntStorageValue extends StorageValue<Integer>
 	 * @param retrieveAction should look like () -> myVar || functional interface to 
 	 * Retrieve variable for storage
 	 */
-	public IntStorageValue(String prefix, String key, OnChangeAction<Integer> changeAction, RetrieveAction<Integer> retrieveAction)
+	public IntStorageValue(String prefix, String key, Consumer<Integer> changeAction, Supplier<Integer> retrieveAction)
 	{
 		super(prefix, key, changeAction, retrieveAction);
 	}
@@ -23,12 +22,12 @@ public class IntStorageValue extends StorageValue<Integer>
 	@Override
 	public final void loadValue(Preferences prefs)
 	{
-		changeAction.doStuff(prefs.getInt(fullKey, defaultValue));
+		changeAction.accept(prefs.getInt(fullKey, defaultValue));
 	}
 	
 	@Override
 	public final void storeValue(Preferences prefs)
 	{
-		prefs.putInt(fullKey, retrieveAction.retrieve());
+		prefs.putInt(fullKey, retrieveAction.get());
 	}
 }

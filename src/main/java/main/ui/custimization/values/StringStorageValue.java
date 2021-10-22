@@ -1,9 +1,8 @@
 package main.ui.custimization.values;
 
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.prefs.Preferences;
-
-import main.interfaces.OnChangeAction;
-import main.interfaces.RetrieveAction;
 
 public class StringStorageValue extends StorageValue<String>
 {
@@ -15,7 +14,7 @@ public class StringStorageValue extends StorageValue<String>
 	 * @param retrieveAction should look like () -> myVar || functional interface to 
 	 * Retrieve variable for storage
 	 */
-	public StringStorageValue(String prefix, String key, OnChangeAction<String> changeAction, RetrieveAction<String> retrieveAction)
+	public StringStorageValue(String prefix, String key, Consumer<String> changeAction, java.util.function.Supplier<String> retrieveAction)
 	{
 		super(prefix, key, changeAction, retrieveAction);
 	}
@@ -29,7 +28,7 @@ public class StringStorageValue extends StorageValue<String>
 	 * @param retrieveAction should look like () -> myVar || functional interface to 
 	 * Retrieve variable for storage
 	 */
-	public StringStorageValue(String prefix, String key, String defaultValue, OnChangeAction<String> changeAction, RetrieveAction<String> retrieveAction)
+	public StringStorageValue(String prefix, String key, String defaultValue, Consumer<String> changeAction, Supplier<String> retrieveAction)
 	{
 		super(prefix, key, defaultValue, changeAction, retrieveAction);
 	}
@@ -37,12 +36,12 @@ public class StringStorageValue extends StorageValue<String>
 	@Override
 	public void loadValue(Preferences prefs)
 	{
-		changeAction.doStuff(prefs.get(fullKey, defaultValue));
+		changeAction.accept(prefs.get(fullKey, defaultValue));
 	}
 
 	@Override
 	public void storeValue(Preferences prefs)
 	{
-		prefs.put(fullKey, retrieveAction.retrieve());
+		prefs.put(fullKey, retrieveAction.get());
 	}
 }
