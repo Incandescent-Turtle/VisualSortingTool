@@ -24,6 +24,10 @@ public class CustomizationGUI extends JPanel
 	public static final Preferences PREFS = Preferences.userRoot().node(VisualSortingTool.class.getSimpleName());
 	public static final JColorChooser COLOR_CHOOSER = new JColorChooser();
 
+	static
+	{
+		COLOR_CHOOSER.getChooserPanels();
+	}
 	//these panels stack on top of each other, each showing the respective sorter/algorithm
 	private JPanel sorterPanels, algorithmPanels;
 	

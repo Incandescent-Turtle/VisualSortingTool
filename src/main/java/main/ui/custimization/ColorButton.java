@@ -54,7 +54,6 @@ public class ColorButton extends JButton implements ActionListener
 		ColorButton.enableColorButtons(false);
 	    final JColorChooser colorChooser = CustomizationGUI.COLOR_CHOOSER;
 		colorChooser.setColor(retrieveAction.get());
-
 	    ActionListener al = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)

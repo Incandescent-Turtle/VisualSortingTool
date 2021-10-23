@@ -265,7 +265,8 @@ public abstract class Sorter implements Customizable
 		BAR_HEIGHT("Bar Height"),
 		COLOR_GRADIENT("Color Gradient"),
 		NUMBER("Number Grid"),
-		IMAGE("Image");
+		IMAGE("Image"),
+		DOT("Dot");
 		
 		private final String name;
 		

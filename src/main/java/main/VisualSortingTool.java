@@ -4,10 +4,7 @@ import javafx.application.Platform;
 import main.algorithms.Algorithm;
 import main.algorithms.BubbleSort;
 import main.algorithms.SelectionSort;
-import main.sorters.BarHeightSorter;
-import main.sorters.ColorGradientSorter;
-import main.sorters.NumberSorter;
-import main.sorters.Sorter;
+import main.sorters.*;
 import main.sorters.image.ImageSorter;
 import main.ui.BetterFrame;
 import main.ui.GUIHandler;
@@ -51,7 +48,8 @@ public class VisualSortingTool extends JPanel
 			   sorter = new BarHeightSorter(this), 
 						new ColorGradientSorter(this),
 						new NumberSorter(this),
-						new ImageSorter(this)
+						new ImageSorter(this),
+						new DotSorter(this)
 		};
 
 		algorithms = new Algorithm[] {

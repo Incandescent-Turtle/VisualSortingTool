@@ -5,8 +5,6 @@ Vital: info on the sort!
 -total
 
 
-new visualizer for cool dots
-
 class Descriptions {
 
 onMouseMove() {
