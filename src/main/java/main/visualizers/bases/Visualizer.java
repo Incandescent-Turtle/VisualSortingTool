@@ -5,11 +5,13 @@ import main.algorithms.Algorithm;
 import main.sorters.Sorter;
 import main.sorters.Sorter.Sorters;
 import main.ui.custimization.Customizable;
+import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
-import main.ui.custimization.values.IntStorageValue;
+import main.ui.custimization.values.DoubleStorageValue;
 import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 
@@ -20,13 +22,13 @@ import java.util.Arrays;
 public abstract class Visualizer implements Customizable
 {	
 	//in px the min distance from the borders of the screen
-	protected int minMargin = 30;
+	protected double minMargin = 30;
 	//the width of individual components
-	protected int componentWidth = 15;
+	protected double componentWidth = 15;
 	//the height of individual components
-	protected int componentHeight= 15;
+	protected double componentHeight= 15;
 	//the horiztonal/veritcal gap between components
-	protected int componentGap = 10;
+	protected double componentGap = 10;
 	
 	//this could be, for example, what unsorted bars are coloured
 	protected Color defaultColor = Color.WHITE;
@@ -83,7 +85,7 @@ public abstract class Visualizer implements Customizable
 	 * @param size # of VCs 
 	 * @return how many pixels the specified number of VCS takes up
 	 */
-	public final int getTotalWidth(int size)
+	public final double getTotalWidth(int size)
 	{
 		return size*(getComponentWidth()+componentGap) - componentGap;
 	}
@@ -95,22 +97,22 @@ public abstract class Visualizer implements Customizable
 	 * @param size # of VCs 
 	 * @return the size of a single margin
 	 */
-	public final int getRealHMargins(int size)
+	public final double getRealHMargins(int size)
 	{
-		return (sortingTool.getVisualizerWidth() - getTotalWidth(size))/2;
+		return (sortingTool.getVisualizerWidth() - getTotalWidth(size))/2f;
 	}
 	
-	public int getComponentWidth()
+	public double getComponentWidth()
 	{
 		return componentWidth;
 	}
 	
-	public final int getComponentGap()
+	public final double getComponentGap()
 	{
 		return componentGap;
 	}
 	
-	public int getComponentHeight()
+	public double getComponentHeight()
 	{
 		return componentHeight;
 	}
@@ -127,34 +129,40 @@ public abstract class Visualizer implements Customizable
 	/**
 	 * @return the storagevalue all set up to load/save etc the componentWidth variable
 	 */
-	protected StorageValue<Integer> createWidthStorageValue()
+	protected final DoubleStorageValue createWidthStorageValue()
 	{
-		return new IntStorageValue(getPrefix(), "width", n -> componentWidth = n, () -> componentWidth);
+		return new DoubleStorageValue(getPrefix(), "width", n -> componentWidth = n, () -> componentWidth);
 	}
 	
 	/**
 	 * @return the storagevalue all set up to load/save etc the componentGap variable
 	 */
-	protected StorageValue<Integer> createGapStorageValue()
+	protected final DoubleStorageValue createGapStorageValue()
 	{
-		return new IntStorageValue(getPrefix(), "gap", n -> componentGap = n, () -> componentGap);
+		return new DoubleStorageValue(getPrefix(), "gap", n -> componentGap = n, () -> componentGap);
 	}
 	
 	/**
 	 * @return the storagevalue all set up to load/save etc the minMargin variable
 	 */
-	protected StorageValue<Integer> createMarginStorageValue()
+	protected final DoubleStorageValue createMarginStorageValue()
 	{
-		return new IntStorageValue(getPrefix(), "margin", n -> minMargin = n, () -> minMargin);
+		return new DoubleStorageValue(getPrefix(), "margin", n -> minMargin = n, () -> minMargin);
 	}
 	
 	/**
 	 * @return the storagevalue all set up to load/save etc the defaultColor variable
 	 */
-	protected StorageValue<Integer> createDefaultColorStorageValue()
+	protected final StorageValue<Integer> createDefaultColorStorageValue()
 	{
 		return StorageValue.createColorStorageValue(getPrefix(), "defaultColor", c -> defaultColor = c, () -> defaultColor);
+	}
 
+	protected final void addMarginSpinner(CustomizationPanel cp)
+	{
+		SpinnerNumberModel nm = new SpinnerNumberModel(minMargin, 0, 100, 1);
+		//spinner to change left/right margin
+		cp.addRow("Margin:", CustomizationGUI.createDoubleJSpinner(sortingTool, nm, n -> minMargin = n, () -> minMargin));
 	}
 	
 	public final Color[] getHighlights()
@@ -177,7 +185,7 @@ public abstract class Visualizer implements Customizable
 		this.defaultColor = defaultColor;
 	}
 	
-	public int getMinMargin()
+	public double getMinMargin()
 	{
 		return minMargin;
 	}

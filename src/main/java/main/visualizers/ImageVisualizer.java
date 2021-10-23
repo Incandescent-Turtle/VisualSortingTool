@@ -32,7 +32,6 @@ public class ImageVisualizer extends FixedSizeVisualizer
 	protected void drawComponent(Graphics2D g, VisualComponent[] array, int index, int arraySize, int x, int y)
 	{
 		componentGap = 0;
-		resize();
 		//"full size" image
 		BufferedImage image = ((ImageVisualComponent)array[index]).getOriginalImage();
 		int width = image.getWidth();
@@ -49,13 +48,12 @@ public class ImageVisualizer extends FixedSizeVisualizer
 			height = componentSize;
 		}
 
-		//adding margins
+		//adding margins to center the image in its square
 		x += (componentSize - width)/2;
 		y += (componentSize - height)/2;
 
 		//draws auto-scaled image
 		g.drawImage(image, x, y, x + width, y + height, 0, 0, image.getWidth(), image.getHeight(), null);
-
 		//dont color in this case
 		if(highlights[index] == null) return;
 
@@ -63,9 +61,10 @@ public class ImageVisualizer extends FixedSizeVisualizer
 		Color c = highlights[index];
 		g.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), 150));
 		if(!c.equals(defaultColor))
-			g.fillRect(x, y, width, height);
+			g.fillRect( x, y, width, height);
 	}
 
+	//to draw the error promt when no files available etc
 	@Override
 	public void drawArray(Graphics2D g)
 	{

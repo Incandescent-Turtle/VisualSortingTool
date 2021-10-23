@@ -4,8 +4,12 @@ import main.VisualSortingTool;
 import main.vcs.VisualComponent;
 import main.visualizers.BarHeightVisualizer;
 
-public class BarHeightSorter extends Sorter
+import javax.swing.*;
+
+public class BarHeightSorter extends BarSorter
 {
+
+	private JSpinner barAmountSpinner;
 	/**
 	 * a {@link Sorter} to use different height of bars as a visualizer
 	 */
@@ -13,23 +17,7 @@ public class BarHeightSorter extends Sorter
 	{
 		super(sortingTool, new BarHeightVisualizer(sortingTool), Sorters.BAR_HEIGHT);
 	}
-	
-	/**
-	 * <ul>
-	 * 	<li>changes the <b>size</b> variable based on window size</li>
-	 *	<li>resizes <b>array</b> and <b>highlights</b> accordingly</li>
-	 *	 * </ul>  
-	 */
-	@Override
-	protected void resizeArray()
-	{
-		int barWidth = visualizer.getComponentWidth();
-		int barGap = visualizer.getComponentGap();
-		size = (sortingTool.getVisualizerWidth() - visualizer.getMinMargin()*2 + barGap)/(barWidth+barGap);
-		if(size <=0 ) size = 10;
-		super.resizeArray();
-	}
-	
+
 	/*
 	 * based on the array size and height of window creates values that create a linear slope
 	 */
@@ -39,11 +27,8 @@ public class BarHeightSorter extends Sorter
 		int maxHeight = sortingTool.getVisualizerHeight() - 20;
 		int minHeight = 15;
 		//difference between two adjacent bars
-		int step = (maxHeight - minHeight)/size;
-		/* 
-		 	steps have to be whole numbers, so it's not possible to have a proper range between min and max
-		 	so this counts down from max height so at least the screen is filled
-		 */
+		double step = (maxHeight - minHeight)/(float)size;
+
 		for(int i = 0; i < size; i++)
 		{
 			array[i] = new VisualComponent(maxHeight - i*(step));

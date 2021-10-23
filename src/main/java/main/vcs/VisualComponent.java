@@ -3,18 +3,18 @@ package main.vcs;
 public class VisualComponent
 {
 	//the value that is compared to other VCs
-	private float value;
+	private double value;
 	
 	/**
 	 * these are what the sorters hold in their arrays, the things being sorted
 	 * VC for short
 	 */
-	public VisualComponent(float value)
+	public VisualComponent(double value)
 	{
 		this.value = value;
 	}
 	
-	public final float getValue()
+	public final double getValue()
 	{
 		return value;
 	}

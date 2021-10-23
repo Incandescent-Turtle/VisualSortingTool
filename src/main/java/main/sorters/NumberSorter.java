@@ -1,7 +1,5 @@
 package main.sorters;
 
-import javax.swing.SpinnerNumberModel;
-
 import main.VisualSortingTool;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
@@ -9,6 +7,8 @@ import main.ui.custimization.values.IntStorageValue;
 import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
 import main.visualizers.NumberFixedVisualizer;
+
+import javax.swing.*;
 
 public class NumberSorter extends Sorter
 {	
@@ -27,7 +27,7 @@ public class NumberSorter extends Sorter
 	public void addSorterCustomizationComponents(CustomizationPanel cp)
 	{
 		SpinnerNumberModel nm = new SpinnerNumberModel(size, 10, 500, 1);
-		cp.addRow("# of Numbers:", CustomizationGUI.createJSpinner(sortingTool, nm, n -> size = n, () -> size));	
+		cp.addRow("# of Numbers:", CustomizationGUI.createIntJSpinner(sortingTool, nm, n -> size = n, () -> size));
 	}
 	
 	@Override

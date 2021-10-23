@@ -1,15 +1,5 @@
 package main;
 
-import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.util.Arrays;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
-
 import javafx.application.Platform;
 import main.algorithms.Algorithm;
 import main.algorithms.BubbleSort;
@@ -25,7 +15,13 @@ import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.values.StorageValue;
 import main.ui.custimization.values.StorageValue.StorageAction;
-import main.util.Util;
+
+import javax.swing.*;
+import javax.swing.UIManager.LookAndFeelInfo;
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.Arrays;
 
 /**
  *	the window/panel for display
@@ -76,7 +72,7 @@ public class VisualSortingTool extends JPanel
 			{
 				//only resizes when algorithm isnt running
 				guiHandler.getTopBarGUI().resizeGUI();
-				sorter.recalculateAndRepaint();
+				sorter.windowResized();
 			}
 		});	
 		//loads ALL values in from preferences

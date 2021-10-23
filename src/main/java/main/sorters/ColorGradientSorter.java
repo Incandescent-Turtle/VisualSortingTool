@@ -13,7 +13,7 @@ import main.visualizers.ColorGradientVisualizer;
 import javax.swing.*;
 import java.awt.*;
 
-public class ColorGradientSorter extends Sorter
+public class ColorGradientSorter extends BarSorter
 {
 	//the two colors represented in the gradient
 	private Color leftColor, rightColor;
@@ -32,6 +32,7 @@ public class ColorGradientSorter extends Sorter
 	@Override
 	public void setDefaultValues()
 	{
+		super.setDefaultValues();
 		leftColor = Color.CYAN;
 		rightColor = Color.BLUE;
 		order = false;
@@ -46,18 +47,16 @@ public class ColorGradientSorter extends Sorter
 		 * places all these components after all other necessary components
 		 */
 		super.addCustomizationComponents(cp);
+
+		//button to change which color is on the left
+		ColorButton leftColorButton = new ColorButton(sortingTool, c -> {
+			this.leftColor = c; recalculateAndRepaint();}, () -> this.leftColor, "Left Color");
+		cp.addRow(leftColorButton, true);
 		
-		//color buttons that cannot be hit mid run
-		
-		//button to change color1
-		ColorButton button1 = new ColorButton(sortingTool, c -> {
-			leftColor = c; recalculateAndRepaint();}, () -> leftColor, "Left Color");
-		cp.addRow(button1, true);
-		
-		//button to change color2
-		ColorButton button2 = new ColorButton(sortingTool, c -> {
+		//button to change which color is on the right
+		ColorButton rightColorButton = new ColorButton(sortingTool, c -> {
 			rightColor = c; recalculateAndRepaint();}, () -> rightColor, "Right Color");
-		cp.addRow(button2, true);
+		cp.addRow(rightColorButton, true);
 		
 		//button to change order
 		JButton orderButton = new JButton("Reverse Order") 
@@ -67,8 +66,8 @@ public class ColorGradientSorter extends Sorter
 			{
 				super.paintComponent(g);
 				//sets the button/text colors to represent the order. bg is right
-				setBackground(order ? leftColor : rightColor);
-				setForeground(!order ? leftColor : rightColor);
+				setBackground(order ? ColorGradientSorter.this.leftColor : rightColor);
+				setForeground(!order ? ColorGradientSorter.this.leftColor : rightColor);
 			}
 		};
 		//on press reverses order and if no algo running re-organizes and re-paints to show it 
@@ -77,7 +76,7 @@ public class ColorGradientSorter extends Sorter
 
 		cp.addRow(ColorButton.createBackgroundColorPickingButton(sortingTool), true);
 
-		GUIHandler.addToggleable(button1, button2, orderButton);
+		GUIHandler.addToggleable(leftColorButton, rightColorButton, orderButton);
 		//for when it's set to default etc. recolours it
 		GUIHandler.addUpdatables(orderButton::repaint);
 	}
@@ -85,25 +84,12 @@ public class ColorGradientSorter extends Sorter
 	@Override
 	public void addStorageValues()
 	{
+		super.addStorageValues();
 		StorageValue.addStorageValues(
 				StorageValue.createColorStorageValue(getPrefix(), "leftColor", c -> leftColor = c, () -> leftColor),
 				StorageValue.createColorStorageValue(getPrefix(), "rightColor", c -> rightColor = c, () -> rightColor),
 				new BooleanStorageValue(getPrefix(), "order", b -> order = b, () -> order)
 		);
-	}
-	
-	/**
-	 * resizes based on window size and bar sizes/gaps
-	 */
-	@Override
-	protected void resizeArray()
-	{
-		int barWidth = visualizer.getComponentWidth();
-		int barGap = visualizer.getComponentGap();
-		size = (sortingTool.getVisualizerWidth() - visualizer.getMinMargin()*2 + barGap)/(barWidth+barGap);
-		//size was -1 when visualizer had 0 width...this solved it
-		if(size <= 0) size = 10;
-			super.resizeArray();
 	}
 	
 	/**
@@ -118,8 +104,6 @@ public class ColorGradientSorter extends Sorter
 	        int red = (int) (rightColor.getRed() * ratio + leftColor.getRed() * (1 - ratio));
 	        int green = (int) (rightColor.getGreen() * ratio + leftColor.getGreen() * (1 - ratio));
 	        int blue = (int) (rightColor.getBlue() * ratio + leftColor.getBlue() * (1 - ratio));
-	        //whether it fills from the back or front
-	        //int index = order ? size-1-i : i;
 	        //loads the VC with the color
 			array[i] = new ColorVisualComponent(i, new Color(red, green, blue));
 		}

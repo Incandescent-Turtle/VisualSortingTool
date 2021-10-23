@@ -118,19 +118,19 @@ public class ImageSorter extends Sorter
 			@Override
 			public String getText()
 			{
-				return brightestFirst ? "Light to Dark" : "Dark to Light";
+				return !brightestFirst ? "Light to Dark" : "Dark to Light";
 			}
 
 			@Override
 			public Color getBackground()
 			{
-				return brightestFirst ? Color.WHITE : Color.BLACK;
+				return !brightestFirst ? Color.WHITE : Color.BLACK;
 			}
 
 			@Override
 			public Color getForeground()
 			{
-				return brightestFirst ? Color.BLACK : Color.WHITE;
+				return !brightestFirst ? Color.BLACK : Color.WHITE;
 			}
 		};
 		//when clicked, switches the order, reloads the images with their new values,
@@ -245,4 +245,5 @@ public class ImageSorter extends Sorter
 	
 	@Override
 	protected void resizeArray() {}
+
 }

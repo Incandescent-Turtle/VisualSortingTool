@@ -3,6 +3,8 @@ package main.visualizers.bases;
 import main.VisualSortingTool;
 import main.sorters.Sorter;
 import main.sorters.Sorter.Sorters;
+import main.ui.custimization.CustomizationPanel;
+import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
 
 import java.awt.*;
@@ -39,25 +41,26 @@ public abstract class FixedSizeVisualizer extends Visualizer
 	 */
 	@Override
 	protected void drawArray(Graphics2D g, VisualComponent[] array, int arraySize)
-	{				
+	{
 		//maxes componentSize
 		this.resize();
 		//limit per row
-		int limit = (sortingTool.getVisualizerWidth()-minMargin*2+componentGap)/((componentSize+componentGap));
+		int limit = (int) Math.floor((sortingTool.getVisualizerWidth()-minMargin*2+componentGap)/((componentSize+componentGap)));
 		int numOfRows = arraySize/limit + 1;
 		
-		//space above/below everything
-		int hMargins = getRealHMargins(limit);
 		//space to the left/right of everything
-		int vMargins = getRealVMargins(numOfRows);
+		double hMargins = getRealHMargins(limit);
+
+		//space above/below everything
+		double vMargins = getRealVMargins(numOfRows);
 		
 		for(int i = 0; i < arraySize; i++)
 		{
 			int row = i/limit;
 			//x and y are the coords of the top left of the component
-			int x = hMargins + (i%limit)*(componentSize+componentGap);
-			int y = vMargins + (row*(componentGap+componentSize));
-			drawComponent(g, array, i, arraySize, x, y);
+			double x = hMargins + (i%limit)*(componentSize+componentGap);
+			double y = vMargins + (row*(componentGap+componentSize));
+			drawComponent(g, array, i, arraySize, (int) x, (int) y);
 		}
 	}
 
@@ -77,7 +80,7 @@ public abstract class FixedSizeVisualizer extends Visualizer
 	 * @param numOfRows # of rows
 	 * @return the size of a single margin
 	 */
-	public final int getRealVMargins(int numOfRows)
+	public final double getRealVMargins(int numOfRows)
 	{
 		return (sortingTool.getVisualizerHeight() - (numOfRows*(componentSize+componentGap)-componentGap))/2;
 	}
@@ -93,10 +96,10 @@ public abstract class FixedSizeVisualizer extends Visualizer
 		while(true)
 		{
 			//total length if all components were lined up horizontally
-			int totalWidth = arraySize * (componentSize+componentGap) - componentGap;
+			double totalWidth = arraySize * (componentSize+componentGap) - componentGap;
 
 			//how many visualizer widths can you fit into the total length? round up!
-			double rows = Math.ceil((float)totalWidth/(sortingTool.getVisualizerWidth()-minMargin*2));
+			int rows = (int) Math.ceil((float)totalWidth/(sortingTool.getVisualizerWidth()-minMargin*2));
 
 			//amount of rows, checking to see if this component would be out of bounds. exits and reverts to prev
 			if(rows*(componentSize+componentGap)+componentSize-componentGap > sortingTool.getVisualizerHeight())
@@ -107,15 +110,28 @@ public abstract class FixedSizeVisualizer extends Visualizer
 			componentSize++;
 		}
 	}
-	
+
 	@Override
-	public int getComponentWidth()
+	public void addCustomizationComponents(CustomizationPanel cp)
+	{
+		addMarginSpinner(cp);
+	}
+
+	@Override public void addStorageValues()
+	{
+		StorageValue.addStorageValues(
+				createMarginStorageValue()
+		);
+	}
+
+	@Override
+	public double getComponentWidth()
 	{
 		return componentSize;
 	}
 	
 	@Override
-	public int getComponentHeight()
+	public double getComponentHeight()
 	{
 		return componentSize;
 	}

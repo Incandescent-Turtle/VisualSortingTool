@@ -192,18 +192,13 @@ public abstract class Sorter implements Customizable
 	 */
 	protected void shuffleArray()
 	{
-		for(int i = 0; i < size; i++)
+		Random rand = new Random();
+		for(int i = size-1; i > 0; i--)
 		{
-			for(int j = 0; j < 10; j++)
-			{
-				Random rand = new Random();
-				int first, second;
-				first = rand.nextInt(size);
-				second = rand.nextInt(size);
-				VisualComponent temp = array[first];
-				array[first] = array[second];
-				array[second] = temp;
-			}
+			int j = rand.nextInt(i+1);
+			VisualComponent temp = array[i];
+			array[i] = array[j];
+			array[j] = temp;
 		}
 	}
 
@@ -211,7 +206,16 @@ public abstract class Sorter implements Customizable
 	 * when this sorter has been switched to via the gui
 	 */
 	public void switchedTo(){}
-	
+
+	/**
+	 * called when this sorter is active and there is a resizing event
+	 */
+	public void windowResized()
+	{
+		//recalculateAndRepaint();
+		sortingTool.repaint();
+	}
+
 	public Visualizer getVisualizer()
 	{
 		return visualizer;

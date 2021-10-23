@@ -29,6 +29,7 @@ public class NumberFixedVisualizer extends FixedSizeVisualizer
 	@Override
 	public void addCustomizationComponents(CustomizationPanel cp)
 	{
+		super.addCustomizationComponents(cp);
 		cp.addRow(ColorButton.createDefaultColorPickingButton(sortingTool, sortingTool.getSorter(identifier)), true);
 		cp.addRow(ColorButton.createBackgroundColorPickingButton(sortingTool), true);
 		cp.addRow(CustomizationGUI.createMakePinkButton(sortingTool), true);
@@ -37,6 +38,7 @@ public class NumberFixedVisualizer extends FixedSizeVisualizer
 	@Override
 	public void addStorageValues()
 	{
+		super.addStorageValues();
 		//setting up default color with preferences
 		StorageValue.addStorageValues(createDefaultColorStorageValue());
 	}

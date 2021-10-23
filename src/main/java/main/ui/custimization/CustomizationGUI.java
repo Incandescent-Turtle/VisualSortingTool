@@ -22,7 +22,8 @@ public class CustomizationGUI extends JPanel
 {
 	//the only preferences instance to be used
 	public static final Preferences PREFS = Preferences.userRoot().node(VisualSortingTool.class.getSimpleName());
-	
+	public static final JColorChooser COLOR_CHOOSER = new JColorChooser();
+
 	//these panels stack on top of each other, each showing the respective sorter/algorithm
 	private JPanel sorterPanels, algorithmPanels;
 	
@@ -163,7 +164,7 @@ public class CustomizationGUI extends JPanel
 	 * @param onUpdate returns the value that the spinner will fetch when updated
 	 * @return returns the new JSpinner
 	 */
-	public static JSpinner createJSpinner(VisualSortingTool sortingTool, SpinnerNumberModel nm, Consumer<Integer> changeAction, Supplier<Integer> onUpdate)
+	public static JSpinner createIntJSpinner(VisualSortingTool sortingTool, SpinnerNumberModel nm, Consumer<Integer> changeAction, Supplier<Integer> onUpdate)
 	{
 		JSpinner spinner = new JSpinner(nm);
 		GUIHandler.addUpdatables(() -> spinner.setValue(onUpdate.get()));
@@ -172,13 +173,36 @@ public class CustomizationGUI extends JPanel
 			@Override
 			public void stateChanged(ChangeEvent e)
 			{
-				changeAction.accept((int) spinner.getValue());
+				changeAction.accept((Integer)spinner.getValue());
 				sortingTool.getSorter().recalculateAndRepaint();
 			}
 		});
 		return spinner;
 	}
-	
+
+	/**
+	 * creating a spinner that supports double types
+	 * @param sortingTool the sorting tool
+	 * @param nm the model used for this spinner
+	 * @param consumer the interface to deal with the value when the spinner changes
+	 * @param supplier interface to retrieve the current value
+	 * @return returns a JSpinner with all the specifications, that auto-updates the variables
+	 */
+	public static JSpinner createDoubleJSpinner(VisualSortingTool sortingTool, SpinnerNumberModel nm, Consumer<Double> consumer, Supplier<Double> supplier)
+	{
+		JSpinner spinner = new JSpinner(nm);
+		GUIHandler.addUpdatables(() -> spinner.setValue(supplier.get()));
+		spinner.addChangeListener(new ChangeListener()
+		{
+			@Override
+			public void stateChanged(ChangeEvent e)
+			{
+				consumer.accept((double) spinner.getValue());
+				sortingTool.getSorter().recalculateAndRepaint();
+			}
+		});
+		return spinner;	}
+
 	/**
 	 * @return a button that switches the default color to pink
 	 */

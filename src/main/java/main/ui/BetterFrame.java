@@ -1,25 +1,13 @@
 package main.ui;
 
-import java.awt.Dimension;
-import java.awt.GraphicsDevice;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-
 import javafx.application.Platform;
 import main.VisualSortingTool;
 import main.interfaces.Closable;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
 
 public class BetterFrame
 {
@@ -61,7 +49,7 @@ public class BetterFrame
 			nonFullScreenBounds = frame.getBounds();
 			windowState = JFrame.NORMAL;
 			//for fullscreen capabilities
-			addListeners();	
+			addListeners();
 			//keybindings
 			setUpF11ForFullscreen(sortingTool);
 			setUpEscForClose(sortingTool);
