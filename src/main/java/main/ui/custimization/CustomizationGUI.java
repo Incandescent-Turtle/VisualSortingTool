@@ -81,10 +81,11 @@ public class CustomizationGUI extends JPanel
 		add(algorithmPanels);
 
 		//creates an invisible JLabel to push all the elemnents to the top/bottom....a little hacky
-		JLabel fill = new JLabel();
-		fill.setPreferredSize(new Dimension(0, 1000));
-		fill.setMinimumSize(new Dimension(0, 0));
-		add(fill);
+//		JLabel fill = new JLabel();
+//		fill.setPreferredSize(new Dimension(0, 1000));
+//		fill.setMinimumSize(new Dimension(0, 0));
+//		add(fill);
+		add(Box.createVerticalGlue());
 
 		//this button reverts all values to what they were on the previous saves(just loads them again)
 		//centered on the botto
@@ -167,10 +168,10 @@ public class CustomizationGUI extends JPanel
 	 * @param sortingTool the sorting tool
 	 * @param changeAction this will be called with the new value passed in on a change
 	 * @param onUpdate returns the value that the spinner will fetch when updated
-	 * @param reCalcNRepaint whether this spinner should recalculate and repaint the current sorter
+	 * @param recalc whether this spinner should recalculate, or just repainted
 	 * @return returns the new JSpinner
 	 */
-	public static <T extends Number> JSpinner createNumberJSpinner(VisualSortingTool sortingTool, SpinnerNumberModel nm, Consumer<T> changeAction, Supplier<T> onUpdate, boolean reCalcNRepaint)
+	public static <T extends Number> JSpinner createNumberJSpinner(VisualSortingTool sortingTool, SpinnerNumberModel nm, Consumer<T> changeAction, Supplier<T> onUpdate, boolean recalc)
 	{
 		JSpinner spinner = new JSpinner(nm);
 		GUIHandler.addUpdatables(() -> spinner.setValue(onUpdate.get()));
@@ -180,7 +181,8 @@ public class CustomizationGUI extends JPanel
 			public void stateChanged(ChangeEvent e)
 			{
 				changeAction.accept((T)spinner.getValue());
-				if(reCalcNRepaint) sortingTool.getSorter().recalculateAndRepaint();
+				if(recalc) sortingTool.getSorter().recalculateAndRepaint();
+				else sortingTool.repaint();
 			}
 		});
 		return spinner;

@@ -36,16 +36,7 @@ public class BetterFrame
 	{
 		if(frame == null)
 		{
-			frame = new JFrame(title) {
-				
-				//min-size so the UI is always shown
-				@Override
-				public Dimension getMinimumSize()
-				{
-					GUIHandler guiHandler = sortingTool.getGUIHandler();
-					return new Dimension(guiHandler.getTopBarGUI().getGUIWidth(false), guiHandler.getCustomizationGUI().getMinimumSize().height + guiHandler.getTopBarGUI().getHeight() + 50);
-				}
-			};
+			frame = new JFrame(title);
 			nonFullScreenBounds = frame.getBounds();
 			windowState = JFrame.NORMAL;
 			//for fullscreen capabilities
