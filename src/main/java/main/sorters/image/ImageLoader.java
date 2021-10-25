@@ -6,6 +6,7 @@ import main.vcs.ImageVisualComponent;
 import main.vcs.VisualComponent;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileFilter;
@@ -36,6 +37,7 @@ public class ImageLoader
 	 */
 	public VisualComponent[] loadFromFolder(File folder)
 	{
+		System.out.println("laoding giles");
 		//only jpg and png
 		FileFilter filter = file -> Util.getFileExtension(file).equals(".png") || Util.getFileExtension(file).equals(".jpg");
 		
@@ -54,7 +56,9 @@ public class ImageLoader
 		final int portions = Math.min(wantedSize, files.length);
 
 		ImageLoadWorker[] workers = new ImageLoadWorker[portions];
-	     
+		//how big images need to be based on screen size
+		int minImageSize = findMinSize(files.length);
+		long start = System.currentTimeMillis();
 		for (int i = 0; i < portions; i++)
 		{
 			//number of images in this portion
@@ -66,7 +70,7 @@ public class ImageLoader
 			//makes the last portion as big as possible to account for slack
 			if(i == portions-1) endAt = files.length;
 			//adds a new worker
-			workers[i] = new ImageLoadWorker(sorter, this, pw, startAt, endAt, files);
+			workers[i] = new ImageLoadWorker(sorter, this, pw, startAt, endAt, files, minImageSize);
 		}
 
 		//the new array that will be filled
@@ -89,6 +93,7 @@ public class ImageLoader
 		} catch (InterruptedException | ExecutionException ex) {
 			ex.printStackTrace();
 		}
+		System.out.println("total time: " + (System.currentTimeMillis()-start)/1000f);
 		//ensures the bar gets hidden
 		pw.setProgress(1000);
 		//closes thread pool
@@ -101,18 +106,17 @@ public class ImageLoader
 	 * @param file the path to the image file
 	 * @return the image as an object
 	 */
-	public BufferedImage loadImage(File file)
+	public BufferedImage loadImage(File file, int minImageSize)
 	{
 		try
 		{
 			//using icon to load images cause it fast
 			ImageIcon icon = new ImageIcon(file.getAbsolutePath());
-			//limiting size to conserve memory.
-			//TODO make this dependant on how many images there are and the display size (make bigger/smaller to improve quality/reduce ram usage)
-			BufferedImage img = Util.restrainImageSize(icon.getImage(), 400, 400);
+			//limiting size to conserve memory, uses the size of the screen
+			BufferedImage img = Util.restrainImageSize(icon.getImage(), minImageSize, minImageSize);
 
 			//amount of kb the image takes up
-
+//
 //			DataBuffer buff = img.getRaster().getDataBuffer();
 //			int bytes = buff.getSize() * DataBuffer.getDataTypeSize(buff.getDataType()) / 8;
 //			System.out.println(bytes/1000 + "kb");
@@ -123,5 +127,43 @@ public class ImageLoader
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	//TODO abstract this into a Util method, use for fixed size sorters as well
+	private static int findMinSize(int amount)
+	{
+		int maxMargin = 100;
+		int minGap = 0;
+
+		GraphicsDevice[] screens = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
+		//based on the biggest monitor
+		int maxScreenWidth = 0, maxScreenHeight = 0;
+
+		for (GraphicsDevice screen : screens)
+		{
+			maxScreenWidth = Math.max(maxScreenWidth, screen.getDisplayMode().getWidth());
+			maxScreenHeight = Math.max(maxScreenHeight, screen.getDisplayMode().getHeight());
+		}
+
+		maxScreenWidth -= maxMargin*2;
+
+		int minImageSize = 1;
+		while(true)
+		{
+			//total length if all components were lined up horizontally
+			double totalWidth = amount * (minImageSize+minGap) - minGap;
+
+			//how many visualizer widths can you fit into the total length? round up!
+			int rows = (int) Math.ceil((float)totalWidth/(maxScreenWidth-minGap*2));
+
+			//amount of rows, checking to see if this component would be out of bounds. exits and reverts to prev
+			if(rows*(minImageSize+minGap)+minImageSize-minGap > maxScreenHeight)
+			{
+				minImageSize--;
+				break;
+			}
+			minImageSize++;
+		}
+		return minImageSize + 10;
 	}
 }
