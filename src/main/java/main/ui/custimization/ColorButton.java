@@ -140,7 +140,7 @@ public class ColorButton extends JButton implements ActionListener
 				visualizer.setDefaultColor(color);
 				if(sorter.getAlgorithm() == null)
 				{
-					visualizer.resetHighlights();
+					visualizer.reloadHighlights();
 					sortingTool.repaint();
 				}
 			}

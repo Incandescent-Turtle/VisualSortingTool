@@ -95,7 +95,7 @@ public class CustomizationGUI extends JPanel
 			//reloads all values
 			StorageValue.performStorageAction(PREFS, StorageAction.RESET_TO_SAVE);
 			//resets highlights (incase new default color)
-			sortingTool.getSorter().getVisualizer().resetHighlights();
+			sortingTool.getSorter().getVisualizer().reloadHighlights();
 			//recolours all buttons according to their corrosponding color
 			ColorButton.recolorButtons();
 			//resizes, reloads, reshuffles, paints
@@ -116,7 +116,7 @@ public class CustomizationGUI extends JPanel
 			//removes ALL preferences and reloads them - everything goes to defaults
 			StorageValue.performStorageAction(PREFS, StorageAction.RESET_TO_DEFAULTS);
 			//resets highlights (incase new default color)
-			sortingTool.getSorter().getVisualizer().resetHighlights();
+			sortingTool.getSorter().getVisualizer().reloadHighlights();
 			//recolours all buttons according to their corrosponding color
 			ColorButton.recolorButtons();
 			//resizes, reloads, reshuffles, paints
@@ -216,7 +216,7 @@ public class CustomizationGUI extends JPanel
 				//pastel pink
 				vis.setDefaultColor(new Color(222, 165,164));
 				ColorButton.recolorButtons();
-				vis.resetHighlights();
+				vis.reloadHighlights();
 				sortingTool.repaint();
 			}
 		});

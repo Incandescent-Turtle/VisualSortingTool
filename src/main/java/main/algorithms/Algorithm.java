@@ -197,7 +197,7 @@ public abstract class Algorithm implements Customizable
 			{
 				
 				if(animateConfirmation) sorter.getVisualizer().setConfirmed(true);
-				sorter.getVisualizer().resetHighlights();
+				sorter.getVisualizer().reloadHighlights();
 				sortingTool.repaint();
 				//printArray(sortingTool); //debug
 				return true;

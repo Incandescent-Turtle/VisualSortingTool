@@ -71,6 +71,7 @@ public class VisualSortingTool extends JPanel
 				//only resizes when algorithm isnt running
 				guiHandler.getTopBarGUI().resizeGUI();
 				sorter.windowResized();
+				System.out.println(frame.getMinimumSize() + " " + frame.size());
 			}
 		});	
 		//loads ALL values in from preferences
@@ -78,11 +79,12 @@ public class VisualSortingTool extends JPanel
 		ColorButton.recolorButtons();
 		GUIHandler.update();
 		frame.setLocationRelativeTo(null);
+		frame.setMinimumSize(frame.getPreferredSize());
+		frame.setPreferredSize(frame.getPreferredSize());
 		//starts maximized
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.requestFocus();
 		frame.validate();
-		frame.setMinimumSize(frame.getMinimumSize());
 		frame.setVisible(true);
 		new Thread(new Runnable()
 		{
@@ -106,8 +108,6 @@ public class VisualSortingTool extends JPanel
 	{
 		//overrides to improve fullscreen function
 		frame = new BetterFrame().createFrame(this, "Sorting Methods Visual");
-		frame.setPreferredSize(getMinimumSize());
-		frame.setMinimumSize(getMinimumSize());
 		//so closing event is called
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setResizable(true);
