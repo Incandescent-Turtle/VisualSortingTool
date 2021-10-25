@@ -2,6 +2,8 @@ package main.visualizers;
 
 import main.VisualSortingTool;
 import main.sorters.Sorter.Sorters;
+import main.ui.custimization.CustomizationPanel;
+import main.ui.custimization.values.StorageValue;
 import main.util.StringHelper;
 import main.util.Util;
 import main.vcs.ImageVisualComponent;
@@ -78,7 +80,6 @@ public class ImageVisualizer extends FixedSizeVisualizer
 			{
 				g.setFont(g.getFont().deriveFont(i));
 				int width = StringHelper.getStringWidth(message, g) + 20;
-				System.out.println(width + " " + sortingTool.getVisualizerWidth());
 				if(width > sortingTool.getVisualizerWidth())
 				{
 					i--;
@@ -104,5 +105,19 @@ public class ImageVisualizer extends FixedSizeVisualizer
 			highlight(i, null);
 		}
 		highlightsToRest.clear();
+	}
+
+	@Override
+	public void addCustomizationComponents(CustomizationPanel cp)
+	{
+		super.addCustomizationComponents(cp);
+		addMarginSpinner(cp);
+	}
+
+	@Override
+	public void addStorageValues()
+	{
+		super.addStorageValues();
+		StorageValue.addStorageValues(createMarginStorageValue());
 	}
 }
