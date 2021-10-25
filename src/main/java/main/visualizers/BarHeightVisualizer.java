@@ -2,6 +2,7 @@ package main.visualizers;
 
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
+import main.sorters.BarHeightSorter;
 import main.sorters.Sorter.Sorters;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationGUI;
@@ -35,6 +36,7 @@ public class BarHeightVisualizer extends BarVisualizer
 		super.addCustomizationComponents(cp);
 		cp.addRow(ColorButton.createDefaultColorPickingButton(sortingTool, sortingTool.getSorter(identifier)), true);
 		cp.addRow(CustomizationGUI.createMakePinkButton(sortingTool), true);
+		cp.addRow(ColorButton.createBackgroundColorPickingButton(sortingTool), true);
 	}
 	
 	@Override
@@ -51,8 +53,9 @@ public class BarHeightVisualizer extends BarVisualizer
 	@Override
 	protected void drawComponent(Graphics2D g, double x, VisualComponent[] array, int i)
 	{
-		g.setColor(confirmed ? Algorithm.confirmationColor : highlights[i]);
+		g.setColor(confirmed ? Algorithm.confirmationColor : getHighlightAt(i));
+		BarHeightSorter sorter = (BarHeightSorter) sortingTool.getSorter(Sorters.BAR_HEIGHT);
 		//drawing this bar
-		drawBar(g, x, array[i].getValue());
+		drawBar(g, x, array[i].getValue()/sorter.getInitialHeight() * sortingTool.getVisualizerHeight());
 	}
 }

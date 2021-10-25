@@ -22,9 +22,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class ImageSorter extends Sorter
 {
@@ -135,18 +132,7 @@ public class ImageSorter extends Sorter
 		};
 		//when clicked, switches the order, reloads the images with their new values,
 		// and reverses the current array so it looks sorted with the new method. repaints
-		toggle.addActionListener(e -> {
-			brightestFirst = !brightestFirst;
-			reloadValues();
-			//only if sorted
-			if(Algorithm.isSorted(sortingTool, false))
-			{
-				List<VisualComponent> list = Arrays.asList(array);
-				Collections.reverse(list);
-				array = list.toArray(new VisualComponent[0]);
-				sortingTool.repaint();
-			}
-		});
+		toggle.addActionListener(e -> reverseOrder(toggle));
 
 		JButton reload = new JButton("Reload");
 		reload.addActionListener(e -> generateValues());
@@ -158,7 +144,31 @@ public class ImageSorter extends Sorter
 		cp.addRow(ColorButton.createBackgroundColorPickingButton(sortingTool), true);
 		GUIHandler.addToggleable(chooseFolderButton, toggle, reload);
 		//reloads values on update
-		GUIHandler.addUpdatables(this::reloadValues);
+		GUIHandler.addUpdatables(this::reloadValues, toggle::repaint);
+	}
+
+	private void reverseOrder(JButton button)
+	{
+		new Thread(() -> {
+			button.setEnabled(false);
+			boolean sorted = Algorithm.isSorted(sortingTool, false);
+			brightestFirst = !brightestFirst;
+			reloadValues();
+			if(sorted)
+			{
+				VisualComponent[] arr = array.clone();
+				for (int i = 0; i < size; i++)
+				{
+					arr[i] = array[size-1-i];
+				}
+				array = arr;
+				//List<VisualComponent> list = Arrays.asList(array);
+				//Collections.reverse(list);
+				//array = list.toArray(new VisualComponent[0]);
+				sortingTool.repaint();
+				button.setEnabled(true);
+			}
+		}).start();
 	}
 
 	/**
@@ -245,5 +255,4 @@ public class ImageSorter extends Sorter
 	
 	@Override
 	protected void resizeArray() {}
-
 }

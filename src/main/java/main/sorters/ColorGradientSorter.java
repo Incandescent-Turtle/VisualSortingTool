@@ -74,8 +74,6 @@ public class ColorGradientSorter extends BarSorter
 		orderButton.addActionListener(e -> reverseOrder());
 		cp.addRow(orderButton, true);
 
-		cp.addRow(ColorButton.createBackgroundColorPickingButton(sortingTool), true);
-
 		GUIHandler.addToggleable(leftColorButton, rightColorButton, orderButton);
 		//for when it's set to default etc. recolours it
 		GUIHandler.addUpdatables(orderButton::repaint);
@@ -124,7 +122,7 @@ public class ColorGradientSorter extends BarSorter
 		reloadArray();
 		//if un-sorted, returns after switch
 		if(!Algorithm.isSorted(sortingTool, false)) return;
-		visualizer.resetHighlights();
+		visualizer.reloadHighlights();
 		sortingTool.repaint();
 	}
 }

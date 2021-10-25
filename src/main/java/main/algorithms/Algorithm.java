@@ -92,8 +92,7 @@ public abstract class Algorithm implements Customizable
 	 * called from constructor before values loaded
 	 */
 	@Override
-	public void setDefaultValues() 
-	{}
+	public void setDefaultValues() {}
 	
 	/**
 	 * to override if this algorithm needs to load/save any other values <br>
@@ -117,9 +116,11 @@ public abstract class Algorithm implements Customizable
 	 */
 	public final void run()
 	{
+		long start =System.currentTimeMillis();
 		currentStep = stepSize;
 		runAlgorithm();
 		finishRun();
+		System.out.println((System.currentTimeMillis() - start)/1000f);
 	}
 	
 	/**

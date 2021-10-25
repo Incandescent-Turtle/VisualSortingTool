@@ -1,19 +1,10 @@
 package main.ui.custimization;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.Box;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-
 import main.VisualSortingTool;
 import main.ui.GUIHandler;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class CustomizationPanel extends JPanel
 {
@@ -106,8 +97,9 @@ public class CustomizationPanel extends JPanel
 	 * creates a new row and adds a right-aligned component with a label to its left
 	 * @param labelText the text to be on the label
 	 * @param right whatever the label is describing
+	 * @param toggleable whether the right component should be disabled on algo run
 	 */
-	public void addRow(String labelText, Component right)
+	public void addRow(String labelText, Component right, boolean toggleable)
 	{
 		//placing label
 		c.gridx = 0;
@@ -128,10 +120,23 @@ public class CustomizationPanel extends JPanel
         c.anchor =  GridBagConstraints.NORTHEAST;
         add(right, c);
         //so it can be disabled when an algorithm is running
-        GUIHandler.addToggleable(right);
+        if(toggleable) GUIHandler.addToggleable(right);
         row++;
 	}
-	
+
+	/**
+	 * creates a new row and adds a right-aligned component with a label to its left <br>
+	 * the right component is disabled when an algo is running
+	 * @param labelText the text to be on the label
+	 * @param right whatever the label is describing
+	 */
+	public void addRow(String labelText, Component right)
+	{
+		addRow(labelText, right, true);
+	}
+
+
+
 	/**
 	 * pushes element to the top
 	 * @return this panel

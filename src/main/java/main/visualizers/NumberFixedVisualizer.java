@@ -46,7 +46,7 @@ public class NumberFixedVisualizer extends FixedSizeVisualizer
 	@Override
 	protected void drawComponent(Graphics2D g , VisualComponent[] array, int i, int arraySize, int x, int y)
 	{
-		g.setColor(confirmed ? Algorithm.confirmationColor : highlights[i]);
+		g.setColor(confirmed ? Algorithm.confirmationColor : getHighlightAt(i));
 		g.setFont(new Font("", Font.PLAIN, componentSize/2));
 		String value = "" + (int) array[i].getValue();
 		//draws number centered around the passed in coors

@@ -27,7 +27,7 @@ public class ColorGradientVisualizer extends BarVisualizer
 	@Override
 	protected void drawComponent(Graphics2D g, double x, VisualComponent[] array, int i)
 	{
-		g.setColor(highlights[i]);
+		g.setColor(getHighlightAt(i));
 		//draws this bar
 		drawBar(g, x, sortingTool.getVisualizerHeight());
 	}
@@ -39,9 +39,10 @@ public class ColorGradientVisualizer extends BarVisualizer
 	@Override
 	public void resetHighlights()
 	{
-		for(int i = 0; i < highlights.length; i++)
+		for(int i : highlightsToRest)
 		{
-			highlights[i] = ((ColorVisualComponent) sortingTool.getSorter(identifier).getArray()[i]).getColor();
+			highlight(i, ((ColorVisualComponent) sortingTool.getSorter(identifier).getArray()[i]).getColor());
 		}
+		highlightsToRest.clear();
 	}
 }

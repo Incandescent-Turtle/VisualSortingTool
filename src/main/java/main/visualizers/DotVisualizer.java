@@ -2,6 +2,7 @@ package main.visualizers;
 
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
+import main.sorters.DotSorter;
 import main.sorters.Sorter;
 import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationGUI;
@@ -38,9 +39,10 @@ public class DotVisualizer extends Visualizer
 	{
 		for (int i = 0; i < size; i++)
 		{
-			double height = array[i].getValue();
+			DotSorter sorter = (DotSorter) sortingTool.getSorter();
+			double height = array[i].getValue()/sorter.getInitialHeight() * sortingTool.getVisualizerHeight();
 			double section = sortingTool.getVisualizerWidth()/(double)size;
-			g.setColor(confirmed ? Algorithm.confirmationColor : highlights[i]);
+			g.setColor(confirmed ? Algorithm.confirmationColor : getHighlightAt(i));
 			Shape circle = new Arc2D.Double(section*i, sortingTool.getVisualizerHeight()-height, componentWidth, componentWidth, 0, 360, Arc2D.CHORD);
 			g.fill(circle);
 		}
@@ -50,7 +52,7 @@ public class DotVisualizer extends Visualizer
 	public void addCustomizationComponents(CustomizationPanel cp)
 	{
 		SpinnerNumberModel nm = new SpinnerNumberModel(componentWidth, .05, 20, 1);
-		cp.addRow("Dot size:", CustomizationGUI.createDoubleJSpinner(sortingTool, nm, n -> componentWidth = n, () -> componentWidth));
+		cp.addRow("Dot size:", CustomizationGUI.createNumberJSpinner(sortingTool, nm, n -> componentWidth = n, () -> componentWidth, false), false);
 		cp.addRow(ColorButton.createDefaultColorPickingButton(sortingTool, sortingTool.getSorter(identifier)), true);
 		cp.addRow(CustomizationGUI.createMakePinkButton(sortingTool), true);
 	}

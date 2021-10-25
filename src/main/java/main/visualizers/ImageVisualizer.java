@@ -10,7 +10,6 @@ import main.visualizers.bases.FixedSizeVisualizer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 
 public class ImageVisualizer extends FixedSizeVisualizer
 {
@@ -18,7 +17,6 @@ public class ImageVisualizer extends FixedSizeVisualizer
 	public ImageVisualizer(VisualSortingTool sortingTool)
 	{
 		super(sortingTool, Sorters.IMAGE);
-		highlights = new Color[5];
 	}
 
 	@Override
@@ -55,10 +53,10 @@ public class ImageVisualizer extends FixedSizeVisualizer
 		//draws auto-scaled image
 		g.drawImage(image, x, y, x + width, y + height, 0, 0, image.getWidth(), image.getHeight(), null);
 		//dont color in this case
-		if(highlights[index] == null) return;
+		if(getHighlightAt(index) == null) return;
 
 		//adding color overlay (translucent)
-		Color c = highlights[index];
+		Color c = getHighlightAt(index);
 		g.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), 150));
 		if(!c.equals(defaultColor))
 			g.fillRect( x, y, width, height);
@@ -101,6 +99,10 @@ public class ImageVisualizer extends FixedSizeVisualizer
 	@Override
 	public void resetHighlights()
 	{
-		Arrays.fill(highlights, null);
+		for(int i : highlightsToRest)
+		{
+			highlight(i, null);
+		}
+		highlightsToRest.clear();
 	}
 }

@@ -13,6 +13,8 @@ import java.util.Random;
 
 public class DotSorter extends Sorter
 {
+	//initial height of the visualization panel when sorting starts
+	private int initialHeight;
 
 	/**
 	 * dot sorter!
@@ -33,7 +35,10 @@ public class DotSorter extends Sorter
 	protected void reloadArray()
 	{
 		Random rand = new Random();
-		double step = sortingTool.getVisualizerHeight()/(double)size;
+		int height = sortingTool.getVisualizerHeight();
+		double step = height/(double)size;
+		//for scaling purposes on resize
+		initialHeight = height;
 		for (int i = 0; i < size; i++)
 		{
 			//creates a diagonal line
@@ -45,7 +50,7 @@ public class DotSorter extends Sorter
 	public void addSorterCustomizationComponents(CustomizationPanel cp)
 	{
 		SpinnerNumberModel nm = new SpinnerNumberModel(size, 100, 9999, 10);
-		cp.addRow("Amount:", CustomizationGUI.createIntJSpinner(sortingTool, nm, n -> size = n, () -> size));
+		cp.addRow("Amount:", CustomizationGUI.createNumberJSpinner(sortingTool, nm, n -> size = n, () -> size));
 	}
 
 	@Override
@@ -54,5 +59,10 @@ public class DotSorter extends Sorter
 		StorageValue.addStorageValues(
 				new IntStorageValue(getPrefix(), "dotAmount", n -> size = n, () -> size)
 		);
+	}
+
+	public int getInitialHeight()
+	{
+		return initialHeight;
 	}
 }

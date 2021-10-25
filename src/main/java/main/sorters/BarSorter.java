@@ -52,7 +52,7 @@ public abstract class BarSorter extends Sorter
 			}
 		};
 
-		barAmountSpinner = CustomizationGUI.createIntJSpinner(sortingTool, nm, setBarAmount, () -> size);
+		barAmountSpinner = CustomizationGUI.createNumberJSpinner(sortingTool, nm, setBarAmount, () -> size);
 		cp.addRow("Max Amount:", barAmountSpinner);
 	}
 

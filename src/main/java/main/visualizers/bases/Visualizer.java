@@ -13,7 +13,8 @@ import main.vcs.VisualComponent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *  Base class
@@ -33,7 +34,7 @@ public abstract class Visualizer implements Customizable
 	//this could be, for example, what unsorted bars are coloured
 	protected Color defaultColor = Color.WHITE;
 	//this is used to colour certain elements, the index corrosponds to that of array in sorter
-	protected Color[] highlights;
+	private Color[] highlights;
 	
 	/**
 	 * whether should render components with {@link Visualizer#defaultColor} or {@link Algorithm#confirmationColor}
@@ -43,6 +44,8 @@ public abstract class Visualizer implements Customizable
 	protected VisualSortingTool sortingTool;
 	
 	protected Sorters identifier;
+
+	protected List<Integer> highlightsToRest = new CopyOnWriteArrayList<>();
 
 	public Visualizer(VisualSortingTool sortingTool, Sorters identifier)
 	{
@@ -70,11 +73,40 @@ public abstract class Visualizer implements Customizable
 	protected abstract void drawArray(Graphics2D g, VisualComponent[] array, int size);
 
 	/**
-	 * resets all indices to the default colour
+	 * resets all indices to the default colour <br>
+	 * only changes ones that need to be changed: performant
 	 */
 	public void resetHighlights()
 	{
-		Arrays.fill(highlights, defaultColor);
+		if(highlightsToRest.size() == 0) return;
+		for(Integer index : highlightsToRest)
+		{
+			highlights[index] = defaultColor;
+		}
+		highlightsToRest.clear();
+
+	//	Arrays.fill(highlights, defaultColor);
+	}
+
+	/**
+	 * updates the <b>highlights</b> array at the specified index with the specified color
+	 * @param index index of the number in <b>array</b> that is to be highlighted
+	 * @param color the color to highlight the VC as
+	 */
+	public void highlight(int index, Color color)
+	{
+		highlights[index] = color;
+		highlightsToRest.add(index);
+	}
+
+	/**
+	 *
+	 * @param index the index to get the color at
+	 * @return returns the highlight color
+	 */
+	public Color getHighlightAt(int index)
+	{
+		return highlights[index];
 	}
 
 	@Override public void addCustomizationComponents(CustomizationPanel cp) {}
@@ -125,6 +157,19 @@ public abstract class Visualizer implements Customizable
 	{
 		highlights = new Color[size];
 	}
+
+	/**
+	 * adds all indices to {@link #highlightsToRest} and calls reset <br>
+	 * <font color="red">NOT PERFORMANT. DONT USE DURING ALGO RUN</font>
+	 */
+	public final void reloadHighlights()
+	{
+		for (int i = 0; i < highlights.length; i++)
+		{
+			highlightsToRest.add(i);
+		}
+		resetHighlights();
+	}
 	
 	/**
 	 * @return the storagevalue all set up to load/save etc the componentWidth variable
@@ -162,7 +207,7 @@ public abstract class Visualizer implements Customizable
 	{
 		SpinnerNumberModel nm = new SpinnerNumberModel(minMargin, 0, 100, 1);
 		//spinner to change left/right margin
-		cp.addRow("Margin:", CustomizationGUI.createDoubleJSpinner(sortingTool, nm, n -> minMargin = n, () -> minMargin));
+		cp.addRow("Margin:", CustomizationGUI.createNumberJSpinner(sortingTool, nm, n -> minMargin = n, () -> minMargin));
 	}
 	
 	public final Color[] getHighlights()

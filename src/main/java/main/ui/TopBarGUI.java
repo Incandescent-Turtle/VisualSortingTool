@@ -133,6 +133,7 @@ public class TopBarGUI extends JPanel
 						System.out.println("Can't run because the array is null");
 						return;
 					}
+					sorter.run();
 		    		sorter.tryShuffleArray();
 					System.out.println(algorithmList.getSelectedItem().toString() + " has been pushed");
 					sorter.setAlgorithm((Algorithm)algorithmList.getSelectedItem());

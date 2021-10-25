@@ -27,7 +27,7 @@ public class NumberSorter extends Sorter
 	public void addSorterCustomizationComponents(CustomizationPanel cp)
 	{
 		SpinnerNumberModel nm = new SpinnerNumberModel(size, 10, 500, 1);
-		cp.addRow("# of Numbers:", CustomizationGUI.createIntJSpinner(sortingTool, nm, n -> size = n, () -> size));
+		cp.addRow("# of Numbers:", CustomizationGUI.createNumberJSpinner(sortingTool, nm, n -> size = n, () -> size));
 	}
 	
 	@Override

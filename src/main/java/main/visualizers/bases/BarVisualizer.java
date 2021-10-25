@@ -3,7 +3,6 @@ package main.visualizers.bases;
 import main.VisualSortingTool;
 import main.algorithms.Algorithm;
 import main.sorters.Sorter;
-import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
 import main.ui.custimization.values.StorageValue;
@@ -34,12 +33,9 @@ public abstract class BarVisualizer extends Visualizer
 	{
 		SpinnerNumberModel nm = new SpinnerNumberModel(componentGap, 0, 20, 1);
 		//spinner to change gap between bars
-		cp.addRow("Gap:", CustomizationGUI.createDoubleJSpinner(sortingTool, nm, n -> componentGap = n, () -> componentGap));
+		cp.addRow("Gap:", CustomizationGUI.createNumberJSpinner(sortingTool, nm, n -> componentGap = n, () -> componentGap));
 
 		addMarginSpinner(cp);
-
-		//change background button
-		cp.addRow(ColorButton.createBackgroundColorPickingButton(sortingTool), true);
 	}
 
 	@Override
@@ -62,7 +58,7 @@ public abstract class BarVisualizer extends Visualizer
 		for(int i = 0; i < size; i++)
 		{
 			//highlights in specified color
-			g.setColor(confirmed ? Algorithm.confirmationColor : highlights[i]);
+			g.setColor(confirmed ? Algorithm.confirmationColor : getHighlightAt(i));
 		}
 
 		for(int i = 0; i < size; i++)

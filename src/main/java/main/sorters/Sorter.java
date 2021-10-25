@@ -8,7 +8,6 @@ import main.ui.custimization.CustomizationPanel;
 import main.vcs.VisualComponent;
 import main.visualizers.bases.Visualizer;
 
-import java.awt.*;
 import java.util.Random;
 
 public abstract class Sorter implements Customizable
@@ -101,15 +100,6 @@ public abstract class Sorter implements Customizable
 	}
 	
 	/**
-	 * updates the <b>highlights</b> array at the specified index with the specified color
-	 * @param index index of the number in <b>array</b> that is to be highlighted
-	 */
-	public final void highlight(int index, Color color)
-	{
-		visualizer.getHighlights()[index] = color;
-	}
-	
-	/**
 	 * To be called when the window has changed size. If no algorithm is active calls resizeArray()
 	 * attempts to change the size variable
 	 */
@@ -148,6 +138,7 @@ public abstract class Sorter implements Customizable
 				hasGenerated = true;
 				generateValues();
 			}
+			visualizer.reloadHighlights();
 		}
 	}
 	
@@ -200,6 +191,7 @@ public abstract class Sorter implements Customizable
 			array[i] = array[j];
 			array[j] = temp;
 		}
+		visualizer.reloadHighlights();
 	}
 
 	/**
@@ -215,6 +207,11 @@ public abstract class Sorter implements Customizable
 		//recalculateAndRepaint();
 		sortingTool.repaint();
 	}
+
+	/**
+	 * when the run button is clicked and this sorter is selected
+	 */
+	public void run() {}
 
 	public Visualizer getVisualizer()
 	{
