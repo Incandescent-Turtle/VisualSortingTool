@@ -92,7 +92,7 @@ public abstract class FixedSizeVisualizer extends Visualizer
 	public void resize()
 	{
 		int arraySize = sortingTool.getSorter().getArraySize();
-		componentSize = (int) Util.getMaxComponentSize(arraySize, sortingTool.getVisualizerHeight(), sortingTool.getVisualizerWidth(), componentGap, 0);
+		componentSize = (int) Util.getMaxComponentSize(arraySize, sortingTool.getVisualizerHeight(), sortingTool.getVisualizerWidth(), componentGap, 0)- 1;
 //		componentSize = 1;
 //		while(true)
 //		{
