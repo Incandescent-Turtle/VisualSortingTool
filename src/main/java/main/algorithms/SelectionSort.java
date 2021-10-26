@@ -6,7 +6,6 @@ import main.ui.custimization.ColorButton;
 import main.ui.custimization.CustomizationPanel;
 import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
-import main.visualizers.bases.Visualizer;
 
 import java.awt.*;
 
@@ -50,7 +49,6 @@ public class SelectionSort extends Algorithm
 	public void runAlgorithm()
 	{
 		Sorter sorter = sortingTool.getSorter();
-		Visualizer visualizer = sorter.getVisualizer();
 		final VisualComponent[] array = sorter.getArray();
 		final int size = array.length;
 		  
@@ -61,23 +59,26 @@ public class SelectionSort extends Algorithm
             //loops through the array to find the smallest element, swaps with i 
             for (int j = i + 1; j < size; j++)
             {
-				visualizer.resetHighlights();
-				visualizer.highlight(j, compareColor);
-				visualizer.highlight(minIndex, minColor);
-				visualizer.highlight(i, startColor);
+				int k = (int) Math.round(4.3);
+				resetHighlights();
+				highlight(j, compareColor);
+				highlight(minIndex, minColor);
+				highlight(i, startColor);
 				//new min value is found
                 if(array[j].getValue() < array[minIndex].getValue())
                 {
-					visualizer.highlight(minIndex, swapColor);
-					visualizer.highlight(j, swapColor);
+					highlight(minIndex, swapColor);
+					highlight(j, swapColor);
                     minIndex = j;//searching for lowest index  
                 }  
     			paintWithDelayAndStep();
-            }
-			visualizer.highlight(minIndex, swapColor);
-			visualizer.highlight(i, swapColor);
+			}
+			highlight(minIndex, swapColor);
+			highlight(i, swapColor);
             sorter.swap(minIndex, i);
 			paintWithDelayAndStep();
-        }  
+		}
 	}
+
+
 }

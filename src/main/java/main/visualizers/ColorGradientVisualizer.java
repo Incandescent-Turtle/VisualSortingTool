@@ -30,6 +30,7 @@ public class ColorGradientVisualizer extends BarVisualizer
 		g.setColor(getHighlightAt(i));
 		//draws this bar
 		drawBar(g, x, sortingTool.getVisualizerHeight());
+		g.setColor(((ColorVisualComponent)sortingTool.getSorter().getArray()[i]).getColor());
 	}
 
 	/**

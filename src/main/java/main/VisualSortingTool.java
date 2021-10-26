@@ -81,6 +81,7 @@ public class VisualSortingTool extends JPanel
 		frame.requestFocus();
 		frame.validate();
 		frame.pack();
+		frame.setSize(new Dimension(frame.getWidth(), frame.getHeight()+-100));
 		frame.setMinimumSize(frame.getSize());
 		frame.setLocationRelativeTo(null);
 		System.out.println(frame.getPreferredSize().getHeight());

@@ -24,6 +24,7 @@ public class ImageLoadWorker extends ArrayWorker<ImageVisualComponent[]>
 	 * @param startAt index to start at in the array
 	 * @param endAt which index to end at
 	 * @param files the list of files
+	 * @param minImageSize minimim size images can be without losing quality
 	 */
 	public ImageLoadWorker(ImageSorter sorter, ImageLoader loader, ProgressWindow progress, int startAt, int endAt, File[] files, int minImageSize)
 	{

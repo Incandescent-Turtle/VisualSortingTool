@@ -58,7 +58,7 @@ public class ImageLoader
 		ImageLoadWorker[] workers = new ImageLoadWorker[portions];
 		//how big images need to be based on screen size
 		int minImageSize = findMinSize(files.length);
-		long start = System.currentTimeMillis();
+//		long start = System.currentTimeMillis();
 		for (int i = 0; i < portions; i++)
 		{
 			//number of images in this portion
@@ -93,7 +93,7 @@ public class ImageLoader
 		} catch (InterruptedException | ExecutionException ex) {
 			ex.printStackTrace();
 		}
-		System.out.println("total time: " + (System.currentTimeMillis()-start)/1000f);
+//		System.out.println("total time: " + (System.currentTimeMillis()-start)/1000f);
 		//ensures the bar gets hidden
 		pw.setProgress(1000);
 		//closes thread pool
@@ -104,6 +104,7 @@ public class ImageLoader
 	/**
 	 * loads a single image from file
 	 * @param file the path to the image file
+	 * @param minImageSize the minimum size images can be without losing quality
 	 * @return the image as an object
 	 */
 	public BufferedImage loadImage(File file, int minImageSize)
@@ -129,41 +130,39 @@ public class ImageLoader
 		return null;
 	}
 
-	//TODO abstract this into a Util method, use for fixed size sorters as well
+	/**
+	 * for finding the minimum size images can be when loaded in based on screen size and image amount
+	 * @param amount the amount of images
+	 * @return returns the acceptable size (width/height) to construct the images
+	 */
 	private static int findMinSize(int amount)
 	{
+		//maximum margins the image visualizer uses
 		int maxMargin = 100;
+		//mimimum gap size image visualizer uses
 		int minGap = 0;
 
+		//all the screens of the users computer
 		GraphicsDevice[] screens = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
 		//based on the biggest monitor
 		int maxScreenWidth = 0, maxScreenHeight = 0;
 
+		//looping through all the user's monitors to find the largest
 		for (GraphicsDevice screen : screens)
 		{
-			maxScreenWidth = Math.max(maxScreenWidth, screen.getDisplayMode().getWidth());
-			maxScreenHeight = Math.max(maxScreenHeight, screen.getDisplayMode().getHeight());
+			int width = screen.getDisplayMode().getWidth();
+			int height = screen.getDisplayMode().getHeight();
+			//if this screen has a larger area than the current biggest screen, resets the max values
+			if(maxScreenHeight * maxScreenWidth < width * height)
+			{
+				maxScreenWidth = width;
+				maxScreenHeight = height;
+			}
 		}
 
+		//subtracts the maximum margin
 		maxScreenWidth -= maxMargin*2;
 
-		int minImageSize = 1;
-		while(true)
-		{
-			//total length if all components were lined up horizontally
-			double totalWidth = amount * (minImageSize+minGap) - minGap;
-
-			//how many visualizer widths can you fit into the total length? round up!
-			int rows = (int) Math.ceil((float)totalWidth/(maxScreenWidth-minGap*2));
-
-			//amount of rows, checking to see if this component would be out of bounds. exits and reverts to prev
-			if(rows*(minImageSize+minGap)+minImageSize-minGap > maxScreenHeight)
-			{
-				minImageSize--;
-				break;
-			}
-			minImageSize++;
-		}
-		return minImageSize + 10;
+		return (int) Util.getMaxComponentSize(amount, maxScreenHeight, maxScreenWidth, minGap, maxMargin);
 	}
 }

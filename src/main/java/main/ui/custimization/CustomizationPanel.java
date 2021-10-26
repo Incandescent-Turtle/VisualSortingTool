@@ -28,6 +28,10 @@ public class CustomizationPanel extends JPanel
 		c.insets = new Insets(1,5,1,3);
 		//adds components to the frame
 		customizable.addCustomizationComponents(this);
+		JLabel fill = new JLabel();
+				fill.setPreferredSize(new Dimension(0, 1000));
+				fill.setMinimumSize(new Dimension(0, 0));
+				add(fill);
 	}
 	
 	/**

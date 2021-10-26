@@ -9,7 +9,6 @@ import main.vcs.VisualComponent;
 import main.visualizers.DotVisualizer;
 
 import javax.swing.*;
-import java.util.Random;
 
 public class DotSorter extends Sorter
 {
@@ -34,10 +33,9 @@ public class DotSorter extends Sorter
 	@Override
 	protected void reloadArray()
 	{
-		Random rand = new Random();
 		int height = sortingTool.getVisualizerHeight();
 		double step = height/(double)size;
-		//for scaling purposes on resize
+		//for scaling purposes on resize. always fills screen height
 		initialHeight = height;
 		for (int i = 0; i < size; i++)
 		{
@@ -49,7 +47,7 @@ public class DotSorter extends Sorter
 	@Override
 	public void addSorterCustomizationComponents(CustomizationPanel cp)
 	{
-		SpinnerNumberModel nm = new SpinnerNumberModel(size, 100, 9999, 10);
+		SpinnerNumberModel nm = new SpinnerNumberModel(size, 100, 50000, 10);
 		cp.addRow("Amount:", CustomizationGUI.createNumberJSpinner(sortingTool, nm, n -> size = n, () -> size));
 	}
 

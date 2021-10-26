@@ -1,12 +1,12 @@
 package main.ui;
 
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import main.VisualSortingTool;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.Updatable;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GUIHandler
 {
@@ -71,7 +71,11 @@ public class GUIHandler
 	{
 		UPDATABLES.forEach(Updatable::update);
 	}
-	
+
+	/**
+	 * add actions that must be run when customization reset buttons are git
+	 * @param updatables
+	 */
 	public static void addUpdatables(Updatable... updatables)
 	{
 		UPDATABLES.addAll(Arrays.asList(updatables));

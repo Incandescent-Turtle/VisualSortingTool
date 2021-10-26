@@ -2,7 +2,6 @@ package main.visualizers;
 
 import main.VisualSortingTool;
 import main.sorters.Sorter.Sorters;
-import main.ui.custimization.CustomizationPanel;
 import main.ui.custimization.values.StorageValue;
 import main.util.StringHelper;
 import main.util.Util;
@@ -105,13 +104,6 @@ public class ImageVisualizer extends FixedSizeVisualizer
 			highlight(i, null);
 		}
 		highlightsToRest.clear();
-	}
-
-	@Override
-	public void addCustomizationComponents(CustomizationPanel cp)
-	{
-		super.addCustomizationComponents(cp);
-		addMarginSpinner(cp);
 	}
 
 	@Override

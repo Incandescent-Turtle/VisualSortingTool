@@ -36,6 +36,7 @@ public abstract class BarVisualizer extends Visualizer
 		cp.addRow("Gap:", CustomizationGUI.createNumberJSpinner(sortingTool, nm, n -> componentGap = n, () -> componentGap));
 
 		addMarginSpinner(cp);
+		super.addCustomizationComponents(cp);
 	}
 
 	@Override

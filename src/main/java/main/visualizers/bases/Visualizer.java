@@ -7,6 +7,7 @@ import main.sorters.Sorter.Sorters;
 import main.ui.custimization.Customizable;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
+import main.ui.custimization.values.BooleanStorageValue;
 import main.ui.custimization.values.DoubleStorageValue;
 import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
@@ -21,7 +22,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *  Visualizers are what draw the arrays and keep all the variables relating to the drawing
  */
 public abstract class Visualizer implements Customizable
-{	
+{
+	private static boolean doHighlights;
+
+	static
+	{
+		doHighlights = true;
+		StorageValue.addStorageValues(new BooleanStorageValue(VisualSortingTool.getPrefix(Visualizer.class), "doHighlights", b -> doHighlights = b, () -> doHighlights));
+	}
+
 	//in px the min distance from the borders of the screen
 	protected double minMargin = 30;
 	//the width of individual components
@@ -78,14 +87,13 @@ public abstract class Visualizer implements Customizable
 	 */
 	public void resetHighlights()
 	{
+		if(!doHighlights) return;
 		if(highlightsToRest.size() == 0) return;
 		for(Integer index : highlightsToRest)
 		{
 			highlights[index] = defaultColor;
 		}
 		highlightsToRest.clear();
-
-	//	Arrays.fill(highlights, defaultColor);
 	}
 
 	/**
@@ -95,6 +103,7 @@ public abstract class Visualizer implements Customizable
 	 */
 	public void highlight(int index, Color color)
 	{
+		if(!doHighlights) return;
 		highlights[index] = color;
 		highlightsToRest.add(index);
 	}
@@ -109,8 +118,8 @@ public abstract class Visualizer implements Customizable
 		return highlights[index];
 	}
 
-	@Override public void addCustomizationComponents(CustomizationPanel cp) {}
 	@Override public void addStorageValues() {}
+	@Override public void addCustomizationComponents(CustomizationPanel cp) {}
 
 	/**
 	 * This method takes in a value and spits out the width of that # of VCs including margins and 

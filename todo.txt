@@ -5,31 +5,10 @@ Vital: info on the sort!
 -total
 
 
-class Descriptions {
+tool tips!
+        ToolTipManager.sharedInstance().setEnabled(true);
 
-onMouseMove() {
 
-for(every component) {
-if(mouse.intersects(component.getBounds()) {
-display(map.get(component));
-}
-}
-
-}
-
-display(String are) {
-//uses multi-line parsing from Util to display the descriptions, fitting to the allowed size
-}
-
-public static addComponent(JComponent c, File file) {
-map.add(c, loadDesc(file);
-}
-
-String loadDesc(File file) {
-//loads the text from file and returns it
-}
-}
-
-JButtom shuffle = new JButton(“Shuffle”);
-Descriptions.addComponent(shuffle, new File(“/desc/shuffle-button.txt”);
-uses bounding box to display description
+- instead of using highlights reset after every component draw!
+sorter method or smthn idk. color gradient does that currently. after one thing is drawn it just resets-
+its own highlight...

@@ -133,7 +133,6 @@ public class TopBarGUI extends JPanel
 						System.out.println("Can't run because the array is null");
 						return;
 					}
-					sorter.run();
 		    		sorter.tryShuffleArray();
 					System.out.println(algorithmList.getSelectedItem().toString() + " has been pushed");
 					sorter.setAlgorithm((Algorithm)algorithmList.getSelectedItem());
@@ -141,7 +140,8 @@ public class TopBarGUI extends JPanel
 					GUIHandler.setEnabled(false);
 		    		//runs the current algorithm
 				    Thread thread = new Thread(() -> ((Algorithm)algorithmList.getSelectedItem()).run());
-		    		//runs logic on another thread so swing can update 
+					sorter.run();
+					//runs logic on another thread so swing can update
 				    thread.start();
 		    	}
 			}

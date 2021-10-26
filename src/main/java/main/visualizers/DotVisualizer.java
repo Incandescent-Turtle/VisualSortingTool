@@ -40,10 +40,13 @@ public class DotVisualizer extends Visualizer
 		for (int i = 0; i < size; i++)
 		{
 			DotSorter sorter = (DotSorter) sortingTool.getSorter();
+			//scaled height so it fits the screen vertivally
 			double height = array[i].getValue()/sorter.getInitialHeight() * sortingTool.getVisualizerHeight();
-			double section = sortingTool.getVisualizerWidth()/(double)size;
+			//space inbetween dots
+			double gap = sortingTool.getVisualizerWidth()/(double)size;
 			g.setColor(confirmed ? Algorithm.confirmationColor : getHighlightAt(i));
-			Shape circle = new Arc2D.Double(section*i, sortingTool.getVisualizerHeight()-height, componentWidth, componentWidth, 0, 360, Arc2D.CHORD);
+			//the dot
+			Shape circle = new Arc2D.Double(gap*i, sortingTool.getVisualizerHeight()-height, componentWidth, componentWidth, 0, 360, Arc2D.CHORD);
 			g.fill(circle);
 		}
 	}
@@ -55,6 +58,7 @@ public class DotVisualizer extends Visualizer
 		cp.addRow("Dot size:", CustomizationGUI.createNumberJSpinner(sortingTool, nm, n -> componentWidth = n, () -> componentWidth, false), false);
 		cp.addRow(ColorButton.createDefaultColorPickingButton(sortingTool, sortingTool.getSorter(identifier)), true);
 		cp.addRow(CustomizationGUI.createMakePinkButton(sortingTool), true);
+		super.addCustomizationComponents(cp);
 	}
 
 	@Override

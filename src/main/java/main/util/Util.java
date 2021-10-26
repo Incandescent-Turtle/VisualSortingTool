@@ -154,4 +154,36 @@ public class Util
 		int pixels = img.getWidth()*img.getHeight();
 		return new Color((int) (r/pixels),(int) (g/pixels), (int) (b/pixels));
 	}
+
+	/**
+	 * calculates the size squares must be to fit within the specified bounds <br>
+	 * with the specified parameters
+	 * @param amount the amount of squares/components
+	 * @param height the height of the area to fit them in
+	 * @param width the width of the area to fit them in
+	 * @param gap the gap between the squares/components
+	 * @param xMargin the margin on the x axis
+	 * @return the maximum size the componets can be in said area
+	 */
+	public static double getMaxComponentSize(int amount, double height, double width, double gap, double xMargin)
+	{
+		double size = 1;
+		while(true)
+		{
+			//total length if all components were lined up horizontally
+			double totalWidth = amount * (size+gap) - gap;
+
+			//how many visualizer widths can you fit into the total length? round up!
+			int rows = (int) Math.ceil((float)totalWidth/(width-xMargin*2));
+
+			//amount of rows, checking to see if this component would be out of bounds. exits and reverts to prev
+			if(rows*(size+gap)+size-gap > height)
+			{
+				size--;
+				break;
+			}
+			size++;
+		}
+		return size;
+	}
 }

@@ -10,6 +10,7 @@ import main.ui.custimization.values.BooleanStorageValue;
 import main.ui.custimization.values.IntStorageValue;
 import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
+import main.visualizers.bases.Visualizer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,6 +36,8 @@ public abstract class Algorithm implements Customizable
 	//whether it renders/delays for every run, every other, etc
 	public static int stepSize;
 
+	public static boolean doHighlights;
+
 	private final String name;
 	protected VisualSortingTool sortingTool;
 	
@@ -49,17 +52,18 @@ public abstract class Algorithm implements Customizable
 		final String prefix = VisualSortingTool.getPrefix(Algorithm.class);
 
 		delay = 10;
-        StorageValue.addStorageValues(new IntStorageValue(prefix, "delay", n -> delay = n, () -> delay));
-
-        stepSize = 1;
-        StorageValue.addStorageValues(new IntStorageValue(prefix, "step", n -> stepSize = n, () -> stepSize));
-
-        confirmationColor = new Color(162, 255, 143); //green
-		//attempts to load confirmationColor, if can't its GREEN, sets up storage as well
-		StorageValue.addStorageValues(StorageValue.createColorStorageValue(prefix, "confirmationColor", c -> confirmationColor = c, () -> confirmationColor));
-
+		stepSize = 1;
+		confirmationColor = new Color(162, 255, 143);
 		animateConfirmation = false;
-		StorageValue.addStorageValues(new BooleanStorageValue(prefix, "animateConfirmation", b -> animateConfirmation = b, () -> animateConfirmation));
+		doHighlights = true;
+
+        StorageValue.addStorageValues(
+				new IntStorageValue(prefix, "delay", n -> delay = n, () -> delay),
+				new IntStorageValue(prefix, "step", n -> stepSize = n, () -> stepSize),
+				StorageValue.createColorStorageValue(prefix, "confirmationColor", c -> confirmationColor = c, () -> confirmationColor),
+				new BooleanStorageValue(prefix, "animateConfirmation", b -> animateConfirmation = b, () -> animateConfirmation),
+				new BooleanStorageValue(prefix, "doHighlights", b -> doHighlights = b, () -> doHighlights)
+		);
 	}
 	
 	public Algorithm(String name, VisualSortingTool sortingTool)
@@ -139,7 +143,14 @@ public abstract class Algorithm implements Customizable
 		sortingTool.getSorter().setAlgorithm(null);
 		GUIHandler.setEnabled(true);
 	}
-	
+
+	/*
+			methods to abstract some functionality
+	 */
+
+	/**
+	 * calls {@link #delay()} and repaint on the sorter. also accounts for steps
+	 */
 	protected final void paintWithDelayAndStep()
 	{
 		currentStep++;
@@ -149,6 +160,27 @@ public abstract class Algorithm implements Customizable
 			sortingTool.repaint();
 			currentStep = 0;
 		}
+	}
+
+	/**
+	 * if highlights are enabled, it will highlight the specified index witht the color
+	 * @param index the index of the VC array to highlight
+	 * @param color the color to highlight it
+	 */
+	protected final void highlight(int index, Color color)
+	{
+		if(doHighlights)
+		{
+			sortingTool.getSorter().getVisualizer().highlight(index, color);
+		}
+	}
+
+	/**
+	 * 	if highlights are enabled, will call {@link Visualizer#resetHighlights()}
+	 */
+	protected final void resetHighlights()
+	{
+		if(doHighlights) sortingTool.getSorter().getVisualizer().resetHighlights();
 	}
 	
 	/**
@@ -178,7 +210,17 @@ public abstract class Algorithm implements Customizable
 		cb.setSelected(animateConfirmation);
 		cb.addChangeListener(e -> animateConfirmation = cb.isSelected());
 		panel.add(cb);
-		GUIHandler.addUpdatables(() -> cb.setSelected(animateConfirmation));
+
+		//button to disable/enable highlighting (speeds up)
+		JCheckBox highlightBox = new JCheckBox("Highlight");
+		//highlightBox.setAlignmentX(JButton.CENTER_ALIGNMENT);
+		highlightBox.setHorizontalTextPosition(SwingConstants.LEFT);
+		highlightBox.addChangeListener(e -> {
+			doHighlights = (highlightBox.isSelected());
+		});
+
+		panel.add(highlightBox);
+		GUIHandler.addUpdatables(() -> cb.setSelected(animateConfirmation), () -> highlightBox.setSelected(doHighlights));
 	}
 
 	/**
@@ -234,7 +276,6 @@ public abstract class Algorithm implements Customizable
 					pw.write("" + vc.getValue() + "\n");
 				} catch (IOException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			});

@@ -85,6 +85,8 @@ public class CustomizationGUI extends JPanel
 //		fill.setPreferredSize(new Dimension(0, 1000));
 //		fill.setMinimumSize(new Dimension(0, 0));
 //		add(fill);
+
+		//to push everything up and to push the reset buttons down
 		add(Box.createVerticalGlue());
 
 		//this button reverts all values to what they were on the previous saves(just loads them again)
