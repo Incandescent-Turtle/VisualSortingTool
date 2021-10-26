@@ -71,6 +71,7 @@ public class VisualSortingTool extends JPanel
 				//only resizes when algorithm isnt running
 				guiHandler.getTopBarGUI().resizeGUI();
 				sorter.windowResized();
+				System.out.println(frame.getHeight());
 			}
 		});	
 		//loads ALL values in from preferences
@@ -81,8 +82,7 @@ public class VisualSortingTool extends JPanel
 		frame.requestFocus();
 		frame.validate();
 		frame.pack();
-		frame.setSize(new Dimension(frame.getWidth(), frame.getHeight()+-100));
-		frame.setMinimumSize(frame.getSize());
+		frame.setSize(frame.getWidth(), 630);
 		frame.setLocationRelativeTo(null);
 		System.out.println(frame.getPreferredSize().getHeight());
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
