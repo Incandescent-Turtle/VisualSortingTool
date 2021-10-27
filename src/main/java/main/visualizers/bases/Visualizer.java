@@ -7,15 +7,12 @@ import main.sorters.Sorter.Sorters;
 import main.ui.custimization.Customizable;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
-import main.ui.custimization.values.BooleanStorageValue;
 import main.ui.custimization.values.DoubleStorageValue;
 import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *  Base class
@@ -23,14 +20,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public abstract class Visualizer implements Customizable
 {
-	private static boolean doHighlights;
-
-	static
-	{
-		doHighlights = true;
-		StorageValue.addStorageValues(new BooleanStorageValue(VisualSortingTool.getPrefix(Visualizer.class), "doHighlights", b -> doHighlights = b, () -> doHighlights));
-	}
-
 	//in px the min distance from the borders of the screen
 	protected double minMargin = 30;
 	//the width of individual components
@@ -54,8 +43,6 @@ public abstract class Visualizer implements Customizable
 	
 	protected Sorters identifier;
 
-	protected List<Integer> highlightsToRest = new CopyOnWriteArrayList<>();
-
 	public Visualizer(VisualSortingTool sortingTool, Sorters identifier)
 	{
 		this.sortingTool = sortingTool;
@@ -74,27 +61,11 @@ public abstract class Visualizer implements Customizable
 		if(sorter.getArraySize() > 0 && highlights != null)
 		{
 			drawArray(g, sorter.getArray(), sorter.getArraySize());
-			resetHighlights();
 		}
 	}
 	
 	//just a little helper method
 	protected abstract void drawArray(Graphics2D g, VisualComponent[] array, int size);
-
-	/**
-	 * resets all indices to the default colour <br>
-	 * only changes ones that need to be changed: performant
-	 */
-	public void resetHighlights()
-	{
-		if(!doHighlights) return;
-		if(highlightsToRest.size() == 0) return;
-		for(Integer index : highlightsToRest)
-		{
-			highlights[index] = defaultColor;
-		}
-		highlightsToRest.clear();
-	}
 
 	/**
 	 * updates the <b>highlights</b> array at the specified index with the specified color
@@ -103,9 +74,7 @@ public abstract class Visualizer implements Customizable
 	 */
 	public void highlight(int index, Color color)
 	{
-		if(!doHighlights) return;
 		highlights[index] = color;
-		highlightsToRest.add(index);
 	}
 
 	/**
@@ -168,16 +137,24 @@ public abstract class Visualizer implements Customizable
 	}
 
 	/**
-	 * adds all indices to {@link #highlightsToRest} and calls reset <br>
+	 * after drawing, this method should be called to ensure highlights are back to normal
+	 * @param index the index of the VC array to reset the highlights of
+	 */
+	public void resetHighlightAt(int index)
+	{
+		highlights[index] = defaultColor;
+	}
+
+	/**
+	 * uses {@link #resetHighlightAt(int)} to reset EVERY highlight <br>
 	 * <font color="red">NOT PERFORMANT. DONT USE DURING ALGO RUN</font>
 	 */
 	public final void reloadHighlights()
 	{
 		for (int i = 0; i < highlights.length; i++)
 		{
-			highlightsToRest.add(i);
+			resetHighlightAt(i);
 		}
-		resetHighlights();
 	}
 	
 	/**

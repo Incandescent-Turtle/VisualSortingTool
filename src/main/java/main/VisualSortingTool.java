@@ -187,11 +187,19 @@ public class VisualSortingTool extends JPanel
 	{
 		return guiHandler;
 	}
-	
+
 	public static void delay(int ms)
 	{
+		delay(ms, 0);
+	}
+
+	public static void delay(int ms, int nanos)
+	{
+		final int NANO_LIMIT = 999998;
+		ms += nanos/NANO_LIMIT;
+		nanos -= NANO_LIMIT*(nanos/NANO_LIMIT);
 		try {
-			Thread.sleep(ms);
+			Thread.sleep(ms, nanos);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

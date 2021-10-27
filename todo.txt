@@ -8,11 +8,4 @@ Vital: info on the sort!
 tool tips!
         ToolTipManager.sharedInstance().setEnabled(true);
 
-
-- instead of using highlights reset after every component draw!
-sorter method or smthn idk. color gradient does that currently. after one thing is drawn it just resets-
-its own highlight...
-
-center the final row in image sorter - wontlook bad cause there will always be same ammount
-
-could use a dirty flag so dont have to resize every update?
+add more algos

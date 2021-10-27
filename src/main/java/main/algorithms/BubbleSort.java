@@ -32,7 +32,6 @@ public class BubbleSort extends Algorithm
 			//loops through what hasn't already been sorted
 			for(int j = 0; j < size-1-i; j++)
 			{
-				resetHighlights();
 				highlight(j, compareColor);
 				highlight(j+1, compareColor);
 				//comparing adjacent components
@@ -43,6 +42,7 @@ public class BubbleSort extends Algorithm
 					highlight(j+1, swapColor);
 				}
 				paintWithDelayAndStep();
+				resetHighlightsAt(j, j+1);
 			}
 		}
 	}

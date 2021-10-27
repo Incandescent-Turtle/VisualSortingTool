@@ -26,9 +26,9 @@ public abstract class Sorter implements Customizable
 	protected Sorter.Sorters identifier;
 	
 	/**
-	 * has an array of {@link VisualComponent}s and uses algorithms to sort them <br>
-	 * handles the loading, shuffling, and resizing of said array <br>
-	 * has a {@link Visualizer} which uses the array to animate the sorting process <br>
+	 * has an array of {@link VisualComponent}s and uses algorithms to sort them
+	 * handles the loading, shuffling, and resizing of said array
+	 * has a {@link Visualizer} which uses the array to animate the sorting process
 	 * each Sorter must have its own {@link Sorter.Sorters} entry
 	 * @param visualizer the visualizer to use
 	 * @param identifier every sorter has their own identifier
@@ -65,7 +65,6 @@ public abstract class Sorter implements Customizable
 	/**
 	 * to override if the sorter needs to set any default values before loading from preferences <br>
 	 * called from constructor before values loaded <br>
-	 * no super() needed
 	 */
 	@Override
 	public void setDefaultValues() {}
@@ -158,7 +157,7 @@ public abstract class Sorter implements Customizable
 		{
 			visualizer.setConfirmed(false);
 			shuffleArray();
-			visualizer.resetHighlights();
+			visualizer.reloadHighlights();
 		}
 	}
 	

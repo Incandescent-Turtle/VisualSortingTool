@@ -59,8 +59,6 @@ public class SelectionSort extends Algorithm
             //loops through the array to find the smallest element, swaps with i 
             for (int j = i + 1; j < size; j++)
             {
-				int k = (int) Math.round(4.3);
-				resetHighlights();
 				highlight(j, compareColor);
 				highlight(minIndex, minColor);
 				highlight(i, startColor);
@@ -72,11 +70,13 @@ public class SelectionSort extends Algorithm
                     minIndex = j;//searching for lowest index  
                 }  
     			paintWithDelayAndStep();
+				resetHighlightsAt(j, i, minIndex);
 			}
 			highlight(minIndex, swapColor);
 			highlight(i, swapColor);
             sorter.swap(minIndex, i);
 			paintWithDelayAndStep();
+			resetHighlightsAt(minIndex, i);
 		}
 	}
 

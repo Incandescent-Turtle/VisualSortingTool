@@ -14,7 +14,6 @@ import java.awt.image.BufferedImage;
 
 public class ImageVisualizer extends FixedSizeVisualizer
 {
-
 	public ImageVisualizer(VisualSortingTool sortingTool)
 	{
 		super(sortingTool, Sorters.IMAGE);
@@ -94,16 +93,6 @@ public class ImageVisualizer extends FixedSizeVisualizer
 		} else {
 			super.drawArray(g);
 		}
-	}
-
-	@Override
-	public void resetHighlights()
-	{
-		for(int i : highlightsToRest)
-		{
-			highlight(i, null);
-		}
-		highlightsToRest.clear();
 	}
 
 	@Override

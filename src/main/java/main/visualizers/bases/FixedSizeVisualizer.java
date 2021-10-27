@@ -58,6 +58,8 @@ public abstract class FixedSizeVisualizer extends Visualizer
 		for(int i = 0; i < arraySize; i++)
 		{
 			int row = i/limit;
+			//centers last row
+			if(row == numOfRows-1) hMargins = getRealHMargins(arraySize%limit);
 			//x and y are the coords of the top left of the component
 			double x = hMargins + (i%limit)*(componentSize+componentGap);
 			double y = vMargins + (row*(componentGap+componentSize));
@@ -92,24 +94,7 @@ public abstract class FixedSizeVisualizer extends Visualizer
 	public void resize()
 	{
 		int arraySize = sortingTool.getSorter().getArraySize();
-		componentSize = (int) Util.getMaxComponentSize(arraySize, sortingTool.getVisualizerHeight(), sortingTool.getVisualizerWidth(), componentGap, 0)- 1;
-//		componentSize = 1;
-//		while(true)
-//		{
-//			//total length if all components were lined up horizontally
-//			double totalWidth = arraySize * (componentSize+componentGap) - componentGap;
-//
-//			//how many visualizer widths can you fit into the total length? round up!
-//			int rows = (int) Math.ceil((float)totalWidth/(sortingTool.getVisualizerWidth()-minMargin*2));
-//
-//			//amount of rows, checking to see if this component would be out of bounds. exits and reverts to prev
-//			if(rows*(componentSize+componentGap)+componentSize-componentGap > sortingTool.getVisualizerHeight())
-//			{
-//				componentSize--;
-//				break;
-//			}
-//			componentSize++;
-//		}
+		componentSize = (int) Util.getMaxComponentSize(arraySize, sortingTool.getVisualizerHeight(), sortingTool.getVisualizerWidth(), componentGap, 0) - 2;
 	}
 
 	@Override
@@ -118,7 +103,8 @@ public abstract class FixedSizeVisualizer extends Visualizer
 		addMarginSpinner(cp);
 	}
 
-	@Override public void addStorageValues()
+	@Override
+	public void addStorageValues()
 	{
 		StorageValue.addStorageValues(
 				createMarginStorageValue()

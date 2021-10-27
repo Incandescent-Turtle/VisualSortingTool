@@ -30,20 +30,11 @@ public class ColorGradientVisualizer extends BarVisualizer
 		g.setColor(getHighlightAt(i));
 		//draws this bar
 		drawBar(g, x, sortingTool.getVisualizerHeight());
-		g.setColor(((ColorVisualComponent)sortingTool.getSorter().getArray()[i]).getColor());
 	}
 
-	/**
-	 * this is overriden to populate the highlights array with gradient values before real <br>
-	 * highlights are set
-	 */
 	@Override
-	public void resetHighlights()
+	public void resetHighlightAt(int index)
 	{
-		for(int i : highlightsToRest)
-		{
-			highlight(i, ((ColorVisualComponent) sortingTool.getSorter(identifier).getArray()[i]).getColor());
-		}
-		highlightsToRest.clear();
+		highlight(index, ((ColorVisualComponent) sortingTool.getSorter(identifier).getArray()[index]).getColor());
 	}
 }

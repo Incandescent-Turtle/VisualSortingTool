@@ -5,8 +5,7 @@ import main.algorithms.Algorithm;
 import main.sorters.Sorter;
 
 /**
- *	for things such as {@link Sorter}s and {@link Algorithm}s that have their own
- *	{@link CustomizationPanel}s <br>
+ *	for things such as {@link Sorter}s and {@link Algorithm}s that have their own {@link CustomizationPanel}s
  */
 public interface Customizable
 {

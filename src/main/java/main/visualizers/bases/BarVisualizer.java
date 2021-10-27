@@ -1,7 +1,6 @@
 package main.visualizers.bases;
 
 import main.VisualSortingTool;
-import main.algorithms.Algorithm;
 import main.sorters.Sorter;
 import main.ui.custimization.CustomizationGUI;
 import main.ui.custimization.CustomizationPanel;
@@ -56,11 +55,6 @@ public abstract class BarVisualizer extends Visualizer
 	public void drawArray(Graphics2D g, VisualComponent[] array, int size)
 	{
 		componentWidth = (sortingTool.getVisualizerWidth()-minMargin*2-componentGap*(size-1))/size;
-		for(int i = 0; i < size; i++)
-		{
-			//highlights in specified color
-			g.setColor(confirmed ? Algorithm.confirmationColor : getHighlightAt(i));
-		}
 
 		for(int i = 0; i < size; i++)
 		{

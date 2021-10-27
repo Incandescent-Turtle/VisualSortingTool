@@ -10,7 +10,6 @@ import main.ui.custimization.values.BooleanStorageValue;
 import main.ui.custimization.values.IntStorageValue;
 import main.ui.custimization.values.StorageValue;
 import main.vcs.VisualComponent;
-import main.visualizers.bases.Visualizer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -85,7 +84,7 @@ public abstract class Algorithm implements Customizable
 	 */
 	@Override
 	public void addCustomizationComponents(CustomizationPanel cp)
-	{		
+	{
 		cp.addTitleSeparator(name, true);
 		cp.addRow(new ColorButton(sortingTool, c -> swapColor = c, () -> swapColor, "Swap Color"), true);
 		cp.addRow(new ColorButton(sortingTool, c -> compareColor = c, () -> compareColor, "Compare Color"), true);
@@ -170,17 +169,20 @@ public abstract class Algorithm implements Customizable
 	protected final void highlight(int index, Color color)
 	{
 		if(doHighlights)
-		{
 			sortingTool.getSorter().getVisualizer().highlight(index, color);
-		}
 	}
 
 	/**
-	 * 	if highlights are enabled, will call {@link Visualizer#resetHighlights()}
+	 * calls {@link main.visualizers.bases.Visualizer#resetHighlightAt(int)} to reset the colors at
+	 * the specified indices
+	 * @param indices the indices to reset
 	 */
-	protected final void resetHighlights()
+	protected final void resetHighlightsAt(int... indices)
 	{
-		if(doHighlights) sortingTool.getSorter().getVisualizer().resetHighlights();
+		for (int index : indices)
+		{
+			sortingTool.getSorter().getVisualizer().resetHighlightAt(index);
+		}
 	}
 	
 	/**
@@ -231,7 +233,11 @@ public abstract class Algorithm implements Customizable
 	{
 		Sorter sorter = sortingTool.getSorter();
 		VisualComponent[] array = sorter.getArray();
-		Color[] highlights = sorter.getVisualizer().getHighlights().clone();
+		Color[] highlights = sorter.getVisualizer().getHighlights();
+		//seconds for the animation
+		int seconds = 2;
+		//the delay needed for it to take 2 seconds
+		int delay = (seconds*1_000_000_000)/sortingTool.getSorter().getArraySize();
 		for(int i = 0; i<array.length; i++)
 		{
 			//if last element
@@ -254,9 +260,8 @@ public abstract class Algorithm implements Customizable
 				{
 					highlights[j] = confirmationColor;
 				}
-				sorter.getVisualizer().setHighlights(highlights);
 				sortingTool.repaint();
-				VisualSortingTool.delay(10);
+				VisualSortingTool.delay(0, delay);
 			}
 		}
 		return true;
