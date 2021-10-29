@@ -1,0 +1,3 @@
+{
+  "bar amount": "This is to adjust amount of bars on the screen at once. At higher numbers, the bars will disappear if the gap is at a non-zero value."
+}

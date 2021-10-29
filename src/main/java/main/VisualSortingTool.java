@@ -1,17 +1,15 @@
 package main;
 
+import algorithms.*;
 import javafx.application.Platform;
-import main.algorithms.Algorithm;
-import main.algorithms.BubbleSort;
-import main.algorithms.SelectionSort;
-import main.sorters.*;
-import main.sorters.image.ImageSorter;
-import main.ui.BetterFrame;
-import main.ui.GUIHandler;
-import main.ui.custimization.ColorButton;
-import main.ui.custimization.CustomizationGUI;
-import main.ui.custimization.values.StorageValue;
-import main.ui.custimization.values.StorageValue.StorageAction;
+import sorters.*;
+import sorters.image.ImageSorter;
+import ui.BetterFrame;
+import ui.GUIHandler;
+import ui.custimization.ColorButton;
+import ui.custimization.CustomizationGUI;
+import ui.custimization.values.StorageValue;
+import ui.custimization.values.StorageValue.StorageAction;
 
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -54,7 +52,9 @@ public class VisualSortingTool extends JPanel
 
 		algorithms = new Algorithm[] {
 				new BubbleSort(this),
-				new SelectionSort(this)
+				new SelectionSort(this),
+				new QuickSort(this),
+				new MergeSort(this)
 		};
 		guiHandler = new GUIHandler();
 		guiHandler.init(this);

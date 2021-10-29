@@ -5,7 +5,12 @@ Vital: info on the sort!
 -total
 
 
-tool tips!
-        ToolTipManager.sharedInstance().setEnabled(true);
+way to toggle tooltips
+increase tool tip time with below class
+ToolTipManager.sharedInstance()
 
-add more algos
+ended in image sorter for adding tool tips. finish that up, then finish the rest of the sorters, then algos, then see if we missin anything, then we done!
+
+need to comment a crap ton of stuff
+
+some more algos as well

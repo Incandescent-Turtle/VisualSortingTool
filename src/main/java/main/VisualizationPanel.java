@@ -1,10 +1,9 @@
 package main;
 
+import ui.custimization.values.StorageValue;
+
+import javax.swing.*;
 import java.awt.*;
-
-import javax.swing.JPanel;
-
-import main.ui.custimization.values.StorageValue;
 
 public class VisualizationPanel extends JPanel
 {

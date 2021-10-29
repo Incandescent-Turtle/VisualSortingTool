@@ -1,0 +1,5 @@
+{
+  "gap": "This is to change the gap between elements.",
+  "margins": "To control the horizontal padding between the edge of the screen and the elements.",
+  "size": "The size of the elements."
+}

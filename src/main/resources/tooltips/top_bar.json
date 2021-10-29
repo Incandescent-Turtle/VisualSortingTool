@@ -1,0 +1,33 @@
+{
+  "shuffle": "This button will randomize the order so the program can sort again.",
+  "algorithms": [
+    {
+      "": "Watch the way different algorithms sort! Some are very cool.",
+
+      "Bubble Sort" : "Bubble sort is moves the last element to the back until it is sorted (slow)",
+
+      "Selection Sort" : "Selection sort finds the smallest element and swaps it with the front-most unsorted element (slow)",
+
+      "Quick Sort": "Quick sort uses a pivot system to recursively sort the elements into smaller and smaller unsorted groups of similar values, which will eventually lead to a sorted list (fast)",
+
+      "Merge Sort": "Merge sort breaks the elements into smaller portions, sorts those smaller portions, then combines the sorted portions until everything is sorted (fast)"
+    }
+  ],
+
+  "run": "This button will shuffle the elements and run the currently selected algorithm to visualize the chosen sorting visualizer",
+
+  "delay": "This to adjust the time before each step of the algorithm. This is in milliseconds, set it to 0 for the fastest possible sorting.",
+
+  "step": "This number represents the amount of actions displayed for every action an algorithm mst execute. A value of 1 will execute every action, a value of 2 will display every other action, etc.",
+
+
+  "visualization": [
+    {
+      "": "Pick the technique of visualization!",
+
+      "Bar Height": "Different sized parallel bars",
+
+      "Color Gradient": "A beautiful horizontal colour gradient"
+    }
+  ]
+}
