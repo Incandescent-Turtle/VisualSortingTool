@@ -9,6 +9,7 @@ import ui.custimization.CustomizationPanel;
 import ui.custimization.values.BooleanStorageValue;
 import ui.custimization.values.IntStorageValue;
 import ui.custimization.values.StorageValue;
+import ui.tooltips.ToolTips;
 import vcs.VisualComponent;
 
 import javax.swing.*;
@@ -86,8 +87,13 @@ public abstract class Algorithm implements Customizable
 	public void addCustomizationComponents(CustomizationPanel cp)
 	{
 		cp.addTitleSeparator(name, true);
-		cp.addRow(new ColorButton(sortingTool, c -> swapColor = c, () -> swapColor, "Swap Color"), true);
-		cp.addRow(new ColorButton(sortingTool, c -> compareColor = c, () -> compareColor, "Compare Color"), true);
+		JButton swapButton = new ColorButton(sortingTool, c -> swapColor = c, () -> swapColor, "Swap Color");
+		swapButton.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.SWAP_COLOR));
+		cp.addRow(swapButton, true);
+
+		JButton compareButton = new ColorButton(sortingTool, c -> compareColor = c, () -> compareColor, "Compare Color");
+		compareButton.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.COMPARE_COLOUR));
+		cp.addRow(compareButton, true);
 	}
 	
 	/**
@@ -146,7 +152,7 @@ public abstract class Algorithm implements Customizable
 	 */
 
 	/**
-	 * calls {@link #delay()} and repaint on the sorter. also accounts for steps
+	 * calls {@link VisualSortingTool#delay(int)} and repaint on the sorter. also accounts for steps
 	 */
 	protected final void paintWithDelayAndStep()
 	{
@@ -220,9 +226,10 @@ public abstract class Algorithm implements Customizable
 	public static void addGeneralAlgorithmCustomizationComponents(VisualSortingTool sortingTool, JPanel panel)
 	{
 		Supplier<Color> retrieveAction = () -> confirmationColor;
-		JButton button = new ColorButton(sortingTool, c -> confirmationColor = c, retrieveAction, "Confirmation Color");
-		button.setAlignmentX(JButton.CENTER_ALIGNMENT);
-		panel.add(button);
+		JButton confirmationColorButton = new ColorButton(sortingTool, c -> confirmationColor = c, retrieveAction, "Confirmation Color");
+		confirmationColorButton.setAlignmentX(JButton.CENTER_ALIGNMENT);
+		confirmationColorButton.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.CONFIRMATION_COLOR));
+		panel.add(confirmationColorButton);
 		
 		JCheckBox cb = new JCheckBox(" Animate Confirmation");
 		cb.setAlignmentX(JButton.CENTER_ALIGNMENT);
@@ -230,6 +237,7 @@ public abstract class Algorithm implements Customizable
 		cb.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,12));
 		cb.setSelected(animateConfirmation);
 		cb.addChangeListener(e -> animateConfirmation = cb.isSelected());
+		cb.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.ANIMATE_CONFIRMATION));
 		panel.add(cb);
 
 		//button to disable/enable highlighting (speeds up)
@@ -239,7 +247,7 @@ public abstract class Algorithm implements Customizable
 		highlightBox.addChangeListener(e -> {
 			doHighlights = (highlightBox.isSelected());
 		});
-
+		highlightBox.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.HIGHLIGHTS));
 		panel.add(highlightBox);
 		GUIHandler.addUpdatables(() -> cb.setSelected(animateConfirmation), () -> highlightBox.setSelected(doHighlights));
 	}

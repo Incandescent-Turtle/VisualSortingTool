@@ -1,3 +1,5 @@
 {
-  "make pink": "Click this to turn the elements pink!"
+  "make pink": "Click this to turn the elements pink!",
+  "reset to save": "Resets all customizable options to their states on the last save (application exit).",
+  "reset to defaults": "Resets all customizable options to their states the first time the application is ever ran."
 }

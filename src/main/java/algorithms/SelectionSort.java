@@ -5,8 +5,10 @@ import sorters.Sorter;
 import ui.custimization.ColorButton;
 import ui.custimization.CustomizationPanel;
 import ui.custimization.values.StorageValue;
+import ui.tooltips.ToolTips;
 import vcs.VisualComponent;
 
+import javax.swing.*;
 import java.awt.*;
 
 //
@@ -32,8 +34,13 @@ public class SelectionSort extends Algorithm
 	public void addCustomizationComponents(CustomizationPanel cp)
 	{
 		super.addCustomizationComponents(cp);
-		cp.addRow(new ColorButton(sortingTool, c -> startColor = c, () -> startColor, "1st Index Color"), true);
-		cp.addRow(new ColorButton(sortingTool, c -> minColor = c, () -> minColor, "Min Color"), true);
+		JButton firstIndexButton = new ColorButton(sortingTool, c -> startColor = c, () -> startColor, "1st Index Color");
+		firstIndexButton.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.FIRST_INDEX_COLOR));
+		cp.addRow(firstIndexButton, true);
+
+		JButton minColorButton = new ColorButton(sortingTool, c -> minColor = c, () -> minColor, "Min Color");
+		minColorButton.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.MIN_COLOR));
+		cp.addRow(minColorButton, true);
 	}
 	
 	@Override

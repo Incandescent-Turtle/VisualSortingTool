@@ -4,16 +4,14 @@ import main.VisualSortingTool;
 import algorithms.Algorithm;
 import sorters.Sorter;
 import ui.custimization.ColorButton;
+import ui.custimization.values.BooleanStorageValue;
 import ui.custimization.values.StorageValue;
 import ui.custimization.values.StringStorageValue;
 import ui.tooltips.ToolTips;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class TopBarGUI extends JPanel
@@ -36,12 +34,15 @@ public class TopBarGUI extends JPanel
     
     //for adjusting the algorithm "step" size (how many runs are skipped)
 	private final JLabel stepLabel = new JLabel("Step:");
-	private final SpinnerNumberModel stepSpinnerNumberModel = new SpinnerNumberModel(Algorithm.stepSize, 1, 500, 1);
+	private final SpinnerNumberModel stepSpinnerNumberModel = new SpinnerNumberModel(Algorithm.stepSize, 1, 10000, 1);
     private final JSpinner stepSpinner = new JSpinner(stepSpinnerNumberModel);
 
 	private final JLabel sorterLabel = new JLabel("Visualization:");
 	//drop down list of sorters to pick visualization methods
     private final JComboBox<Sorter> sorterList = new JComboBox<>();
+
+	//	to toggle the tool tips on/off
+	private final JCheckBox tooltipsCheckbox = new JCheckBox("Toggle Tooltips", true);
     
     private final ArrayList<JLabel> labels = new ArrayList<>();
     private final ArrayList<Component> components = new ArrayList<>();
@@ -103,7 +104,37 @@ public class TopBarGUI extends JPanel
         StorageValue.addStorageValues(new StringStorageValue(prefix, "algorithm", sortingTool.getAlgorithms()[0].toString(), name -> algorithmList.setSelectedItem(sortingTool.getAlgorithm(name)), () -> algorithmList.getSelectedItem().toString()).setResetable(false));
 		algorithmList.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.ALGORITHMS));
 
-        setUpRunButton(sortingTool);
+
+
+		tooltipsCheckbox.addActionListener(e -> ToolTips.MANAGER.setEnabled(tooltipsCheckbox.isSelected()));
+		StorageValue.addStorageValues(new BooleanStorageValue(prefix, "enableToolTips", b -> tooltipsCheckbox.setSelected(b), () -> tooltipsCheckbox.isSelected()));
+
+		//always displaying tooltip whether disabled or not
+		JToolTip toolTip = new JToolTip();
+		toolTip.setTipText(ToolTips.getDescriptionFor(ToolTips.Keys.TOGGLE_TOOLTIPS));
+		Popup[] popup = {PopupFactory.getSharedInstance().getPopup(tooltipsCheckbox, toolTip, tooltipsCheckbox.getX(), tooltipsCheckbox.getY())};
+		tooltipsCheckbox.addMouseListener(
+		new MouseAdapter(){
+
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{
+				if(e.getSource() == tooltipsCheckbox)
+				{
+					Point screenPos = tooltipsCheckbox.getLocationOnScreen();
+					popup[0] = PopupFactory.getSharedInstance().getPopup(tooltipsCheckbox, toolTip, (int)screenPos.getX()-toolTip.getWidth(), (int)screenPos.getY()+tooltipsCheckbox.getHeight());
+					popup[0].show();
+				}
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e)
+			{
+				popup[0].hide();
+			}
+		});
+
+		setUpRunButton(sortingTool);
 		runAlgorithmButton.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.RUN));
         
         //in a specific order
@@ -117,8 +148,11 @@ public class TopBarGUI extends JPanel
         addToGUI(stepSpinner);
         addToGUI(sorterLabel);
         addToGUI(sorterList);
+		addToGUI(tooltipsCheckbox);
         //adds all the things that need to be turned off while algorithm running
         GUIHandler.addToggleable(shuffleButton, algorithmList, runAlgorithmButton, sorterList);
+		//	for tooltips
+		GUIHandler.addUpdatables(() -> ToolTips.MANAGER.setEnabled(tooltipsCheckbox.isSelected()));
         sortingTool.validate();
 	}
 

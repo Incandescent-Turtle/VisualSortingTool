@@ -108,6 +108,7 @@ public class CustomizationGUI extends JPanel
 			GUIHandler.update();
 
 		});
+		resetToSave.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.RESET_TO_SAVE));
 		//disabled when algo is running
 		GUIHandler.addToggleable(resetToSave);
 		add(resetToSave);
@@ -115,6 +116,7 @@ public class CustomizationGUI extends JPanel
 		//at the very bottom middle of panel, resets all values to their ORIGINAL defaults
 		JButton resetToDefaultValues = new JButton("Reset to Default Values");
 		resetToDefaultValues.setAlignmentX(CENTER_ALIGNMENT);
+		resetToDefaultValues.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.RESET_TO_DEFAULTS));
 		resetToDefaultValues.addActionListener(e ->
 		{
 			//removes ALL preferences and reloads them - everything goes to defaults

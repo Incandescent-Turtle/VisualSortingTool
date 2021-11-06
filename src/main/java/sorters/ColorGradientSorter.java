@@ -74,6 +74,7 @@ public class ColorGradientSorter extends BarSorter
 		};
 		//on press reverses order and if no algo running re-organizes and re-paints to show it 
 		orderButton.addActionListener(e -> reverseOrder());
+		orderButton.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.REVERSE_SORT_ORDER));
 		cp.addRow(orderButton, true);
 
 		GUIHandler.addToggleable(leftColorButton, rightColorButton, orderButton);

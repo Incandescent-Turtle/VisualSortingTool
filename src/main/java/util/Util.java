@@ -188,12 +188,24 @@ public class Util
 		return size;
 	}
 
+	/**
+	 * this is to form a string representing parameters of the model passed in
+	 * @param nm the spinner number model to pass in
+	 * @return returns a nicely formatted string giving info on min, max, step, and decimal values
+	 */
 	public static String spinnerNumberModelToString(SpinnerNumberModel nm)
 	{
+		//	whether this spinner allows decimal values
 		boolean allowsDecimals = nm.getValue() instanceof Double || nm.getValue() instanceof Float;
+		//	max, min, step, and allowance of decimals (only if they are allowed, if else it hides)
 		return String.join(" | ", "Max: " + nm.getMaximum(), "Min: " + nm.getMinimum(), "Step size: " + nm.getStepSize()) + (allowsDecimals ? " | Allows Decimals" : "");
 	}
 
+	/**
+	 * to get a file name without an extension
+	 * @param file the file to get the name of
+	 * @return the extensionless name
+	 */
 	public static String getNameWithoutExtension(File file)
 	{
 		String fileName = file.getName();

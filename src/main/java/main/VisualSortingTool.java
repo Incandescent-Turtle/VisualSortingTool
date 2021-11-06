@@ -239,6 +239,7 @@ public class VisualSortingTool extends JPanel
 				e1.printStackTrace();
 			} 
 		}
+
 		Platform.startup(()->{});
 		Platform.setImplicitExit(false);
 		new VisualSortingTool();

@@ -1,7 +1,6 @@
 {
   "shuffle": "This button will randomize the order so the program can sort again.",
-  "algorithms": [
-    {
+  "algorithms": {
       "": "Watch the way different algorithms sort! Some are very cool.",
 
       "Bubble Sort" : "Bubble sort is moves the last element to the back until it is sorted (slow)",
@@ -11,8 +10,7 @@
       "Quick Sort": "Quick sort uses a pivot system to recursively sort the elements into smaller and smaller unsorted groups of similar values, which will eventually lead to a sorted list (fast)",
 
       "Merge Sort": "Merge sort breaks the elements into smaller portions, sorts those smaller portions, then combines the sorted portions until everything is sorted (fast)"
-    }
-  ],
+    },
 
   "run": "This button will shuffle the elements and run the currently selected algorithm to visualize the chosen sorting visualizer",
 
@@ -21,13 +19,11 @@
   "step": "This number represents the amount of actions displayed for every action an algorithm mst execute. A value of 1 will execute every action, a value of 2 will display every other action, etc.",
 
 
-  "visualization": [
-    {
-      "": "Pick the technique of visualization!",
+  "visualization": {
+    "": "Pick the technique of visualization!",
+    "Bar Height": "Different sized parallel bars",
+    "Color Gradient": "A beautiful horizontal colour gradient"
+  },
 
-      "Bar Height": "Different sized parallel bars",
-
-      "Color Gradient": "A beautiful horizontal colour gradient"
-    }
-  ]
+  "toggle tooltips": "When checked, this will enable helpful descriptions <br> and explanations for every button, checkbox, and number/item selection menus. <br> This will also give brief overviews of certain algorithms!"
 }

@@ -5,6 +5,7 @@ import ui.custimization.CustomizationGUI;
 import ui.custimization.CustomizationPanel;
 import ui.custimization.values.IntStorageValue;
 import ui.custimization.values.StorageValue;
+import ui.tooltips.ToolTips;
 import vcs.VisualComponent;
 import visualizers.DotVisualizer;
 
@@ -48,7 +49,9 @@ public class DotSorter extends Sorter
 	public void addSorterCustomizationComponents(CustomizationPanel cp)
 	{
 		SpinnerNumberModel nm = new SpinnerNumberModel(size, 100, 50000, 10);
-		cp.addRow("Amount:", CustomizationGUI.createNumberJSpinner(sortingTool, nm, n -> size = n, () -> size));
+		JSpinner amountSpinner = CustomizationGUI.createNumberJSpinner(sortingTool, nm, n -> size = n, () -> size);
+		amountSpinner.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.AMOUNT, nm));
+		cp.addRow("Amount:", amountSpinner);
 	}
 
 	@Override

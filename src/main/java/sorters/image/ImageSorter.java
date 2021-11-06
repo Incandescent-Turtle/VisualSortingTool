@@ -108,7 +108,7 @@ public class ImageSorter extends Sorter
 				}
 			}
 		});
-		chooseFolderButton.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.SELECT_FOLER));
+		chooseFolderButton.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.SELECT_FOLDER));
 
 		//button to toggle sorting order. changes color/text based on which goes first
 		JButton toggle = new JButton() {
@@ -134,11 +134,11 @@ public class ImageSorter extends Sorter
 		//when clicked, switches the order, reloads the images with their new values,
 		// and reverses the current array so it looks sorted with the new method. repaints
 		toggle.addActionListener(e -> reverseOrder(toggle));
-		toggle.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.REVERSE));
+		toggle.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.REVERSE_SORT_ORDER));
 
-		// TODO add these and the rest of the sorter tooltips, then them for algos, then done?
 		JButton reload = new JButton("Reload");
 		reload.addActionListener(e -> generateValues());
+		reload.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.RELOAD_IMAGES));
 
 		cp.addRow(chooseFolderButton, true);
 		//cp.addRow(cb, true);

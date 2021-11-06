@@ -5,6 +5,7 @@ import ui.custimization.CustomizationGUI;
 import ui.custimization.CustomizationPanel;
 import ui.custimization.values.IntStorageValue;
 import ui.custimization.values.StorageValue;
+import ui.tooltips.ToolTips;
 import vcs.VisualComponent;
 import visualizers.NumberFixedVisualizer;
 
@@ -27,7 +28,9 @@ public class NumberSorter extends Sorter
 	public void addSorterCustomizationComponents(CustomizationPanel cp)
 	{
 		SpinnerNumberModel nm = new SpinnerNumberModel(size, 10, 500, 1);
-		cp.addRow("# of Numbers:", CustomizationGUI.createNumberJSpinner(sortingTool, nm, n -> size = n, () -> size));
+		JSpinner amountSpinner = CustomizationGUI.createNumberJSpinner(sortingTool, nm, n -> size = n, () -> size);
+		amountSpinner.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.AMOUNT,nm));
+		cp.addRow("# of Numbers:", amountSpinner);
 	}
 	
 	@Override

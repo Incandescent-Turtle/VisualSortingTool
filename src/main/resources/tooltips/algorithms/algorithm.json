@@ -1,0 +1,7 @@
+{
+  "swap color": "The elements will be coloured this colour when they are being swapped with another element",
+  "compare color": "The elements will be coloured this colour when they are being compared to another element",
+  "confirmation color": "This is the color elements are highlighted once the array is sorted during the confirmation animation.",
+  "animate confirmation": "Click this to enable an animation once the elements are sorted. This is not recommended.",
+  "highlights": "Click this to show highlighted elements to represent comparisons, swapping, and any other special element properties certain algorithms might have. This is ideal for visualization."
+}

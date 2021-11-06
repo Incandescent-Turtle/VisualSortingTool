@@ -1,3 +1,4 @@
 {
-  "select folder": "This button will let you pick where your images are loaded from."
+  "select folder": "This button will let you pick where your images are loaded from.",
+  "reload": "Reloads all the images from the currently selected directory into the program."
 }
