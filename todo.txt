@@ -1,15 +1,15 @@
-Weird confirmation color glitch thing
-
 Vital: info on the sort!
 -total loops
 -total
 
-need to comment a crap ton of stuff
+add loop algorithm toggle
 
+FIX:
+confirmation animation time
 
 For release:
 
 Upload photos of all visualizations
 Add documentation
-Explanation for tooltip system?
+Explanation for tooltip system? (in documentation) (html?)
 

@@ -27,7 +27,6 @@ public class QuickSort extends Algorithm
 		// Divide into two lists
 		while (i <= j)
 		{
-
 			while(array[i].getValue() < array[pivotIndex].getValue())
 			{
 				compare(i, pivotIndex);
@@ -53,8 +52,11 @@ public class QuickSort extends Algorithm
 				i++;
 				j--;
 			}
-			paintWithDelayAndStep();
-			if(swap) resetHighlightsAt((i-1), (j+1));
+			if(swap)
+			{
+				paintWithDelayAndStep();
+				resetHighlightsAt((i-1), (j+1));
+			}
 		}
 		// Recursion
 		if (low < j)

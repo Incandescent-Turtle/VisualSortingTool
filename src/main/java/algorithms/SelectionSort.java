@@ -71,6 +71,7 @@ public class SelectionSort extends Algorithm
 				highlight(minIndex, minColor);
 				highlight(i, startColor);
 				//new min value is found
+				int initialMin = minIndex;
                 if(array[j].getValue() < array[minIndex].getValue())
                 {
 					highlight(minIndex, swapColor);
@@ -78,7 +79,7 @@ public class SelectionSort extends Algorithm
                     minIndex = j;//searching for lowest index  
                 }  
     			paintWithDelayAndStep();
-				resetHighlightsAt(j, i, minIndex);
+				resetHighlightsAt(j, i, initialMin);
 			}
             swap(minIndex, i);
 			paintWithDelayAndStep();

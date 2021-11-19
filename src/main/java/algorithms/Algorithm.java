@@ -70,8 +70,8 @@ public abstract class Algorithm implements Customizable
 	{
 		this.name = name;
 		this.sortingTool = sortingTool;
-		swapColor = Color.RED;
-		compareColor = Color.GREEN;
+		swapColor = new Color(255, 105, 97);
+		compareColor = new Color(150, 210, 148);
 		setDefaultValues();
 		addStorageValues();
 	}
@@ -261,8 +261,9 @@ public abstract class Algorithm implements Customizable
 		Sorter sorter = sortingTool.getSorter();
 		VisualComponent[] array = sorter.getArray();
 		Color[] highlights = sorter.getVisualizer().getHighlights();
+		//	FIXME: total duration of confirmation animation is borked
 		//seconds for the animation
-		int seconds = 2;
+		int seconds = 1;
 		//the delay needed for it to take 2 seconds
 		int delay = (seconds*1_000_000_000)/sortingTool.getSorter().getArraySize();
 		for(int i = 0; i<array.length; i++)
@@ -280,13 +281,10 @@ public abstract class Algorithm implements Customizable
 			
 			//returns false if incorrect
 			if(i != array.length-1 && array[i].getValue()>array[i+1].getValue()) return false;
-			//one by one colors them with confirmationColor
+			//colors the next element green
 			if(shouldPaint && animateConfirmation)
 			{
-				for(int j = 0; j <= i+1; j++)
-				{
-					highlights[j] = confirmationColor;
-				}
+				sorter.getVisualizer().highlight(i, confirmationColor);
 				sortingTool.repaint();
 				VisualSortingTool.delay(0, delay);
 			}

@@ -31,7 +31,7 @@ public class VisualizationPanel extends JPanel
 		g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 		g.setRenderingHint(RenderingHints.KEY_RESOLUTION_VARIANT, RenderingHints.VALUE_RESOLUTION_VARIANT_DPI_FIT);
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-	    if(getWidth() > 0) sortingTool.getSorter().getVisualizer().drawArray((Graphics2D)g);
+	    if(getWidth() > 0) sortingTool.getSorter().getVisualizer().drawArray(g);
 		g.dispose();
 //		Window[] windows = Window.getWindows();
 //		for (Window window : windows)

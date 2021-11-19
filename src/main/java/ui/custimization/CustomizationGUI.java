@@ -1,7 +1,7 @@
 package ui.custimization;
 
-import main.VisualSortingTool;
 import algorithms.Algorithm;
+import main.VisualSortingTool;
 import sorters.Sorter;
 import ui.GUIHandler;
 import ui.custimization.values.StorageValue;
@@ -106,8 +106,8 @@ public class CustomizationGUI extends JPanel
 			sortingTool.getSorter().recalculateAndRepaint();
 			//updates all the spinner etc so their values match with reality
 			GUIHandler.update();
-
 		});
+
 		resetToSave.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.RESET_TO_SAVE));
 		//disabled when algo is running
 		GUIHandler.addToggleable(resetToSave);

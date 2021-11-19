@@ -107,14 +107,14 @@ public class TopBarGUI extends JPanel
 
 
 		tooltipsCheckbox.addActionListener(e -> ToolTips.MANAGER.setEnabled(tooltipsCheckbox.isSelected()));
-		StorageValue.addStorageValues(new BooleanStorageValue(prefix, "enableToolTips", b -> tooltipsCheckbox.setSelected(b), () -> tooltipsCheckbox.isSelected()));
+		StorageValue.addStorageValues(new BooleanStorageValue(prefix, "enableToolTips", b -> tooltipsCheckbox.setSelected(b), () -> tooltipsCheckbox.isSelected()).setResetable(false));
 
 		//always displaying tooltip whether disabled or not
 		JToolTip toolTip = new JToolTip();
 		toolTip.setTipText(ToolTips.getDescriptionFor(ToolTips.Keys.TOGGLE_TOOLTIPS));
-		Popup[] popup = {PopupFactory.getSharedInstance().getPopup(tooltipsCheckbox, toolTip, tooltipsCheckbox.getX(), tooltipsCheckbox.getY())};
-		tooltipsCheckbox.addMouseListener(
-		new MouseAdapter(){
+		tooltipsCheckbox.addMouseListener(new MouseAdapter(){
+
+			Popup popup = PopupFactory.getSharedInstance().getPopup(tooltipsCheckbox, toolTip, tooltipsCheckbox.getX(), tooltipsCheckbox.getY());
 
 			@Override
 			public void mouseEntered(MouseEvent e)
@@ -122,15 +122,15 @@ public class TopBarGUI extends JPanel
 				if(e.getSource() == tooltipsCheckbox)
 				{
 					Point screenPos = tooltipsCheckbox.getLocationOnScreen();
-					popup[0] = PopupFactory.getSharedInstance().getPopup(tooltipsCheckbox, toolTip, (int)screenPos.getX()-toolTip.getWidth(), (int)screenPos.getY()+tooltipsCheckbox.getHeight());
-					popup[0].show();
+					popup = PopupFactory.getSharedInstance().getPopup(tooltipsCheckbox, toolTip, (int)screenPos.getX()-toolTip.getWidth(), (int)screenPos.getY()+tooltipsCheckbox.getHeight());
+					popup.show();
 				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				popup[0].hide();
+				popup.hide();
 			}
 		});
 
@@ -175,7 +175,7 @@ public class TopBarGUI extends JPanel
 						System.out.println("Can't run because the array is null");
 						return;
 					}
-		    		sorter.tryShuffleArray();
+		    		if(Algorithm.isSorted(sortingTool, false)) sorter.tryShuffleArray();
 					System.out.println(algorithmList.getSelectedItem().toString() + " has been pushed");
 					sorter.setAlgorithm((Algorithm)algorithmList.getSelectedItem());
 		    		//disables resizing components etc

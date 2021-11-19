@@ -4,8 +4,6 @@ import main.VisualSortingTool;
 import sorters.Sorter;
 import vcs.VisualComponent;
 
-import java.awt.*;
-
 //works by moving the biggest to the back
 public class BubbleSort extends Algorithm
 {		
@@ -14,12 +12,12 @@ public class BubbleSort extends Algorithm
 		super("Bubble Sort", sortingTool);
 	}
 	
-	@Override
-	public void setDefaultValues()
-	{
-		swapColor = new Color(255, 105, 97); //red
-		compareColor = new Color(150, 210, 148); //green
-	}
+//	@Override
+//	public void setDefaultValues()
+//	{
+//		swapColor = new Color(255, 105, 97); //red
+//		compareColor = new Color(150, 210, 148); //green
+//	}
 
 	@Override
 	public void runAlgorithm()

@@ -197,7 +197,9 @@ public class VisualSortingTool extends JPanel
 	{
 		final int NANO_LIMIT = 999998;
 		ms += nanos/NANO_LIMIT;
-		nanos -= NANO_LIMIT*(nanos/NANO_LIMIT);
+		nanos %= NANO_LIMIT;
+		float s = ms/1000f + nanos/1000000000f;
+//		System.out.println(s*3000);
 		try {
 			Thread.sleep(ms, nanos);
 		} catch (InterruptedException e) {
@@ -237,9 +239,8 @@ public class VisualSortingTool extends JPanel
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			} catch (Exception e1) {
 				e1.printStackTrace();
-			} 
+			}
 		}
-
 		Platform.startup(()->{});
 		Platform.setImplicitExit(false);
 		new VisualSortingTool();

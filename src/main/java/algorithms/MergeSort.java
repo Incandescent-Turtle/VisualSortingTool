@@ -54,14 +54,14 @@ public class MergeSort extends Algorithm
 			if (leftArray[i].getValue() <= rightArray[j].getValue())
 			{
 				array[k] = leftArray[i];
-				highlight(i+startIndex, swapColor);
-				mainArray[k+startIndex] = leftArray[i];
+				highlight(iInit, swapColor);
+				mainArray[kInit] = leftArray[i];
 				k++;
 				i++;
 			} else {
 				array[k] = rightArray[j];
-				highlight(j + rightStart + startIndex, swapColor);
-				mainArray[k + startIndex] = rightArray[j];
+				highlight(jInit + rightStart, swapColor);
+				mainArray[kInit] = rightArray[j];
 				k++;
 				j++;
 			}
@@ -76,7 +76,7 @@ public class MergeSort extends Algorithm
 			highlight(iInit, swapColor);
 			highlight(kInit, swapColor);
 			array[k] = leftArray[i];
-			mainArray[k+startIndex] = leftArray[i];
+			mainArray[kInit] = leftArray[i];
 			paintWithDelayAndStep();
 			resetHighlightsAt(iInit, kInit);
 			k++;
@@ -90,7 +90,7 @@ public class MergeSort extends Algorithm
 			highlight(kInit, swapColor);
 			highlight(jInit, swapColor);
 			array[k] = rightArray[j];
-			mainArray[k+startIndex] = rightArray[j];
+			mainArray[kInit] = rightArray[j];
 			paintWithDelayAndStep();
 			resetHighlightsAt(jInit, kInit);
 			k++;
