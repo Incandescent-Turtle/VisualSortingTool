@@ -94,7 +94,7 @@ public class VisualSortingTool extends JPanel
 	private void setUpFrame()
 	{
 		//overrides to improve fullscreen function
-		frame = new BetterFrame().createFrame(this, "Sorting Methods Visual");
+		frame = new BetterFrame().createFrame(this, "Sorting Visualizer");
 		//so closing event is called
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setResizable(true);

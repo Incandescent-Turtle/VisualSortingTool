@@ -3,6 +3,9 @@ Vital: info on the sort!
 -total
 
 add loop algorithm toggle
+pause
+loop
+
 
 FIX:
 confirmation animation time
@@ -12,4 +15,5 @@ For release:
 Upload photos of all visualizations
 Add documentation
 Explanation for tooltip system? (in documentation) (html?)
+icon - like 3 of the blue bars
 
