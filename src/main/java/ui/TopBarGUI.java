@@ -41,6 +41,9 @@ public class TopBarGUI extends JPanel
 	//drop down list of sorters to pick visualization methods
     private final JComboBox<Sorter> sorterList = new JComboBox<>();
 
+	//	toggles algorithm loop
+	private final JCheckBox loopCheckBox = new JCheckBox("Loop", false);
+
 	//	to toggle the tool tips on/off
 	private final JCheckBox tooltipsCheckbox = new JCheckBox("Toggle Tooltips", true);
     
@@ -109,6 +112,7 @@ public class TopBarGUI extends JPanel
 		tooltipsCheckbox.addActionListener(e -> ToolTips.MANAGER.setEnabled(tooltipsCheckbox.isSelected()));
 		StorageValue.addStorageValues(new BooleanStorageValue(prefix, "enableToolTips", b -> tooltipsCheckbox.setSelected(b), () -> tooltipsCheckbox.isSelected()).setResetable(false));
 
+		loopCheckBox.addActionListener(e -> Algorithm.loop = loopCheckBox.isSelected());
 		//always displaying tooltip whether disabled or not
 		JToolTip toolTip = new JToolTip();
 		toolTip.setTipText(ToolTips.getDescriptionFor(ToolTips.Keys.TOGGLE_TOOLTIPS));
@@ -149,10 +153,10 @@ public class TopBarGUI extends JPanel
         addToGUI(sorterLabel);
         addToGUI(sorterList);
 		addToGUI(tooltipsCheckbox);
+		addToGUI(loopCheckBox);
         //adds all the things that need to be turned off while algorithm running
         GUIHandler.addToggleable(shuffleButton, algorithmList, runAlgorithmButton, sorterList);
-		//	for tooltips
-		GUIHandler.addUpdatables(() -> ToolTips.MANAGER.setEnabled(tooltipsCheckbox.isSelected()));
+		GUIHandler.addUpdatables(() -> ToolTips.MANAGER.setEnabled(tooltipsCheckbox.isSelected()), () -> loopCheckBox.setSelected(Algorithm.loop));
         sortingTool.validate();
 	}
 
@@ -175,13 +179,12 @@ public class TopBarGUI extends JPanel
 						System.out.println("Can't run because the array is null");
 						return;
 					}
-		    		if(Algorithm.isSorted(sortingTool, false)) sorter.tryShuffleArray();
-					System.out.println(algorithmList.getSelectedItem().toString() + " has been pushed");
-					sorter.setAlgorithm((Algorithm)algorithmList.getSelectedItem());
-		    		//disables resizing components etc
-					GUIHandler.setEnabled(false);
 		    		//runs the current algorithm
-				    Thread thread = new Thread(() -> ((Algorithm)algorithmList.getSelectedItem()).run());
+				    Thread thread = new Thread(() -> {
+						do {
+							((Algorithm)algorithmList.getSelectedItem()).run();
+						} while(Algorithm.loop);
+					});
 					sorter.run();
 					//runs logic on another thread so swing can update
 				    thread.start();

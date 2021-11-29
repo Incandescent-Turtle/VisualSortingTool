@@ -35,6 +35,8 @@ public abstract class Algorithm implements Customizable
 	public static int delay;
 	//whether it renders/delays for every run, every other, etc
 	public static int stepSize;
+	//	whether algorithms should continuously loop
+	public static boolean loop;
 
 	public static boolean doHighlights;
 
@@ -56,13 +58,15 @@ public abstract class Algorithm implements Customizable
 		confirmationColor = new Color(162, 255, 143);
 		animateConfirmation = false;
 		doHighlights = true;
+		loop = false;
 
         StorageValue.addStorageValues(
 				new IntStorageValue(prefix, "delay", n -> delay = n, () -> delay),
 				new IntStorageValue(prefix, "step", n -> stepSize = n, () -> stepSize),
 				StorageValue.createColorStorageValue(prefix, "confirmationColor", c -> confirmationColor = c, () -> confirmationColor),
 				new BooleanStorageValue(prefix, "animateConfirmation", b -> animateConfirmation = b, () -> animateConfirmation),
-				new BooleanStorageValue(prefix, "doHighlights", b -> doHighlights = b, () -> doHighlights)
+				new BooleanStorageValue(prefix, "doHighlights", b -> doHighlights = b, () -> doHighlights),
+				new BooleanStorageValue(prefix, "loop", b -> loop = b, () -> loop)
 		);
 	}
 	
@@ -125,6 +129,12 @@ public abstract class Algorithm implements Customizable
 	 */
 	public final void run()
 	{
+		Sorter sorter = sortingTool.getSorter();
+		if(Algorithm.isSorted(sortingTool, false)) sorter.tryShuffleArray();
+		System.out.println(this + " has been ran");
+		sorter.setAlgorithm(this);
+		//disables resizing components etc
+		GUIHandler.setEnabled(false);
 		currentStep = stepSize;
 		runAlgorithm();
 		finishRun();
@@ -145,6 +155,7 @@ public abstract class Algorithm implements Customizable
 		isSorted(sortingTool, true);
 		sortingTool.getSorter().setAlgorithm(null);
 		GUIHandler.setEnabled(true);
+
 	}
 
 	/*

@@ -4,7 +4,7 @@ Vital: info on the sort!
 
 add loop algorithm toggle
 pause
-loop
+loop - comment/test with preferences
 
 
 FIX:
