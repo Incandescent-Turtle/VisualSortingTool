@@ -49,6 +49,7 @@ public class DotVisualizer extends Visualizer
 			//the dot
 			Shape circle = new Arc2D.Double(gap*i, sortingTool.getVisualizerHeight()-height, componentWidth, componentWidth, 0, 360, Arc2D.CHORD);
 			g.fill(circle);
+			//g.fillOval((int)(gap*i), (int)(sortingTool.getVisualizerHeight()-height), (int)componentWidth, (int)componentWidth);
 		}
 	}
 

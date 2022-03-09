@@ -118,7 +118,6 @@ public abstract class Sorter implements Customizable
 	protected void resizeArray()
 	{
 		array = new VisualComponent[size];
-		visualizer.resizeHighlights(size);
 	}
 	
 	/**

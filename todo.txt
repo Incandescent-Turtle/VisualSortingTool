@@ -9,6 +9,8 @@ loop - comment/test with preferences
 
 FIX:
 confirmation animation time
+
+confirmation animation with da color gradient
 disable "reset to saved" if the default reset button has been pushed, as it wont work.
 
 For release:

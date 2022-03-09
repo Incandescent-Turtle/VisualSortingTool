@@ -155,7 +155,6 @@ public abstract class Algorithm implements Customizable
 		isSorted(sortingTool, true);
 		sortingTool.getSorter().setAlgorithm(null);
 		GUIHandler.setEnabled(true);
-
 	}
 
 	/*
@@ -271,7 +270,6 @@ public abstract class Algorithm implements Customizable
 	{
 		Sorter sorter = sortingTool.getSorter();
 		VisualComponent[] array = sorter.getArray();
-		Color[] highlights = sorter.getVisualizer().getHighlights();
 		//	FIXME: total duration of confirmation animation is borked
 		//seconds for the animation
 		int seconds = 1;
