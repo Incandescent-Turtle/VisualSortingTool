@@ -22,7 +22,7 @@ import java.util.Arrays;
  *	the window/panel for display
  */
 public class VisualSortingTool extends JPanel
-{		
+{
 	private JFrame frame;
 	private VisualizationPanel visualizationPanel;
 	private Sorter sorter;

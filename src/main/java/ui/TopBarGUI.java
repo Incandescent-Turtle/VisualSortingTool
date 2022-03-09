@@ -42,7 +42,7 @@ public class TopBarGUI extends JPanel
     private final JComboBox<Sorter> sorterList = new JComboBox<>();
 
 	//	toggles algorithm loop
-	private final JCheckBox loopCheckBox = new JCheckBox("Loop", false);
+	private final JCheckBox loopCheckBox = new JCheckBox("Loop Algorithm", false);
 
 	//	to toggle the tool tips on/off
 	private final JCheckBox tooltipsCheckbox = new JCheckBox("Toggle Tooltips", true);
@@ -152,8 +152,8 @@ public class TopBarGUI extends JPanel
         addToGUI(stepSpinner);
         addToGUI(sorterLabel);
         addToGUI(sorterList);
-		addToGUI(tooltipsCheckbox);
 		addToGUI(loopCheckBox);
+		addToGUI(tooltipsCheckbox);
         //adds all the things that need to be turned off while algorithm running
         GUIHandler.addToggleable(shuffleButton, algorithmList, runAlgorithmButton, sorterList);
 		GUIHandler.addUpdatables(() -> ToolTips.MANAGER.setEnabled(tooltipsCheckbox.isSelected()), () -> loopCheckBox.setSelected(Algorithm.loop));
@@ -181,6 +181,7 @@ public class TopBarGUI extends JPanel
 					}
 		    		//runs the current algorithm
 				    Thread thread = new Thread(() -> {
+						//	loops until the toggle is disabled
 						do {
 							((Algorithm)algorithmList.getSelectedItem()).run();
 						} while(Algorithm.loop);
@@ -188,7 +189,7 @@ public class TopBarGUI extends JPanel
 					sorter.run();
 					//runs logic on another thread so swing can update
 				    thread.start();
-		    	}
+				}
 			}
 		});		
 	}

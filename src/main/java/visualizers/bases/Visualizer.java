@@ -33,8 +33,7 @@ public abstract class Visualizer implements Customizable
 	//this could be, for example, what unsorted bars are coloured
 	protected Color defaultColor = Color.WHITE;
 	//this is used to colour certain elements, the index corrosponds to that of array in sorter
-	private Color[] highlights;
-	
+
 	/**
 	 * whether should render components with {@link Visualizer#defaultColor} or {@link Algorithm#confirmationColor}
 	 */
@@ -59,7 +58,7 @@ public abstract class Visualizer implements Customizable
 	public void drawArray(Graphics2D g)
 	{
 		Sorter sorter = sortingTool.getSorter();
-		if(sorter.getArraySize() > 0 && highlights != null)
+		if(sorter.getArraySize() > 0)
 		{
 			drawArray(g, sorter.getArray(), sorter.getArraySize());
 		}
@@ -75,7 +74,7 @@ public abstract class Visualizer implements Customizable
 	 */
 	public void highlight(int index, Color color)
 	{
-		highlights[index] = color;
+		sortingTool.getSorter().getArray()[index].setHighlight(color);
 	}
 
 	/**
@@ -85,7 +84,7 @@ public abstract class Visualizer implements Customizable
 	 */
 	public Color getHighlightAt(int index)
 	{
-		return highlights[index];
+		return 	sortingTool.getSorter().getArray()[index].getHighlight();
 	}
 
 	@Override public void addStorageValues() {}
@@ -127,15 +126,6 @@ public abstract class Visualizer implements Customizable
 	{
 		return componentHeight;
 	}
-	
-	/**
-	 * used to resise the highlights array
-	 * @param size the new length of the higlights array
-	 */
-	public final void resizeHighlights(int size)
-	{
-		highlights = new Color[size];
-	}
 
 	/**
 	 * after drawing, this method should be called to ensure highlights are back to normal
@@ -143,7 +133,7 @@ public abstract class Visualizer implements Customizable
 	 */
 	public void resetHighlightAt(int index)
 	{
-		highlights[index] = defaultColor;
+		sortingTool.getSorter().getArray()[index].setHighlight(defaultColor);
 	}
 
 	/**
@@ -152,7 +142,8 @@ public abstract class Visualizer implements Customizable
 	 */
 	public final void reloadHighlights()
 	{
-		for (int i = 0; i < highlights.length; i++)
+		VisualComponent[] arr = sortingTool.getSorter().getArray();
+		for (int i = 0; i < arr.length; i++)
 		{
 			resetHighlightAt(i);
 		}
@@ -198,17 +189,7 @@ public abstract class Visualizer implements Customizable
 		marginSpinner.setToolTipText(ToolTips.getDescriptionFor(ToolTips.Keys.MARGINS, nm));
 		cp.addRow("Margin:", marginSpinner);
 	}
-	
-	public final Color[] getHighlights()
-	{
-		return highlights;
-	}
-	
-	public void setHighlights(Color[] highlights)
-	{
-		this.highlights = highlights;
-	}
-	
+
 	public final Color getDefaultColor()
 	{
 		return defaultColor;

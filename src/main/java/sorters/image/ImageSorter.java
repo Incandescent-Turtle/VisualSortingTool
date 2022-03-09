@@ -39,7 +39,6 @@ public class ImageSorter extends Sorter
 	{
 		super(sortingTool, new ImageVisualizer(sortingTool), Sorters.IMAGE);
 		size = 0;
-        visualizer.resizeHighlights(size);
         loader = new ImageLoader(this);
 	}
 		
@@ -225,7 +224,6 @@ public class ImageSorter extends Sorter
 		array = loader.loadFromFolder(directoryPath);
 		
 		size = array.length;
-        visualizer.resizeHighlights(size);
 		GUIHandler.setEnabled(true);
 	}
 	

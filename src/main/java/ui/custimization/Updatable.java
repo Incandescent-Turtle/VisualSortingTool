@@ -1,6 +1,6 @@
 package ui.custimization;
 
-public interface Updatable
+@FunctionalInterface public interface Updatable
 {
 	void update();
 }

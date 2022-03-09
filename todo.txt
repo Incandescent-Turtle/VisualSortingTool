@@ -9,6 +9,8 @@ loop - comment/test with preferences
 
 FIX:
 confirmation animation time
+confirmation animation with da color gradient
+
 
 For release:
 

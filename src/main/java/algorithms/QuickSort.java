@@ -35,7 +35,6 @@ public class QuickSort extends Algorithm
 				resetHighlightsAt(i-1, pivotIndex);
 			}
 
-
 			while (array[j].getValue() > array[pivotIndex].getValue())
 			{
 				compare(j, pivotIndex);
