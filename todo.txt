@@ -15,11 +15,6 @@ disable "reset to saved" if the default reset button has been pushed, as it wont
 
 For release:
 
-Upload photos of all visualizations
 Add documentation
 Explanation for tooltip system? (in documentation) (html?)
 icon - like 3 of the blue bars
-
-README:
-upload gifs of all the visualization methods with all the algorithms?
-
