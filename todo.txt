@@ -20,3 +20,6 @@ Add documentation
 Explanation for tooltip system? (in documentation) (html?)
 icon - like 3 of the blue bars
 
+README:
+upload gifs of all the visualization methods with all the algorithms?
+
