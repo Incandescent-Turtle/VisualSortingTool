@@ -43,18 +43,19 @@ public class VisualSortingTool extends JPanel
 		super(new BorderLayout());
 		add(visualizationPanel = new VisualizationPanel(this), BorderLayout.CENTER);
 		sorters = new Sorter[] {
-			   sorter = new BarHeightSorter(this), 
-						new ColorGradientSorter(this),
-						new NumberSorter(this),
-						new ImageSorter(this),
-						new DotSorter(this)
+		   sorter = new BarHeightSorter(this),
+				new ColorGradientSorter(this),
+				new NumberSorter(this),
+				new ImageSorter(this),
+				new DotSorter(this)
 		};
 
 		algorithms = new Algorithm[] {
 				new BubbleSort(this),
 				new SelectionSort(this),
 				new QuickSort(this),
-				new MergeSort(this)
+				new MergeSort(this),
+				new InsertionSort(this)
 		};
 		guiHandler = new GUIHandler();
 		guiHandler.init(this);
