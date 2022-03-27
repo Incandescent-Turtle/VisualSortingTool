@@ -17,53 +17,55 @@ This is a program to visually represent a number of sorting algorithms via diffe
 ![tool bar of program](https://user-images.githubusercontent.com/59327500/159868922-25b96df8-9c80-4998-a5e3-9945b6d56f4d.png)
 This tool bar contains the main controls for the program
 - shuffle the elements for sorting
-- menu to select algorithms
+- menu to [select algorithms](#-algorithm-choices)
 - control animation/algorithm speed
   - delay between animation steps
   - steps to skip animation steps
-- menu for difference visualization methods
+- menu for difference [visualization methods](#%EF%B8%8F-visualization-choices)
 - continuously loop an algorithm
-- toggle tooptips for explanations
+- toggle [tooptips](#ℹ%EF%B8%8F-tooltips) for explanations
 
 ---
-## 🧮 Algorithm Choices
-Choose between different algorithms  
-![algorithm choice drop down](https://user-images.githubusercontent.com/59327500/159870178-de1f3a32-77f0-48ff-9c8b-f20e0c8e12f8.png)
-- [Bubble sort](https://en.wikipedia.org/wiki/Bubble_sort)
-<p float="left">
-    <img height="120" width="195" alt="bar height bubble sort" src="https://user-images.githubusercontent.com/59327500/159882382-4bc7d164-b342-493f-ae51-549290ef4d35.gif">
-    <img height="120" width="195" alt="color gradient bubble sort" src="https://user-images.githubusercontent.com/59327500/160004593-055c2595-379f-4b86-ad6b-63b7cf46b8c3.gif">
-    <img height="120" width="195" alt="number grid bubble sort" src="https://i.imgur.com/lruDj8E.gif">
-    <img height="120" width="195" alt="image bubble sort" src="https://user-images.githubusercontent.com/59327500/160009826-b31a18eb-2baa-4a93-932d-b5a134e00d80.gif">
-    <img height="120" width="195" alt="dot bubble sort" src="https://user-images.githubusercontent.com/59327500/160004044-399cdd09-f2e9-486b-87ac-ea9b50689e0c.gif">
+<h2 align="center">🧮 Algorithm Choices</h2>
+<div align="center">
+  Choose between different algorithms <br>  
+  <img alt="algorithm choice drop down" src="https://user-images.githubusercontent.com/59327500/159870178-de1f3a32-77f0-48ff-9c8b-f20e0c8e12f8.png">
+</div>
 
+<div align="center"><h3><a href="https://en.wikipedia.org/wiki/Bubble_sort">Bubble Sort</a></h3></div>
+<p align="center" style="text-align:center;">
+  <img height="200" width="325" alt="bar height bubble sort" src="https://user-images.githubusercontent.com/59327500/159882382-4bc7d164-b342-493f-ae51-549290ef4d35.gif">
+      <img height="200" width="325" alt="color gradient bubble sort" src="https://user-images.githubusercontent.com/59327500/160004593-055c2595-379f-4b86-ad6b-63b7cf46b8c3.gif"><br>
+      <img height="200" width="325" alt="number grid bubble sort" src="https://i.imgur.com/lruDj8E.gif">
+      <img height="200" width="325" alt="image bubble sort" src="https://user-images.githubusercontent.com/59327500/160009826-b31a18eb-2baa-4a93-932d-b5a134e00d80.gif">
+      <img height="200" width="325" alt="dot bubble sort" src="https://user-images.githubusercontent.com/59327500/160004044-399cdd09-f2e9-486b-87ac-ea9b50689e0c.gif">
 </p>
 
-- [Selection Sort](https://en.wikipedia.org/wiki/Selection_sort)
-<p float="left">
-  <img height="120" width="195" alt="bar height selection sort" src="https://user-images.githubusercontent.com/59327500/160010985-b59c74e2-a38b-42e0-b9ca-7fe1d86d9a6b.gif">
-  <img height="120" width="195" alt="color gradient selection sort" src="https://user-images.githubusercontent.com/59327500/160011434-6db3c668-0313-4542-ae5e-b2abc28ad8ad.gif">
-  <img height="120" width="195" alt="number grid selection sort" src="https://user-images.githubusercontent.com/59327500/160011804-0490f772-731e-4438-8382-cfe8e608dc7c.gif">
-  <img height="120" width="195" alt="image selection" src="https://user-images.githubusercontent.com/59327500/160012519-b2b3c39d-30f3-488b-8d5b-945c60386c9f.gif">
-  <img height="120" width="195" alt="dot selection sort" src="https://user-images.githubusercontent.com/59327500/160012101-b5cbd1cb-b3b5-416a-873d-f18dc124d11f.gif">
+<div align="center"><h3><a href="https://en.wikipedia.org/wiki/Selection_sort">Selection Sort</a></h3></div>
+<p align="center" style="text-align:center;">
+  <img height="200" width="325" alt="bar height selection sort" src="https://user-images.githubusercontent.com/59327500/160010985-b59c74e2-a38b-42e0-b9ca-7fe1d86d9a6b.gif">
+  <img height="200" width="325" alt="color gradient selection sort" src="https://user-images.githubusercontent.com/59327500/160011434-6db3c668-0313-4542-ae5e-b2abc28ad8ad.gif"><br>
+  <img height="200" width="325" alt="number grid selection sort" src="https://user-images.githubusercontent.com/59327500/160011804-0490f772-731e-4438-8382-cfe8e608dc7c.gif">
+  <img height="200" width="325" alt="image selection" src="https://user-images.githubusercontent.com/59327500/160012519-b2b3c39d-30f3-488b-8d5b-945c60386c9f.gif">
+  <img height="200" width="325" alt="dot selection sort" src="https://user-images.githubusercontent.com/59327500/160012101-b5cbd1cb-b3b5-416a-873d-f18dc124d11f.gif">
 </p>
 
-- [Quick Sort](https://en.wikipedia.org/wiki/Quicksort)
-<p float="left">
-  <img height="120" width="195" alt="bar height quick sort" src="https://user-images.githubusercontent.com/59327500/160014460-27f4886a-7957-4178-bbe8-5ad44f5661f7.gif">
-  <img height="120" width="195" alt="color gradient quick sort" src="https://user-images.githubusercontent.com/59327500/160014731-c5b37c71-2211-4b60-b7ac-205187484ede.gif">
-  <img height="120" width="195" alt="number grid quick sort" src="https://user-images.githubusercontent.com/59327500/160014751-9d5755e2-dd20-4d15-bb07-38b9eb5218b0.gif">
-  <img height="120" width="195" alt="image quick sort" src="https://user-images.githubusercontent.com/59327500/160014744-77d8cf6a-ff95-4f24-84fe-8397682560e6.gif">
-  <img height="120" width="195" alt="dot quick sort" src="https://user-images.githubusercontent.com/59327500/160014737-f4165782-1058-4476-a5f0-2c24540cde1a.gif">
+<div align="center"><h3><a href="https://en.wikipedia.org/wiki/Quicksort">Quick Sort</a></h3></div>
+<p align="center" style="text-align:center;">
+  <img height="200" width="325" alt="bar height quick sort" src="https://user-images.githubusercontent.com/59327500/160014460-27f4886a-7957-4178-bbe8-5ad44f5661f7.gif">
+  <img height="200" width="325" alt="color gradient quick sort" src="https://user-images.githubusercontent.com/59327500/160014731-c5b37c71-2211-4b60-b7ac-205187484ede.gif"><br>
+  <img height="200" width="325" alt="number grid quick sort" src="https://user-images.githubusercontent.com/59327500/160014751-9d5755e2-dd20-4d15-bb07-38b9eb5218b0.gif">
+  <img height="200" width="325" alt="image quick sort" src="https://user-images.githubusercontent.com/59327500/160014744-77d8cf6a-ff95-4f24-84fe-8397682560e6.gif">
+  <img height="200" width="325" alt="dot quick sort" src="https://user-images.githubusercontent.com/59327500/160014737-f4165782-1058-4476-a5f0-2c24540cde1a.gif">
 </p>
 
-- [Merge Sort](https://en.wikipedia.org/wiki/Merge_sort)
-<p float="left">
-  <img height="120" width="195" alt="bar height merge sort" src="https://user-images.githubusercontent.com/59327500/160017125-467d0f06-79ff-40b9-bbbe-d668960ffe82.gif">
-  <img height="120" width="195" alt="color gradient merge sort" src="https://user-images.githubusercontent.com/59327500/160017129-c1a0e819-a913-4d04-ab0c-86c5cc72c2dc.gif">
-  <img height="120" width="195" alt="number grid merge sort" src="https://user-images.githubusercontent.com/59327500/160017149-fdc1a316-0044-418c-ab54-2135351a8f8c.gif">
-  <img height="120" width="195" alt="image quick merge" src="https://user-images.githubusercontent.com/59327500/160017139-c4b17ab9-c7d4-4af8-9b6e-d94676694996.gif">
-  <img height="120" width="195" alt="dot merge sort" src="https://user-images.githubusercontent.com/59327500/160017317-099fea85-56a9-472a-b776-347b11e882fe.gif">
+<div align="center"><h3><a href="https://en.wikipedia.org/wiki/Merge_sort">Merge Sort</a></h3></div>
+<p align="center" style="text-align:center;">
+  <img height="200" width="325" alt="bar height merge sort" src="https://user-images.githubusercontent.com/59327500/160017125-467d0f06-79ff-40b9-bbbe-d668960ffe82.gif">
+  <img height="200" width="325" alt="color gradient merge sort" src="https://user-images.githubusercontent.com/59327500/160017129-c1a0e819-a913-4d04-ab0c-86c5cc72c2dc.gif"><br>
+  <img height="200" width="325" alt="number grid merge sort" src="https://user-images.githubusercontent.com/59327500/160017149-fdc1a316-0044-418c-ab54-2135351a8f8c.gif">
+  <img height="200" width="325" alt="image quick merge" src="https://user-images.githubusercontent.com/59327500/160017139-c4b17ab9-c7d4-4af8-9b6e-d94676694996.gif">
+  <img height="200" width="325" alt="dot merge sort" src="https://user-images.githubusercontent.com/59327500/160017317-099fea85-56a9-472a-b776-347b11e882fe.gif">
 </p>
 
 ---
