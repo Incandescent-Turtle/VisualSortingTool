@@ -1,6 +1,6 @@
 # 💻 Sorting Algorithm Visualization Tool
 This is a program to visually represent a number of sorting algorithms via different visualization methods, such as using different height bars, color gradients, scatter dots, images, etc.  
-[Download the .jar here](https://github.com/Incandescent-Turtle/main.VisualSortingTool/raw/main/sorting-visualizer.jar)
+[Click here to download the program as a runnable .jar](https://github.com/Incandescent-Turtle/main.VisualSortingTool/raw/main/sorting-visualizer.jar)
 
 ---
 ## 🧰 Feature Overview
